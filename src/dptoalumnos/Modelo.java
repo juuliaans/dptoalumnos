@@ -1,9 +1,6 @@
 package dptoalumnos;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,11 +10,13 @@ public final class Modelo {
     
     private ArrayList<Alumno> arrayAlumnos ; // array de todos los alumnos. 
     private ResultSet rs;
+    private String databaseName = "dptoAlumnos";
     
     public Modelo(){
         arrayAlumnos = new ArrayList<Alumno>();
         rs = null;
         cargaArrayAlumno();
+        System.out.println(getAlumnos());
     }
     
     public Connection conexionSQL(String ip , String usr , String psw , String bd){
@@ -51,7 +50,7 @@ public final class Modelo {
     }
     
     public void executeQuery(String strSql){
-        Connection db = conexionSQL("localhost" , "root" , "" , "dtoalumnos");
+        Connection db = conexionSQL("localhost" , "root" , "" , databaseName);
         Statement statement = statementSQL(db);
         try {
             this.rs = statement.executeQuery(strSql);
@@ -68,14 +67,33 @@ public final class Modelo {
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void executeUpdate(String strSql){
+        Connection db = conexionSQL("localhost" , "root" , "" , databaseName);
+        Statement statement = statementSQL(db);
+        try {
+            statement.executeUpdate(strSql);
+        } catch (SQLException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void cargaArrayAlumno(){ // cargo en un array todos los registros de la tabla alumno.
         String query = "SELECT * FROM alumnos";
-        this.arrayAlumnos = null;
-        Connection db = conexionSQL("localhost" , "root" , "" , "dtoAlumnos");
+        arrayAlumnos = new ArrayList<Alumno>();
+        Connection db = conexionSQL("localhost" , "root" , "" , databaseName);
         Statement statement = statementSQL(db);
         try {
             ResultSet rs = statement.executeQuery(query);

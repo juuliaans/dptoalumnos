@@ -2,18 +2,11 @@ package dptoalumnos;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
 
 
 public final class Vista {
@@ -43,7 +36,9 @@ public final class Vista {
     private JMenuItem delItem1_5;
     private JMenuItem modItem1_5;
     private JMenuItem item1_6;
-    private JTextArea txtAlumnosPrincipal;
+    
+    //Globals
+    private JPanel pantallaActual;
     
     //Pantalla Alta Alumno
     private JPanel panelAltaAlumno;
@@ -84,12 +79,98 @@ public final class Vista {
         contenedor.setTitle("Departamentos de Alumnos");
         contenedor.setResizable(true);
         contenedor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        contenedor.setSize(800 , 600);
-        pantallaPrincipal();
+        contenedor.setSize(1024 , 768);
+    }
+    
+    public void iniciarVentanaPrincipal(){
+        menuBar = new JMenuBar();
+        archivo = new JMenu("Archivo");
+        
+        item1_1 = new JMenu("Alumnos");
+        addItem1_1 = new JMenuItem("Alta");
+        delItem1_1 = new JMenuItem("Baja");
+        modItem1_1 = new JMenuItem("Modificacion");
+        item1_1.add(addItem1_1);
+        item1_1.add(delItem1_1);
+        item1_1.add(modItem1_1);
+        archivo.add(item1_1);
+        
+        item1_2 = new JMenu("Cursos");
+        addItem1_2 = new JMenuItem("Alta");
+        delItem1_2 = new JMenuItem("Baja");
+        modItem1_2 = new JMenuItem("Modificacion");
+        item1_2.add(addItem1_2);
+        item1_2.add(delItem1_2);
+        item1_2.add(modItem1_2);
+        archivo.add(item1_2);
+        
+        item1_3 = new JMenu("Pagos");
+        addItem1_3 = new JMenuItem("Alta");
+        delItem1_3 = new JMenuItem("Baja");
+        modItem1_3 = new JMenuItem("Modificacion");
+        item1_3.add(addItem1_3);
+        item1_3.add(delItem1_3);
+        item1_3.add(modItem1_3);
+        archivo.add(item1_3);
+        
+        item1_4 = new JMenu("Prestamos");
+        addItem1_4 = new JMenuItem("Alta");
+        delItem1_4 = new JMenuItem("Baja");
+        modItem1_4 = new JMenuItem("Modificacion");
+        item1_4.add(addItem1_4);
+        item1_4.add(delItem1_4);
+        item1_4.add(modItem1_4);
+        archivo.add(item1_4);
+        
+        item1_5 = new JMenu("Recursos");
+        addItem1_5 = new JMenuItem("Alta");
+        delItem1_5 = new JMenuItem("Baja");
+        modItem1_5 = new JMenuItem("Modificacion");
+        item1_5.add(addItem1_5);
+        item1_5.add(delItem1_5);
+        item1_5.add(modItem1_5);
+        archivo.add(item1_5);
+        
+        archivo.addSeparator();
+        item1_6 = new JMenuItem("Cerrar");
+        archivo.add(item1_6);
+        
+        menuBar.add(archivo);
+        contenedor.setJMenuBar(menuBar);
+        contenedor.setLocationRelativeTo(null);
+        contenedor.setLayout(new BorderLayout());
+        contenedor.setVisible(true);
+    }
+    
+    public void addEventsToMenu(ActionListener[] al) {
+        addItem1_1.addActionListener(al[0]);
+        delItem1_1.addActionListener(al[1]);
+        modItem1_1.addActionListener(al[2]);
+        
+        addItem1_2.addActionListener(al[3]);
+        delItem1_2.addActionListener(al[4]);
+        modItem1_2.addActionListener(al[5]);
+        
+        addItem1_3.addActionListener(al[6]);
+        delItem1_3.addActionListener(al[7]);
+        modItem1_3.addActionListener(al[8]);
+        
+        addItem1_4.addActionListener(al[9]);
+        delItem1_4.addActionListener(al[10]);
+        modItem1_4.addActionListener(al[11]);
+        
+        addItem1_5.addActionListener(al[12]);
+        delItem1_5.addActionListener(al[13]);
+        modItem1_5.addActionListener(al[14]);
+    }
+    
+    public void addCloseEventToMenuItem(ActionListener al){
+        item1_6.addActionListener(al);
     }
     
     public void pantallaAltaAlumno(){
         panelAltaAlumno = new JPanel();
+        pantallaActual = panelAltaAlumno;
         
         txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ");
         txtFldAlumnoNroLegajo = new JTextField(4);
@@ -151,79 +232,67 @@ public final class Vista {
         panelAltaAlumno.add(txtFldAlumnoMail);
         panelAltaAlumno.add(btnAlumnoSend);
         
-        panelAltaAlumno.setSize(1024,768);
         contenedor.add(panelAltaAlumno);
-        contenedor.setSize(1024,768);
-        contenedor.setVisible(true);
-        pantallaPrincipal.setVisible(false);
-        contenedor.pack();
     }
-
-    public void pantallaPrincipal(){
-        menuBar = new JMenuBar();
-        archivo = new JMenu("Archivo");
-        pantallaPrincipal = new JPanel();
-        
-        item1_1 = new JMenu("Alumnos");
-        addItem1_1 = new JMenuItem("Alta");
-        delItem1_1 = new JMenuItem("Baja");
-        modItem1_1 = new JMenuItem("Modificacion");
-        item1_1.add(addItem1_1);
-        item1_1.add(delItem1_1);
-        item1_1.add(modItem1_1);
-        archivo.add(item1_1);
-        
-        item1_2 = new JMenu("Cursos");
-        addItem1_2 = new JMenuItem("Alta");
-        delItem1_2 = new JMenuItem("Baja");
-        modItem1_2 = new JMenuItem("Modificacion");
-        item1_2.add(addItem1_2);
-        item1_2.add(delItem1_2);
-        item1_2.add(modItem1_2);
-        archivo.add(item1_2);
-        
-        item1_3 = new JMenu("Pagos");
-        addItem1_3 = new JMenuItem("Alta");
-        delItem1_3 = new JMenuItem("Baja");
-        modItem1_3 = new JMenuItem("Modificacion");
-        item1_3.add(addItem1_3);
-        item1_3.add(delItem1_3);
-        item1_3.add(modItem1_3);
-        archivo.add(item1_3);
-        
-        item1_4 = new JMenu("Prestamos");
-        addItem1_4 = new JMenuItem("Alta");
-        delItem1_4 = new JMenuItem("Baja");
-        modItem1_4 = new JMenuItem("Modificacion");
-        item1_4.add(addItem1_4);
-        item1_4.add(delItem1_4);
-        item1_4.add(modItem1_4);
-        archivo.add(item1_4);
-        
-        item1_5 = new JMenu("Recursos");
-        addItem1_5 = new JMenuItem("Alta");
-        delItem1_5 = new JMenuItem("Baja");
-        modItem1_5 = new JMenuItem("Modificacion");
-        item1_5.add(addItem1_5);
-        item1_5.add(delItem1_5);
-        item1_5.add(modItem1_5);
-        archivo.add(item1_5);
-        
-        archivo.addSeparator();
-        item1_6 = new JMenuItem("Cerrar");
-        archivo.add(item1_6);
-        txtAlumnosPrincipal = new JTextArea("",30,30);
-        
-        menuBar.add(archivo);
-        contenedor.setJMenuBar(menuBar);
-        contenedor.setLocationRelativeTo(null);
-        contenedor.setLayout(new BorderLayout());
-        contenedor.setVisible(true);
-        pantallaPrincipal.add(new JScrollPane(txtAlumnosPrincipal));
-        contenedor.add(pantallaPrincipal);
     
+    public void mostrarPantalla(String pantalla){
+        //System.out.println("La pantalla a mostrar es: " + pantalla);
+        if (pantallaActual != null){
+            contenedor.getContentPane().remove(pantallaActual);
+            contenedor.repaint();
+            //contenedor.pack();
+            pantallaActual = null;
+        }
+        
+        if (pantalla.contains("ALTA")){
+            
+            if (pantalla.contains("ALUMNO")){
+                pantallaAltaAlumno();
+            }else if (pantalla.contains("CURSOS")){
+                
+            }else if (pantalla.contains("PAGOS")){
+                
+            }else if (pantalla.contains("PRESTAMOS")){
+                
+            }else if (pantalla.contains("RECURSOS")){
+                
+            }
+            
+        }else if (pantalla.contains("BAJA")){
+            
+            if (pantalla.contains("ALUMNO")){
+                
+            }else if (pantalla.contains("CURSOS")){
+                
+            }else if (pantalla.contains("PAGOS")){
+                
+            }else if (pantalla.contains("PRESTAMOS")){
+                
+            }else if (pantalla.contains("RECURSOS")){
+                
+            }
+            
+        }else if (pantalla.contains("MODIFICACION")){
+            
+            if (pantalla.contains("ALUMNO")){
+                
+            }else if (pantalla.contains("CURSOS")){
+                
+            }else if (pantalla.contains("PAGOS")){
+                
+            }else if (pantalla.contains("PRESTAMOS")){
+                
+            }else if (pantalla.contains("RECURSOS")){
+                
+            }
+            
+        }
+        
+        contenedor.setVisible(true);
+        
+        
     }
-
+    
     public String getTxtFldAlumnoNroLegajo() {
         return txtFldAlumnoNroLegajo.getText();
     }
@@ -283,21 +352,13 @@ public final class Vista {
     public String getTxtFldAlumnoFoto() {
         return txtFldAlumnoFoto.getText();
     }
-
-    public void setTxtAlumnosPrincipal(String txtAlumnosPrincipal) {
-        this.txtAlumnosPrincipal.setText(txtAlumnosPrincipal);
-    }
     
-    public void mostrarAltaAlumno(ActionListener al) {
-        addItem1_1.addActionListener(al);
-    }
-    
-    public void getElementsAltaAlumno(ActionListener al){
+    public void addActionListenerAltaAlumno(ActionListener al){
         btnAlumnoSend.addActionListener(al);
     }
     
-    public void sendDatosAltaAlumno(ActionListener al){
-        btnAlumnoSend.addActionListener(al);
+    public void showErrorMsg(String err){
+        JOptionPane.showMessageDialog(contenedor, err);
     }
    
     

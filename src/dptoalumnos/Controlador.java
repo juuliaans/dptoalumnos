@@ -14,21 +14,148 @@ public class Controlador {
     }
     
     public void comenzar(){
+        v.iniciarVentanaPrincipal();
         addFunciones();
-        v.pantallaPrincipal();
-        addFunciones();
-        
-        v.setTxtAlumnosPrincipal(m.getAlumnos());
     }
     
     public void addFunciones(){
-        v.mostrarAltaAlumno(new funcionMostrarAltaAlumno());
+        v.addEventsToMenu(
+                new ActionListener[]{
+                    new menuItem_altaAlumno(), 
+                    new menuItem_bajaAlumno(), 
+                    new menuItem_modificacionAlumno(), 
+                        
+                    new menuItem_altaCursos(), 
+                    new menuItem_bajaCursos(), 
+                    new menuItem_modificacionCursos(), 
+                    
+                    new menuItem_altaPagos(), 
+                    new menuItem_bajaPagos(), 
+                    new menuItem_modificacionPagos(), 
+                    
+                    new menuItem_altaPrestamos(), 
+                    new menuItem_bajaPrestamos(), 
+                    new menuItem_modificacionPrestamos(), 
+                    
+                    new menuItem_altaRecursos(), 
+                    new menuItem_bajaRecursos(), 
+                    new menuItem_modificacionRecursos(), 
+                }
+                );
+        v.addCloseEventToMenuItem(new menuItem_close());
     }
-
-    private class funcionMostrarAltaAlumno implements ActionListener {
+    
+    private class menuItem_close implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent ae) {
-            v.pantallaAltaAlumno();
+            System.exit(0);
+        }
+    }
+    
+    private class menuItem_altaAlumno implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_ALUMNO");
+            
+            v.addActionListenerAltaAlumno(new funcionSendAltaAlumno());
+        }
+    }
+    
+    private class menuItem_bajaAlumno implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("BAJA_ALUMNO");
+        }
+    }
+    
+    private class menuItem_modificacionAlumno implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_ALUMNO");
+        }
+    }
+    
+    private class menuItem_altaCursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_CURSOS");
+        }
+    }
+    
+    private class menuItem_bajaCursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("BAJA_CURSOS");
+        }
+    }
+    
+    private class menuItem_modificacionCursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_CURSOS");
+        }
+    }
+    
+    private class menuItem_altaPagos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_PAGOS");
+        }
+    }
+    
+    private class menuItem_bajaPagos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("BAJA_PAGOS");
+        }
+    }
+    
+    private class menuItem_modificacionPagos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_PAGOS");
+        }
+    }
+    
+    private class menuItem_altaPrestamos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_PRESTAMOS");
+        }
+    }
+    
+    private class menuItem_bajaPrestamos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("BAJA_PRESTAMOS");
+        }
+    }
+    
+    private class menuItem_modificacionPrestamos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_PRESTAMOS");
+        }
+    }
+    
+    private class menuItem_altaRecursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_RECURSOS");
+        }
+    }
+    
+    private class menuItem_bajaRecursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("BAJA_RECURSOS");
+        }
+    }
+    
+    private class menuItem_modificacionRecursos implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_RECURSOS");
         }
     }
     
@@ -101,7 +228,9 @@ public class Controlador {
                 String strSql = "";
                 strSql = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
                 strSql+= "VALUES ('"+nroLegajo+"','"+nombre+"','"+apellido+"','"+fechaNacimiento+"','"+nroDoc+"','"+calle+"','"+nroCalle+"','"+piso+"','"+dpto+"','"+codPostal+"','"+localidad+"','"+telFijo+"','"+telCel+"','"+eMail+"');";
-                m.executeQuery(strSql);
+                m.executeUpdate(strSql);
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
             }
         }
         
