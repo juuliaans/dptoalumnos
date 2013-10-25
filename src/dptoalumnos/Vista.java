@@ -375,45 +375,47 @@ public final class Vista {
             pantallaActual = null;
         }
         
-        if (pantalla.contains("ALTA")){
-            
-            if (pantalla.contains("ALUMNO")){
+        if (pantalla.startsWith("ALTA")){
+            pantalla = pantalla.replace("ALTA_", "");
+            if (pantalla.equals("ALUMNO")){
                 pantallaAltaAlumno();
-            }else if (pantalla.contains("CURSOS")){
+            }else if (pantalla.equals("CURSOS")){
+                pantallaAltaCurso();
+            }else if (pantalla.equals("PAGOS")){
+                pantallaAltaPago();
+            }else if (pantalla.equals("PRESTAMOS")){
                 
-            }else if (pantalla.contains("PAGOS")){
+            }else if (pantalla.equals("RECURSOS")){
+                pantallaAltaRecurso();
+            }
+            
+        }else if (pantalla.startsWith("BAJA")){
+            pantalla = pantalla.replace("BAJA_", "");
+            
+            if (pantalla.equals("ALUMNO")){
                 
-            }else if (pantalla.contains("PRESTAMOS")){
+            }else if (pantalla.equals("CURSOS")){
                 
-            }else if (pantalla.contains("RECURSOS")){
+            }else if (pantalla.equals("PAGOS")){
+                
+            }else if (pantalla.equals("PRESTAMOS")){
+                
+            }else if (pantalla.equals("RECURSOS")){
                 
             }
             
-        }else if (pantalla.contains("BAJA")){
+        }else if (pantalla.startsWith("MODIFICACION")){
+            pantalla = pantalla.replace("MODIFICACION_", "");
             
-            if (pantalla.contains("ALUMNO")){
+            if (pantalla.equals("ALUMNO")){
                 
-            }else if (pantalla.contains("CURSOS")){
+            }else if (pantalla.equals("CURSOS")){
                 
-            }else if (pantalla.contains("PAGOS")){
+            }else if (pantalla.equals("PAGOS")){
                 
-            }else if (pantalla.contains("PRESTAMOS")){
+            }else if (pantalla.equals("PRESTAMOS")){
                 
-            }else if (pantalla.contains("RECURSOS")){
-                
-            }
-            
-        }else if (pantalla.contains("MODIFICACION")){
-            
-            if (pantalla.contains("ALUMNO")){
-                
-            }else if (pantalla.contains("CURSOS")){
-                
-            }else if (pantalla.contains("PAGOS")){
-                
-            }else if (pantalla.contains("PRESTAMOS")){
-                
-            }else if (pantalla.contains("RECURSOS")){
+            }else if (pantalla.equals("RECURSOS")){
                 
             }
             
