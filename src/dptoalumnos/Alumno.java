@@ -11,7 +11,7 @@ public class Alumno {
     private String calle;
     private String nroCalle;
     private String piso;
-    private String departamento;
+    private String dpto;
     private String codPostal;
     private String localidad;
     private String telFijo;
@@ -27,7 +27,7 @@ public class Alumno {
         calle = "";
         nroCalle = "";
         piso = "";
-        departamento = "";
+        dpto = "";
         codPostal = "";
         localidad = "";
         telFijo = "";
@@ -69,7 +69,7 @@ public class Alumno {
     }
 
     public String getDepartamento() {
-        return departamento;
+        return dpto;
     }
 
     public String getCodPostal() {
@@ -124,8 +124,8 @@ public class Alumno {
         this.piso = piso;
     }
 
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
+    public void setDepartamento(String dpto) {
+        this.dpto = dpto;
     }
 
     public void setCodPostal(String codPostal) {

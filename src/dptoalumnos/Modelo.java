@@ -154,5 +154,22 @@ public final class Modelo {
         }
         return rs;
     }
+    
+    // ------ queries -------
+    public void qryAltaAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
+        String qry;
+        qry = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
+        qry+= "VALUES ('"+nroLegajo+"','"+nombre+"','"+apellido+"','"+fechaNacimiento+"','"+nroDoc+"','"+calle+"','"+nroCalle+"','"+piso+"','"+dpto+"','"+codPostal+"','"+localidad+"','"+telFijo+"','"+telCel+"','"+eMail+"');";
+        
+        executeUpdate(qry);
+    }
+    
+    public void qryAltaCurso(String codCurso , String nombre , String prof){
+        String qry;
+        qry = "INSERT INTO cursos (codCurso , nombre , prof)";
+        qry+= "VALUES ('"+ codCurso +"' , '"+ nombre +"' , '"+ prof +"')";
+        
+        executeUpdate(qry);
+    }
 
 }
