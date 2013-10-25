@@ -78,7 +78,88 @@ public final class Vista {
     private JLabel txtLblAlumnoFoto;
     private JTextField txtFldAlumnoFoto;
     private JButton btnAlumnoSend;
+
+    //Pantalla Alta Curso
+    private JPanel panelAltaCurso;
+    private JLabel txtLblCursoCodCurso;
+    private JTextField txtFldCursoCodCurso;
+    private JLabel txtLblCursoNombre;
+    private JTextField txtFldCursoNombre;
+    private JLabel txtLblCursoProf;
+    private JTextField txtFldCursoProf;
     
+    //Pantalla Alta Recurso
+    private JPanel panelAltaRecurso;
+    private JLabel txtLblRecursoCodRec;
+    private JTextField txtFldRecursoCodRec;
+    private JLabel txtLblRecursoCategoria;
+    private JTextField txtFldRecursoCategoria;
+    private JLabel txtLblRecursoNombre;
+    private JTextField txtFldRecursoNombre;
+    private JLabel txtLblRecursoAutor;
+    private JTextField txtFldRecursoAutor;
+    private JLabel txtLblRecursoAnio;
+    private JTextField txtFldRecursoAnio;
+    private JLabel txtLblRecursoCant;
+    private JTextField txtFldRecursoCant;
+
+    //Pantalla Alta Prestamo
+    private JPanel panelAltaPrestamo;
+    private JLabel txtLblPrestamoNroLegajo;
+    private JTextField txtFldPrestamoNroLegajo;
+    private JLabel txtLblPrestamoCodRecurso;
+    private JTextField txtFldPrestamoCodRecurso;
+    private JLabel txtLblPrestamoFechaPres;
+    private JTextField txtFldPrestamoFechaPres;
+    private JLabel txtLblPrestamoFechaDevo;
+    private JTextField txtFldPrestamoFechaDevo;
+    private JLabel txtLblPrestamoFechaPrevDevo;
+    private JTextField txtFldPrestamoFechaPrevDevo;
+
+    //Pantalla Alta Pagos
+    private JPanel panelAltaPago;
+    private JLabel txtLblPagoNroLegajo;
+    private JTextField txtFldPagoNroLegajo;
+    private JLabel txtLblPagoCodCurso;
+    private JTextField txtFldPagoCodCurso;
+    private JLabel txtLblPagoFecha;
+    private JTextField txtFldPagoFecha;
+    private JLabel txtLblPagoImporte;
+    private JTextField txtFldPagoImporte;
+    private JLabel txtLblPagoComprobante;
+    private JTextField txtFldPagoComprobante;
+
+    public void pantallaAltaPago(){
+        panelAltaPago = new JPanel();
+
+        txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
+        txtFldPagoNroLegajo = new JTextField(4);
+        txtLblPagoCodCurso = new JLabel("Cod Curso : ");
+        txtFldPagoCodCurso = new JTextField(4);
+        txtLblPagoFecha = new JLabel("Fecha : ");
+        txtFldPagoFecha = new JTextField(10);
+        txtLblPagoImporte = new JLabel("Importe : ");
+        txtFldPagoImporte = new JTextField(6);
+        txtLblPagoComprobante = new JLabel("Comprobante : ");
+        txtFldPagoComprobante = new JTextField(4);
+
+        panelAltaPago.add(txtLblPagoNroLegajo);
+        panelAltaPago.add(txtFldPagoNroLegajo);
+        panelAltaPago.add(txtLblPagoCodCurso);
+        panelAltaPago.add(txtFldPagoCodCurso);
+        panelAltaPago.add(txtLblPagoFecha);
+        panelAltaPago.add(txtFldPagoFecha);
+        panelAltaPago.add(txtLblPagoImporte);
+        panelAltaPago.add(txtFldPagoImporte);
+        panelAltaPago.add(txtLblPagoComprobante);
+        panelAltaPago.add(txtFldPagoComprobante);
+
+        contenedor.add(panelAltaPago);
+
+    }
+
+    
+
     public Vista() {
         contenedor = new JFrame();
         contenedor.setTitle("Departamentos de Alumnos");
@@ -151,12 +232,59 @@ public final class Vista {
         panelAltaAlumno.add(txtFldAlumnoMail);
         panelAltaAlumno.add(btnAlumnoSend);
         
-        panelAltaAlumno.setSize(1024,768);
         contenedor.add(panelAltaAlumno);
-        contenedor.setSize(1024,768);
-        contenedor.setVisible(true);
-        pantallaPrincipal.setVisible(false);
-        contenedor.pack();
+    }
+
+    public void pantallaAltaCurso(){
+        panelAltaCurso = new JPanel();
+
+        txtLblCursoCodCurso = new JLabel("Nro Curso : ");
+        txtFldCursoCodCurso = new JTextField(4);
+        txtLblCursoNombre = new JLabel("Nombre : ");
+        txtFldCursoNombre = new JTextField(50);
+        txtLblCursoProf = new JLabel("Profesor : ");
+        txtFldCursoProf = new JTextField(50);
+    
+        panelAltaCurso.add(txtLblCursoCodCurso);
+        panelAltaCurso.add(txtFldCursoCodCurso);
+        panelAltaCurso.add(txtLblCursoNombre);
+        panelAltaCurso.add(txtFldCursoNombre);
+        panelAltaCurso.add(txtLblCursoProf);
+        panelAltaCurso.add(txtFldCursoProf);
+
+        contenedor.add(panelAltaCurso);
+    }
+
+    public void pantallaAltaRecurso(){
+        panelAltaRecurso = new JPanel();
+
+        txtLblRecursoCodRec = new JLabel("Cod Recurso : ");
+        txtFldRecursoCodRec = new JTextField(4);
+        txtLblRecursoCategoria = new JLabel("Categoría : ");
+        txtFldRecursoCategoria = new JTextField(2);
+        txtLblRecursoNombre = new JLabel("Nombre : ");
+        txtFldRecursoNombre = new JTextField(50);
+        txtLblRecursoAutor = new JLabel("Autor : ");
+        txtFldRecursoAutor = new JTextField(50);
+        txtLblRecursoAnio = new JLabel("Año : ");
+        txtFldRecursoAnio = new JTextField(4);
+        txtLblRecursoCant = new JLabel("Cant. : ");
+        txtFldRecursoCant = new JTextField(3);
+
+        panelAltaRecurso.add(txtLblRecursoCodRec);
+        panelAltaRecurso.add(txtFldRecursoCodRec);
+        panelAltaRecurso.add(txtLblRecursoCategoria);
+        panelAltaRecurso.add(txtFldRecursoCategoria);
+        panelAltaRecurso.add(txtLblRecursoNombre);
+        panelAltaRecurso.add(txtFldRecursoNombre);
+        panelAltaRecurso.add(txtLblRecursoAutor);
+        panelAltaRecurso.add(txtFldRecursoAutor);
+        panelAltaRecurso.add(txtLblRecursoAnio);
+        panelAltaRecurso.add(txtFldRecursoAnio);
+        panelAltaRecurso.add(txtLblRecursoCant);
+        panelAltaRecurso.add(txtFldRecursoCant);
+
+        contenedor.add(panelAltaRecurso);
     }
 
     public void pantallaPrincipal(){
@@ -223,6 +351,8 @@ public final class Vista {
         contenedor.add(pantallaPrincipal);
     
     }
+    
+    // ----- Getters inputs -----
 
     public String getTxtFldAlumnoNroLegajo() {
         return txtFldAlumnoNroLegajo.getText();
@@ -284,6 +414,219 @@ public final class Vista {
         return txtFldAlumnoFoto.getText();
     }
 
+    public String getTxtFldCursoCodCurso() {
+        return txtFldCursoCodCurso.getText();
+    }
+
+    public String getTxtFldCursoNombre() {
+        return txtFldCursoNombre.getText();
+    }
+
+    public String getTxtFldCursoProf() {
+        return txtFldCursoProf.getText();
+    }
+
+    public String getTxtFldRecursoCodRec() {
+        return txtFldRecursoCodRec.getText();
+    }
+
+    public String getTxtFldRecursoCategoria() {
+        return txtFldRecursoCategoria.getText();
+    }
+
+    public String getTxtFldRecursoNombre() {
+        return txtFldRecursoNombre.getText();
+    }
+
+    public String getTxtFldRecursoAutor() {
+        return txtFldRecursoAutor.getText();
+    }
+
+    public String getTxtFldRecursoAnio() {
+        return txtFldRecursoAnio.getText();
+    }
+
+    public String getTxtFldRecursoCant() {
+        return txtFldRecursoCant.getText();
+    }
+
+    public String getTxtFldPrestamoNroLegajo() {
+        return txtFldPrestamoNroLegajo.getText();
+    }
+
+    public String getTxtFldPrestamoCodRecurso() {
+        return txtFldPrestamoCodRecurso.getText();
+    }
+
+    public String getTxtFldPrestamoFechaPres() {
+        return txtFldPrestamoFechaPres.getText();
+    }
+
+    public String getTxtFldPrestamoFechaDevo() {
+        return txtFldPrestamoFechaDevo.getText();
+    }
+
+    public String getTxtFldPrestamoFechaPrevDevo() {
+        return txtFldPrestamoFechaPrevDevo.getText();
+    }
+
+    public String getTxtFldPagoNroLegajo() {
+        return txtFldPagoNroLegajo.getText();
+    }
+
+    public String getTxtFldPagoCodCurso() {
+        return txtFldPagoCodCurso.getText();
+    }
+
+    public String getTxtFldPagoFecha() {
+        return txtFldPagoFecha.getText();
+    }
+
+    public String getTxtFldPagoImporte() {
+        return txtFldPagoImporte.getText();
+    }
+
+    public String getTxtFldPagoComprobante() {
+        return txtFldPagoComprobante.getText();
+    }
+    
+    // ----- Seters inputs -----
+    public void setTxtFldAlumnoNroLegajo(String txtFldAlumnoNroLegajo) {
+        this.txtFldAlumnoNroLegajo.setText(txtFldAlumnoNroLegajo);
+    }
+
+    public void setTxtFldAlumnoNombre(String txtFldAlumnoNombre) {
+        this.txtFldAlumnoNombre.setText(txtFldAlumnoNombre);
+    }
+
+    public void setTxtFldAlumnoApellido(String txtFldAlumnoApellido) {
+        this.txtFldAlumnoApellido.setText(txtFldAlumnoApellido);
+    }
+
+    public void setTxtFldAlumnoFechaNacimiento(String txtFldAlumnoFechaNacimiento) {
+        this.txtFldAlumnoFechaNacimiento.setText(txtFldAlumnoFechaNacimiento);
+    }
+
+    public void setTxtFldAlumnoNroDoc(String txtFldAlumnoNroDoc) {
+        this.txtFldAlumnoNroDoc.setText(txtFldAlumnoNroDoc);
+    }
+
+    public void setTxtFldAlumnoCalle(String txtFldAlumnoCalle) {
+        this.txtFldAlumnoCalle.setText(txtFldAlumnoCalle);
+    }
+
+    public void setTxtFldAlumnoNro(String txtFldAlumnoNro) {
+        this.txtFldAlumnoNro.setText(txtFldAlumnoNro);
+    }
+
+    public void setTxtFldAlumnoPiso(String txtFldAlumnoPiso) {
+        this.txtFldAlumnoPiso.setText(txtFldAlumnoPiso);
+    }
+
+    public void setTxtFldAlumnoDepartamento(String txtFldAlumnoDepartamento) {
+        this.txtFldAlumnoDepartamento.setText(txtFldAlumnoDepartamento);
+    }
+
+    public void setTxtFldAlumnoCodPostal(String txtFldAlumnoCodPostal) {
+        this.txtFldAlumnoCodPostal.setText(txtFldAlumnoCodPostal);
+    }
+
+    public void setTxtFldAlumnoLocalidad(String txtFldAlumnoLocalidad) {
+        this.txtFldAlumnoLocalidad.setText(txtFldAlumnoLocalidad);
+    }
+
+    public void setTxtFldAlumnoTelFijo(String txtFldAlumnoTelFijo) {
+        this.txtFldAlumnoTelFijo.setText(txtFldAlumnoTelFijo);
+    }
+
+    public void setTxtFldAlumnoTelCel(String txtFldAlumnoTelCel) {
+        this.txtFldAlumnoTelCel.setText(txtFldAlumnoTelCel);
+    }
+
+    public void setTxtFldAlumnoMail(String txtFldAlumnoMail) {
+        this.txtFldAlumnoMail.setText(txtFldAlumnoMail);
+    }
+
+    public void setTxtFldAlumnoFoto(String txtFldAlumnoFoto) {
+        this.txtFldAlumnoFoto.setText(txtFldAlumnoFoto);
+    }
+
+    public void setTxtFldCursoCodCurso(String txtFldCursoCodCurso) {
+        this.txtFldCursoCodCurso.setText(txtFldCursoCodCurso);
+    }
+
+    public void setTxtFldCursoNombre(String txtFldCursoNombre) {
+        this.txtFldCursoNombre.setText(txtFldCursoNombre);
+    }
+
+    public void setTxtFldCursoProf(String txtFldCursoProf) {
+        this.txtFldCursoProf.setText(txtFldCursoProf);
+    }
+
+    public void setTxtFldRecursoCodRec(String txtFldRecursoCodRec) {
+        this.txtFldRecursoCodRec.setText(txtFldRecursoCodRec);
+    }
+
+    public void setTxtFldRecursoCategoria(String txtFldRecursoCategoria) {
+        this.txtFldRecursoCategoria.setText(txtFldRecursoCategoria);
+    }
+
+    public void setTxtFldRecursoAutor(String txtFldRecursoAutor) {
+        this.txtFldRecursoAutor.setText(txtFldRecursoAutor);
+    }
+
+    public void setTxtFldRecursoAnio(String txtFldRecursoAnio) {
+        this.txtFldRecursoAnio.setText(txtFldRecursoAnio);
+    }
+
+    public void setTxtFldRecursoCant(String txtFldRecursoCant) {
+        this.txtFldRecursoCant.setText(txtFldRecursoCant);
+    }
+
+    public void setTxtFldPrestamoNroLegajo(String txtFldPrestamoNroLegajo) {
+        this.txtFldPrestamoNroLegajo.setText(txtFldPrestamoNroLegajo);
+    }
+
+    public void setTxtFldPrestamoCodRecurso(String txtFldPrestamoCodRecurso) {
+        this.txtFldPrestamoCodRecurso.setText(txtFldPrestamoCodRecurso);
+    }
+
+    public void setTxtFldPrestamoFechaPres(String txtFldPrestamoFechaPres) {
+        this.txtFldPrestamoFechaPres.setText(txtFldPrestamoFechaPres);
+    }
+
+    public void setTxtFldPrestamoFechaDevo(String txtFldPrestamoFechaDevo) {
+        this.txtFldPrestamoFechaDevo.setText(txtFldPrestamoFechaDevo);
+    }
+
+    public void setTxtFldPrestamoFechaPrevDevo(String txtFldPrestamoFechaPrevDevo) {
+        this.txtFldPrestamoFechaPrevDevo.setText(txtFldPrestamoFechaPrevDevo);
+    }
+
+    public void setTxtFldPagoNroLegajo(String txtFldPagoNroLegajo) {
+        this.txtFldPagoNroLegajo.setText(txtFldPagoNroLegajo);
+    }
+
+    public void setTxtFldPagoCodCurso(String txtFldPagoCodCurso) {
+        this.txtFldPagoCodCurso.setText(txtFldPagoCodCurso);
+    }
+
+    public void setTxtFldPagoFecha(String txtFldPagoFecha) {
+        this.txtFldPagoFecha.setText(txtFldPagoFecha);
+    }
+
+    public void setTxtFldPagoImporte(String txtFldPagoImporte) {
+        this.txtFldPagoImporte.setText(txtFldPagoImporte);
+    }
+
+    public void setTxtFldPagoComprobante(String txtFldPagoComprobante) {
+        this.txtFldPagoComprobante.setText(txtFldPagoComprobante);
+    }
+    
+        
+    // ----- Listeners ----- 
+    
+
     public void setTxtAlumnosPrincipal(String txtAlumnosPrincipal) {
         this.txtAlumnosPrincipal.setText(txtAlumnosPrincipal);
     }
@@ -299,7 +642,10 @@ public final class Vista {
     public void sendDatosAltaAlumno(ActionListener al){
         btnAlumnoSend.addActionListener(al);
     }
-   
+    
+    
+    
+    
     
     
 

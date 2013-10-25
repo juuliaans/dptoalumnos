@@ -98,11 +98,32 @@ public class Controlador {
             }
             
             if(validacion){
-                String strSql = "";
-                strSql = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
-                strSql+= "VALUES ('"+nroLegajo+"','"+nombre+"','"+apellido+"','"+fechaNacimiento+"','"+nroDoc+"','"+calle+"','"+nroCalle+"','"+piso+"','"+dpto+"','"+codPostal+"','"+localidad+"','"+telFijo+"','"+telCel+"','"+eMail+"');";
-                m.executeQuery(strSql);
+                m.qryAltaAlumno(nroLegajo, nombre, apellido, fechaNacimiento, nroDoc, calle, nroCalle, piso, dpto, codPostal, localidad, telFijo, telCel, eMail);
             }
+        }
+        
+        private class funcionSendAltaCurso implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                Curso curso = new Curso();
+                Boolean validation = true;
+                
+                String codCurso = v.getTxtFldCursoCodCurso();
+                String nombre = v.getTxtFldCursoNombre();
+                String prof = v.getTxtFldCursoProf();
+                
+                if(codCurso.isEmpty()){
+                    validation = false;
+                }
+                if(nombre.isEmpty()){
+                    validation = false;
+                }
+                if(prof.isEmpty()){
+                    validation = false;
+                }
+            }
+            
         }
         
     }
