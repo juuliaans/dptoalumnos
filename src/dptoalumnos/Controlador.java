@@ -239,24 +239,139 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             Curso curso = new Curso();
-            Boolean validation = true;
+            Boolean validacion = true;
 
             String codCurso = v.getTxtFldCursoCodCurso();
             String nombre = v.getTxtFldCursoNombre();
             String prof = v.getTxtFldCursoProf();
 
             if(codCurso.isEmpty()){
-                validation = false;
+                validacion = false;
             }
             if(nombre.isEmpty()){
-                validation = false;
+                validacion = false;
             }
             if(prof.isEmpty()){
-                validation = false;
+                validacion = false;
             }
+            
+            if(validacion){
+                m.qryAltaCurso(codCurso, nombre, prof);
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+            }
+            
         }
             
     }
+    
+    private class funcionSendAltaRecurso implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Recurso recurso = new Recurso();
+            Boolean validacion = true;
+
+            String codRecurso = v.getTxtFldRecursoCodRec();
+            String categoria = v.getTxtFldRecursoCategoria();
+            String nombre = v.getTxtFldRecursoNombre();
+            String autor = v.getTxtFldRecursoAutor();
+            String anio = v.getTxtFldRecursoAnio();
+            String cant = v.getTxtFldRecursoCant();
+
+            if(codRecurso.isEmpty()){
+                validacion = false;
+            }
+            if(categoria.isEmpty()){
+                validacion = false;
+            }
+            if(nombre.isEmpty()){
+                validacion = false;
+            }
+            if(autor.isEmpty()){
+                validacion = false;
+            }
+            if(anio.isEmpty()){
+                validacion = false;
+            }
+            if(cant.isEmpty()){
+                validacion = false;
+            }
+            
+            if(validacion){
+                m.qryAltaRecurso(codRecurso, nombre, anio, categoria, autor, cant);
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+            }
+            
+        }
+            
+    }
+    
+    private class funcionSendAltaPrestamo implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Prestamo prestamo = new Prestamo();
+            Boolean validacion = true;
+
+            String nroLegajo = v.getTxtFldPrestamoNroLegajo();
+            String codRecurso = v.getTxtFldPrestamoCodRecurso();
+            String fechaPrestamo = v.getTxtFldPrestamoFechaPres();
+            String fechaPrevistaDevolucion = v.getTxtFldPrestamoFechaPrevDevo();
+            String fechaDevolucion = v.getTxtFldPrestamoFechaDevo();
+            
+            if(validacion){
+                m.qryAltaPrestamo(nroLegajo, codRecurso, fechaPrestamo, fechaDevolucion, fechaPrevistaDevolucion);
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+            }
+            
+        }
+            
+    }  
+    
+    private class funcionSendAltaPago implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Pago pago = new Pago();
+            Boolean validacion = true;
+
+            String nroLegajo = v.getTxtFldPagoNroLegajo();
+            String codCurso = v.getTxtFldPagoCodCurso();
+            String fecha = v.getTxtFldPagoFecha();
+            String importe = v.getTxtFldPagoImporte();
+            String comprobante = v.getTxtFldPagoComprobante();
+            
+            if(nroLegajo.isEmpty()){
+                validacion = false;
+            }
+            if(codCurso.isEmpty()){
+                validacion = false;
+            }
+            if(fecha.isEmpty()){
+                validacion = false;
+            }
+            if(importe.isEmpty()){
+                validacion = false;
+            }
+            if(comprobante.isEmpty()){
+                validacion = false;
+            }
+            
+            if(validacion){
+                m.aryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+            }
+            
+        }
+            
+    }  
+    
+    
+    
     
     
 }

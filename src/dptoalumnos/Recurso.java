@@ -5,7 +5,7 @@ public class Recurso {
 
     private String codRecurso;
     private String categoria;
-    private String denominacion;
+    private String nombre;
     private String autor;
     private String anio;
     private String cant;
@@ -14,7 +14,7 @@ public class Recurso {
     public Recurso(){
         codRecurso = "";
         categoria = "";
-        denominacion = "";
+        nombre = "";
         autor = "";
         anio = "";
         cant = "";
@@ -29,8 +29,8 @@ public class Recurso {
         return categoria;
     }
 
-    public String getDenominacion() {
-        return denominacion;
+    public String getNombre() {
+        return nombre;
     }
 
     public String getAutor() {
@@ -57,8 +57,8 @@ public class Recurso {
         this.categoria = categoria;
     }
 
-    public void setDenominacion(String denominacion) {
-        this.denominacion = denominacion;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setAutor(String autor) {
