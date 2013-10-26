@@ -12,7 +12,8 @@ public final class Modelo {
     private ArrayList<Curso> arrayCursos; // array de todos los cursos
     private ArrayList<Pago> arrayPagos; // array de todos los pagos
     private ArrayList<Prestamo> arrayPrestamos; // array de todos los prestamos
-    private ResultSet rs;
+    private Connection db;
+    private Statement statement;
     private String databaseName;
     
     // ----- CONSTRUCTOR -----
@@ -22,9 +23,6 @@ public final class Modelo {
         arrayCursos = new ArrayList<Curso>();
         arrayPagos = new ArrayList<Pago>();
         arrayPrestamos = new ArrayList<Prestamo>();
-        rs = null;
-        cargaArrayAlumno();
-        System.out.println(getAlumnos());
     }
     
     // ----- CONEXION BASE DE DATOS -----
@@ -55,17 +53,14 @@ public final class Modelo {
         }
         
         return statement;
-        
     }
     
-    public void executeQuery(String strSql){
-        Connection db = conexionSQL("localhost" , "root" , "" , databaseName);
-        Statement statement = statementSQL(db);
-        try {
-            this.rs = statement.executeQuery(strSql);
-        } catch (Exception ex) {
-            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void openDBConnection(){
+        db = conexionSQL("localhost" , "root" , "" , databaseName);
+        statement = statementSQL(db);
+    }
+    
+    private void closeDBConnection(){
         try {
             if (statement != null) {
                 statement.close();
@@ -78,32 +73,31 @@ public final class Modelo {
         }
     }
     
-    public void executeUpdate(String strSql){
-        Connection db = conexionSQL("localhost" , "root" , "" , databaseName);
-        Statement statement = statementSQL(db);
+    public ResultSet executeQuery(String strSql){
         try {
-            statement.executeUpdate(strSql);
+            return statement.executeQuery(strSql);
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public int executeUpdate(String strSql){
+        try {
+            return statement.executeUpdate(strSql);
         } catch (SQLException ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        try {
-            if (statement != null) {
-                statement.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        return 0;
     }
     
     // ----- LEVANTA DATOS -----
     public void cargaArrayAlumno(){ // cargo en un array todos los registros de la tabla alumno.
         String qry = "SELECT * FROM alumnos";
+        ResultSet rs = null;
+        this.openDBConnection();
         try {
-            this.executeQuery(qry);
+            rs = this.executeQuery(qry);
             while (rs.next()) {
                 Alumno a = new Alumno();
                 a.setNroLegajo(rs.getString(1));
@@ -127,19 +121,21 @@ public final class Modelo {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            if (this.rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.closeDBConnection();
     }
 
     public void cargaArrayCurso(){ // cargo en un array todos los registros de la tabla Cursos.
         String qry = "SELECT * FROM cursos";
+        ResultSet rs = null;
+        this.openDBConnection();
         try {
-            this.executeQuery(qry);
+            rs = this.executeQuery(qry);
             while (rs.next()) {
                 Curso a = new Curso();
                 a.setCursoCod(rs.getString(1));                
@@ -152,19 +148,21 @@ public final class Modelo {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            if (this.rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.closeDBConnection();
     }
     
     public void cargaArrayPago(){ // cargo en un array todos los registros de la tabla Pagos.
         String qry = "SELECT * FROM pagos";
+        ResultSet rs = null;
+        this.openDBConnection();
         try {
-            this.executeQuery(qry);
+            rs = this.executeQuery(qry);
             while (rs.next()) {
                 Pago a = new Pago();
                 a.setPagoNroLegajo(rs.getString(1));
@@ -179,19 +177,21 @@ public final class Modelo {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            if (this.rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.closeDBConnection();
     }
     
     public void cargaArrayPrestamo(){ // cargo en un array todos los registros de la tabla Prestamos.
         String qry = "SELECT * FROM prestamos";
+        ResultSet rs = null;
+        this.openDBConnection();
         try {
-            this.executeQuery(qry);
+            rs = this.executeQuery(qry);
             while (rs.next()) {
                 Prestamo a = new Prestamo();
                 a.setNroLegajo(rs.getString(1));
@@ -206,13 +206,13 @@ public final class Modelo {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            if (this.rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (Exception ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.closeDBConnection();
     }
 
     
