@@ -158,7 +158,7 @@ public class Controlador {
             v.mostrarPantalla("MODIFICACION_RECURSOS");
         }
     }
-    
+    // ----- Levanta datos form , envía a armado de Query -----
     private class funcionSendAltaAlumno implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -321,6 +321,22 @@ public class Controlador {
             String fechaPrevistaDevolucion = v.getTxtFldPrestamoFechaPrevDevo();
             String fechaDevolucion = v.getTxtFldPrestamoFechaDevo();
             
+            if(nroLegajo.isEmpty()){
+                validacion = false;
+            }
+            if(codRecurso.isEmpty()){
+                validacion = false;
+            }
+            if(fechaPrestamo.isEmpty()){
+                validacion = false;
+            }
+            if(fechaPrevistaDevolucion.isEmpty()){
+                validacion = false;
+            }
+            if(fechaDevolucion.isEmpty()){
+                validacion = false;
+            }
+            
             if(validacion){
                 m.qryAltaPrestamo(nroLegajo, codRecurso, fechaPrestamo, fechaDevolucion, fechaPrevistaDevolucion);
             }else{
@@ -369,6 +385,124 @@ public class Controlador {
         }
             
     }  
+    
+    // ----- Handlers botones avanzar / retroceder -----
+      // ALUMNO
+    class RetrocederAlumnoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantAlumnos()> 0) {
+                m.setPosAlumnos(m.getPosAlumnos()- 1);
+                if (m.getPosAlumnos()== -1) {
+                    m.setPosAlumnos(0);
+                }
+                v.cargaInputsAlumno(m.getAlumno(m.getPosAlumnos()));
+            }
+        }
+    }
+    
+    class AvanzarAlumnoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantAlumnos() > 0) {
+                m.setPosAlumnos(m.getPosAlumnos()+ 1);
+                if (m.getPosAlumnos()== m.getCantAlumnos()) {
+                    m.setPosAlumnos(m.getCantAlumnos()- 1);
+                }
+                v.cargaInputsAlumno(m.getAlumno(m.getPosAlumnos()));
+            }
+        }
+    }
+    
+      // CURSO
+    class RetrocederCursoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantCursos()> 0) {
+                m.setPosCursos(m.getPosCursos()- 1);
+                if (m.getPosCursos()== -1) {
+                    m.setPosCursos(0);
+                }
+                v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
+            }
+        }
+    }
+    
+    class AvanzarCursoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantCursos() > 0) {
+                m.setPosCursos(m.getPosCursos()+ 1);
+                if (m.getPosCursos()== m.getCantCursos()) {
+                    m.setPosCursos(m.getCantCursos()- 1);
+                }
+                v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
+            }
+        }
+    }
+    
+     // PAGO 
+    class RetrocederPagoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantPagos()> 0) {
+                m.setPosPagos(m.getPosPagos()- 1);
+                if (m.getPosPagos()== -1) {
+                    m.setPosPagos(0);
+                }
+                v.cargaInputsPago(m.getPago(m.getPosPagos()));
+            }
+        }
+    }
+    
+    class AvanzarPagoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantPagos() > 0) {
+                m.setPosPagos(m.getPosPagos()+ 1);
+                if (m.getPosPagos()== m.getCantPagos()) {
+                    m.setPosPagos(m.getCantPagos()- 1);
+                }
+                v.cargaInputsPago(m.getPago(m.getPosPagos()));
+            }
+        }
+    }
+    
+      // PRESTAMO
+    class RetrocederPrestamoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantPrestamos()> 0) {
+                m.setPosPrestamos(m.getPosPrestamos()- 1);
+                if (m.getPosPrestamos()== -1) {
+                    m.setPosPrestamos(0);
+                }
+                v.cargaInputsPrestamo(m.getPrestamo(m.getPosPrestamos()));
+            }
+        }
+    }
+    
+    class AvanzarPrestamoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantPrestamos() > 0) {
+                m.setPosPrestamos(m.getPosPrestamos()+ 1);
+                if (m.getPosPrestamos()== m.getCantPrestamos()) {
+                    m.setPosPrestamos(m.getCantPrestamos()- 1);
+                }
+                v.cargaInputsPrestamo(m.getPrestamo(m.getPosPrestamos()));
+            }
+        }
+    }
+    
     
     
     

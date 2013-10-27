@@ -425,6 +425,56 @@ public final class Vista {
         
     }
     
+    // ----- Setea inputs para form modificación -----
+    
+    public void cargaInputsAlumno(Alumno alumno){
+        setTxtFldAlumnoApellido(alumno.getApellido());
+        setTxtFldAlumnoCalle(alumno.getCalle());
+        setTxtFldAlumnoCodPostal(alumno.getCodPostal());
+        setTxtFldAlumnoDepartamento(alumno.getDepartamento());
+        setTxtFldAlumnoFechaNacimiento(alumno.getFechaNacimiento());
+        setTxtFldAlumnoLocalidad(alumno.getLocalidad());
+        setTxtFldAlumnoMail(alumno.geteMail());
+        setTxtFldAlumnoNombre(alumno.getNombre());
+        setTxtFldAlumnoNro(alumno.getNroCalle());
+        setTxtFldAlumnoNroDoc(alumno.getNroDoc());
+        setTxtFldAlumnoNroLegajo(alumno.getNroLegajo());
+        setTxtFldAlumnoPiso(alumno.getPiso());
+        setTxtFldAlumnoTelCel(alumno.getTelCel());
+        setTxtFldAlumnoTelFijo(alumno.getTelFijo());
+    }
+    
+    public void cargaInputsCurso(Curso curso){
+        setTxtFldCursoCodCurso(curso.getCursoCod());
+        setTxtFldCursoNombre(curso.getCursoNombre());
+        setTxtFldCursoProf(curso.getCursoProf());
+    }
+    
+    public void cargaInputsPago(Pago pago){
+        setTxtFldPagoCodCurso(pago.getPagoCodCurso());
+        setTxtFldPagoComprobante(pago.getPagoComprobante());
+        setTxtFldPagoFecha(pago.getPagoFecha());
+        setTxtFldPagoImporte(Float.toString(pago.getPagoImporte()));
+        setTxtFldPagoNroLegajo(pago.getPagoNroLegajo());        
+    }
+    
+    public void cargaInputsPrestamo(Prestamo prestamo){
+        setTxtFldPrestamoCodRecurso(prestamo.getCodRecurso());
+        setTxtFldPrestamoFechaDevo(prestamo.getFechaDevolucion());
+        setTxtFldPrestamoFechaPres(prestamo.getFechaPrestamo());
+        setTxtFldPrestamoFechaPrevDevo(prestamo.getFechaPrevistaDevolucion());
+        setTxtFldPrestamoNroLegajo(prestamo.getNroLegajo());
+    }
+    
+    public void cargaInputsRecurso(Recurso recurso){
+        setTxtFldRecursoAnio(recurso.getAnio());
+        setTxtFldRecursoAutor(recurso.getAutor());
+        setTxtFldRecursoCant(recurso.getCant());
+        setTxtFldRecursoCategoria(recurso.getCategoria());
+        setTxtFldRecursoCodRec(recurso.getCodRecurso());
+    }
+    
+    
     // ----- Getters inputs -----
     public String getTxtFldAlumnoNroLegajo() {
         return txtFldAlumnoNroLegajo.getText();
