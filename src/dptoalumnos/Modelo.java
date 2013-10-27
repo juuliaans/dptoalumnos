@@ -12,6 +12,12 @@ public final class Modelo {
     private ArrayList<Curso> arrayCursos; // array de todos los cursos
     private ArrayList<Pago> arrayPagos; // array de todos los pagos
     private ArrayList<Prestamo> arrayPrestamos; // array de todos los prestamos
+    private ArrayList<Recurso> arrayRecursos; // arrayde todos los recursos
+    private int posAlumnos; // posición actual del array de registro 
+    private int posCursos; // posición actual del array de registro 
+    private int posPagos; // posición actual del array de registro 
+    private int posPrestamos; // posición actual del array de registro 
+    private int posRecursos; // posición actual del array de recurso 
     private Connection db;
     private Statement statement;
     private String databaseName;
@@ -23,6 +29,7 @@ public final class Modelo {
         arrayCursos = new ArrayList<Curso>();
         arrayPagos = new ArrayList<Pago>();
         arrayPrestamos = new ArrayList<Prestamo>();
+        arrayRecursos = new ArrayList<Recurso>();
     }
     
     // ----- CONEXION BASE DE DATOS -----
@@ -95,6 +102,7 @@ public final class Modelo {
     public void cargaArrayAlumno(){ // cargo en un array todos los registros de la tabla alumno.
         String qry = "SELECT * FROM alumnos";
         ResultSet rs = null;
+        this.arrayAlumnos.clear(); // borro el array para despues cargarlo denuevo . 
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -133,6 +141,7 @@ public final class Modelo {
     public void cargaArrayCurso(){ // cargo en un array todos los registros de la tabla Cursos.
         String qry = "SELECT * FROM cursos";
         ResultSet rs = null;
+        this.arrayCursos.clear(); // borro el array para despues cargarlo denuevo . 
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -160,6 +169,7 @@ public final class Modelo {
     public void cargaArrayPago(){ // cargo en un array todos los registros de la tabla Pagos.
         String qry = "SELECT * FROM pagos";
         ResultSet rs = null;
+        this.arrayPagos.clear(); // borro el array para despues cargarlo denuevo . 
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -189,6 +199,7 @@ public final class Modelo {
     public void cargaArrayPrestamo(){ // cargo en un array todos los registros de la tabla Prestamos.
         String qry = "SELECT * FROM prestamos";
         ResultSet rs = null;
+        this.arrayPrestamos.clear(); // borro el array para despues cargarlo denuevo . 
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -233,7 +244,7 @@ public final class Modelo {
             rs += arrayAlumnos.get(i).getLocalidad();
             rs += arrayAlumnos.get(i).getTelFijo();
             rs += arrayAlumnos.get(i).getTelCel();
-            rs += arrayAlumnos.get(i).geteMail();
+            rs += arrayAlumnos.get(i).geteMail() + "\n";
         }
         return rs;
     }
@@ -243,7 +254,7 @@ public final class Modelo {
         for(int i = 0 ; i < arrayCursos.size() ; i++){
             rs += arrayCursos.get(i).getCursoCod();
             rs += arrayCursos.get(i).getCursoNombre();
-            rs += arrayCursos.get(i).getCursoProf();
+            rs += arrayCursos.get(i).getCursoProf() + "\n";
         }
         return rs;
     }
@@ -254,7 +265,7 @@ public final class Modelo {
             rs += arrayPagos.get(i).getPagoCodCurso();
             rs += arrayPagos.get(i).getPagoNroLegajo();
             rs += arrayPagos.get(i).getPagoFecha();
-            rs += arrayPagos.get(i).getPagoComprobante();
+            rs += arrayPagos.get(i).getPagoComprobante() + "\n";
         }
         return rs;
     }
@@ -265,7 +276,7 @@ public final class Modelo {
             rs += arrayPagos.get(i).getPagoCodCurso();
             rs += arrayPagos.get(i).getPagoNroLegajo();
             rs += arrayPagos.get(i).getPagoFecha();
-            rs += arrayPagos.get(i).getPagoComprobante();
+            rs += arrayPagos.get(i).getPagoComprobante() + "\n";
         }
         return rs;
     }
@@ -319,6 +330,99 @@ public final class Modelo {
         openDBConnection();
         executeUpdate(qry);
         closeDBConnection();
+    }
+    
+    public void aryAltaPagos(String nroLegajo , String codRecurso , String fecha , String importe , String comprobante){
+        String qry; // revisar los campos de la tabla 
+        qry = "INSERT INTO prestamo (nroLegajo , codRecurso , fecha , importe , comprobante) ";
+        qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fecha+"' , "+importe+" , '"+comprobante+"' );";
+    }
+    
+    // ----- Getters -----
+      // Levanta objetos de array
+    public Alumno getAlumno(int i) { 
+        return arrayAlumnos.get(i);
+    }
+    
+    public Prestamo getPrestamo(int i) { 
+        return arrayPrestamos.get(i);
+    }
+    
+    public Recurso getRecurso(int i) { 
+        return arrayRecursos.get(i);
+    }
+    
+    public Curso getCurso(int i) { 
+        return arrayCursos.get(i);
+    }
+    
+    public Pago getPago(int i) { 
+        return arrayPagos.get(i);
+    }
+      // Devuelve tamaño de array 
+    public int getCantAlumnos() {
+        return arrayAlumnos.size();
+    }
+    
+    public int getCantPrestamos() {
+        return arrayPrestamos.size();
+    }
+    
+    public int getCantRecursos() {
+        return arrayRecursos.size();
+    }
+    
+    public int getCantCursos() {
+        return arrayCursos.size();
+    }
+    
+    public int getCantPagos() {
+        return arrayPagos.size();
+    }
+    
+      // Devuelve posicion actual del array de registros 
+    public int getPosAlumnos() {
+        return posAlumnos;
+    }
+
+    public int getPosCursos() {
+        return posCursos;
+    }
+
+    public int getPosPagos() {
+        return posPagos;
+    }
+
+    public int getPosPrestamos() {
+        return posPrestamos;
+    }
+
+    public int getPosRecursos() {
+        return posRecursos;
+    }
+    
+    
+    
+    // ----- Setters -----
+      // Setea posición actual del array de registros 
+    public void setPosAlumnos(int posAlumnos) {
+        this.posAlumnos = posAlumnos;
+    }
+    
+    public void setPosPrestamos(int posPrestamos) {
+        this.posPrestamos = posPrestamos;
+    }
+    
+    public void setPosRecursos(int posRecursos) {
+        this.posRecursos = posRecursos;
+    }
+    
+    public void setPosCursos(int posCursos) {
+        this.posCursos = posCursos;
+    }
+    
+    public void setPosPagos(int posPagos) {
+        this.posPagos = posPagos;
     }
     
 }
