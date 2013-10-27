@@ -1,6 +1,8 @@
 package dptoalumnos;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +41,7 @@ public final class Vista {
     private JPanel pantallaActual;
     
     //Pantalla Alta Alumno
-    private JPanel panelAltaAlumno;
+    private JPanel panelAlumno;
     private JLabel txtLblAlumnoNroLegajo;
     private JTextField txtFldAlumnoNroLegajo;
     private JLabel txtLblAlumnoNombre;
@@ -71,18 +73,27 @@ public final class Vista {
     private JLabel txtLblAlumnoFoto;
     private JTextField txtFldAlumnoFoto;
     private JButton btnAlumnoSend;
+    private JButton btnAlumnoNext;
+    private JButton btnAlumnoPrev;
+    private JButton btnAlumnoSave;
+    private JButton btnAlumnoDelete;
 
     //Pantalla Alta Curso
-    private JPanel panelAltaCurso;
+    private JPanel panelCurso;
     private JLabel txtLblCursoCodCurso;
     private JTextField txtFldCursoCodCurso;
     private JLabel txtLblCursoNombre;
     private JTextField txtFldCursoNombre;
     private JLabel txtLblCursoProf;
     private JTextField txtFldCursoProf;
+    private JButton btnCursoSend;
+    private JButton btnCursoNext;
+    private JButton btnCursoPrev;
+    private JButton btnCursoSave;
+    private JButton btnCursoDelete;
     
     //Pantalla Alta Recurso
-    private JPanel panelAltaRecurso;
+    private JPanel panelRecurso;
     private JLabel txtLblRecursoCodRec;
     private JTextField txtFldRecursoCodRec;
     private JLabel txtLblRecursoCategoria;
@@ -95,9 +106,14 @@ public final class Vista {
     private JTextField txtFldRecursoAnio;
     private JLabel txtLblRecursoCant;
     private JTextField txtFldRecursoCant;
+    private JButton btnRecursoSend;
+    private JButton btnRecursoNext;
+    private JButton btnRecursoPrev;
+    private JButton btnRecursoSave;
+    private JButton btnRecursoDelete;
 
     //Pantalla Alta Prestamo
-    private JPanel panelAltaPrestamo;
+    private JPanel panelPrestamo;
     private JLabel txtLblPrestamoNroLegajo;
     private JTextField txtFldPrestamoNroLegajo;
     private JLabel txtLblPrestamoCodRecurso;
@@ -108,9 +124,14 @@ public final class Vista {
     private JTextField txtFldPrestamoFechaDevo;
     private JLabel txtLblPrestamoFechaPrevDevo;
     private JTextField txtFldPrestamoFechaPrevDevo;
+    private JButton btnPrestamoSend;
+    private JButton btnPrestamoNext;
+    private JButton btnPrestamoPrev;
+    private JButton btnPrestamoSave;
+    private JButton btnPrestamoDelete;
 
     //Pantalla Alta Pagos
-    private JPanel panelAltaPago;
+    private JPanel panelPago;
     private JLabel txtLblPagoNroLegajo;
     private JTextField txtFldPagoNroLegajo;
     private JLabel txtLblPagoCodCurso;
@@ -121,37 +142,11 @@ public final class Vista {
     private JTextField txtFldPagoImporte;
     private JLabel txtLblPagoComprobante;
     private JTextField txtFldPagoComprobante;
-
-    public void pantallaAltaPago(){
-        panelAltaPago = new JPanel();
-
-        txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
-        txtFldPagoNroLegajo = new JTextField(4);
-        txtLblPagoCodCurso = new JLabel("Cod Curso : ");
-        txtFldPagoCodCurso = new JTextField(4);
-        txtLblPagoFecha = new JLabel("Fecha : ");
-        txtFldPagoFecha = new JTextField(10);
-        txtLblPagoImporte = new JLabel("Importe : ");
-        txtFldPagoImporte = new JTextField(6);
-        txtLblPagoComprobante = new JLabel("Comprobante : ");
-        txtFldPagoComprobante = new JTextField(4);
-
-        panelAltaPago.add(txtLblPagoNroLegajo);
-        panelAltaPago.add(txtFldPagoNroLegajo);
-        panelAltaPago.add(txtLblPagoCodCurso);
-        panelAltaPago.add(txtFldPagoCodCurso);
-        panelAltaPago.add(txtLblPagoFecha);
-        panelAltaPago.add(txtFldPagoFecha);
-        panelAltaPago.add(txtLblPagoImporte);
-        panelAltaPago.add(txtFldPagoImporte);
-        panelAltaPago.add(txtLblPagoComprobante);
-        panelAltaPago.add(txtFldPagoComprobante);
-
-        contenedor.add(panelAltaPago);
-
-    }
-
-    
+    private JButton btnPagoSend;
+    private JButton btnPagoNext;
+    private JButton btnPagoPrev;
+    private JButton btnPagoSave;
+    private JButton btnPagoDelete;
 
     public Vista() {
         contenedor = new JFrame();
@@ -214,6 +209,12 @@ public final class Vista {
         item1_6 = new JMenuItem("Cerrar");
         archivo.add(item1_6);
         
+        
+        //disabling some items
+        delItem1_1.setVisible(false);
+        delItem1_4.setVisible(false);
+        delItem1_5.setVisible(false);
+        
         menuBar.add(archivo);
         contenedor.setJMenuBar(menuBar);
         contenedor.setLocationRelativeTo(null);
@@ -248,122 +249,600 @@ public final class Vista {
     }
     
     public void pantallaAltaAlumno(){
-        panelAltaAlumno = new JPanel();
-        pantallaActual = panelAltaAlumno;
+        panelAlumno = new JPanel(new BorderLayout());
+        pantallaActual = panelAlumno;
         
-        txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ");
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(14, 1));
+        derecha.setLayout(new GridLayout(14, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ", JLabel.RIGHT);
         txtFldAlumnoNroLegajo = new JTextField(4);
-        txtLblAlumnoNombre = new JLabel("Nombre : ");
+        txtLblAlumnoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldAlumnoNombre = new JTextField(20);
-        txtLblAlumnoApellido = new JLabel("Apellido : ");
+        txtLblAlumnoApellido = new JLabel("Apellido : ", JLabel.RIGHT);
         txtFldAlumnoApellido = new JTextField(20);
-        txtLblAlumnoFechaNacimiento = new JLabel("Fecha Nacimiento : ");
+        txtLblAlumnoFechaNacimiento = new JLabel("Fecha Nacimiento : ", JLabel.RIGHT);
         txtFldAlumnoFechaNacimiento = new JTextField(10);
-        txtLblAlumnoNroDoc = new JLabel("Nro Doc : ");
+        txtLblAlumnoNroDoc = new JLabel("Nro Doc : ", JLabel.RIGHT);
         txtFldAlumnoNroDoc = new JTextField(10);
-        txtLblAlumnoCalle = new JLabel("Calle : ");
+        txtLblAlumnoCalle = new JLabel("Calle : ", JLabel.RIGHT);
         txtFldAlumnoCalle = new JTextField(20);
-        txtLblAlumnoNro = new JLabel("Nro : ");
+        txtLblAlumnoNro = new JLabel("Nro : ", JLabel.RIGHT);
         txtFldAlumnoNro = new JTextField(5);
-        txtLblAlumnoPiso = new JLabel("Piso : ");
+        txtLblAlumnoPiso = new JLabel("Piso : ", JLabel.RIGHT);
         txtFldAlumnoPiso = new JTextField(2);
-        txtLblAlumnoDepartamento = new JLabel("Depto : ");
+        txtLblAlumnoDepartamento = new JLabel("Depto : ", JLabel.RIGHT);
         txtFldAlumnoDepartamento = new JTextField(1);
-        txtLblAlumnoCodPostal = new JLabel("Cod Postal : ");
+        txtLblAlumnoCodPostal = new JLabel("Cod Postal : ", JLabel.RIGHT);
         txtFldAlumnoCodPostal = new JTextField(5);
-        txtLblAlumnoLocalidad = new JLabel("Localidad : ");
+        txtLblAlumnoLocalidad = new JLabel("Localidad : ", JLabel.RIGHT);
         txtFldAlumnoLocalidad = new JTextField(20);
-        txtLblAlumnoTelFijo = new JLabel("Tel Fijo : ");
+        txtLblAlumnoTelFijo = new JLabel("Tel Fijo : ", JLabel.RIGHT);
         txtFldAlumnoTelFijo = new JTextField(10);
-        txtLblAlumnoTelCel = new JLabel("Tel Cel : ");
+        txtLblAlumnoTelCel = new JLabel("Tel Cel : ", JLabel.RIGHT);
         txtFldAlumnoTelCel = new JTextField(10);
-        txtLblAlumnoMail = new JLabel("E-Mail : ");
+        txtLblAlumnoMail = new JLabel("E-Mail : ", JLabel.RIGHT);
         txtFldAlumnoMail = new JTextField(20);
         btnAlumnoSend = new JButton("Enviar");
         
-        panelAltaAlumno.add(txtLblAlumnoNroLegajo);
-        panelAltaAlumno.add(txtFldAlumnoNroLegajo);
-        panelAltaAlumno.add(txtLblAlumnoNombre);
-        panelAltaAlumno.add(txtFldAlumnoNombre);
-        panelAltaAlumno.add(txtLblAlumnoApellido);
-        panelAltaAlumno.add(txtFldAlumnoApellido);
-        panelAltaAlumno.add(txtLblAlumnoFechaNacimiento);
-        panelAltaAlumno.add(txtFldAlumnoFechaNacimiento);
-        panelAltaAlumno.add(txtLblAlumnoNroDoc);
-        panelAltaAlumno.add(txtFldAlumnoNroDoc);
-        panelAltaAlumno.add(txtLblAlumnoCalle);
-        panelAltaAlumno.add(txtFldAlumnoCalle);
-        panelAltaAlumno.add(txtLblAlumnoNro);
-        panelAltaAlumno.add(txtFldAlumnoNro);
-        panelAltaAlumno.add(txtLblAlumnoPiso);
-        panelAltaAlumno.add(txtFldAlumnoPiso);
-        panelAltaAlumno.add(txtLblAlumnoDepartamento);
-        panelAltaAlumno.add(txtFldAlumnoDepartamento);
-        panelAltaAlumno.add(txtLblAlumnoCodPostal);
-        panelAltaAlumno.add(txtFldAlumnoCodPostal);
-        panelAltaAlumno.add(txtLblAlumnoLocalidad);
-        panelAltaAlumno.add(txtFldAlumnoLocalidad);
-        panelAltaAlumno.add(txtLblAlumnoTelFijo);
-        panelAltaAlumno.add(txtFldAlumnoTelFijo);
-        panelAltaAlumno.add(txtLblAlumnoTelCel);
-        panelAltaAlumno.add(txtFldAlumnoTelCel);
-        panelAltaAlumno.add(txtLblAlumnoMail);
-        panelAltaAlumno.add(txtFldAlumnoMail);
-        panelAltaAlumno.add(btnAlumnoSend);
+        izquierda.add(txtLblAlumnoNroLegajo);
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldAlumnoNroLegajo);
+        derecha.add(p1);
         
-        contenedor.add(panelAltaAlumno);
+        izquierda.add(txtLblAlumnoNombre);
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldAlumnoNombre);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblAlumnoApellido);
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldAlumnoApellido);
+        derecha.add(p3);
+        izquierda.add(txtLblAlumnoFechaNacimiento);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldAlumnoFechaNacimiento);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblAlumnoNroDoc);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldAlumnoNroDoc);
+        derecha.add(p5);
+        
+        izquierda.add(txtLblAlumnoCalle);
+        
+        JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p6.add(txtFldAlumnoCalle);
+        derecha.add(p6);
+        
+        izquierda.add(txtLblAlumnoNro);
+        
+        JPanel p7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p7.add(txtFldAlumnoNro);
+        derecha.add(p7);
+        
+        izquierda.add(txtLblAlumnoPiso);
+        
+        JPanel p8 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p8.add(txtFldAlumnoPiso);
+        derecha.add(p8);
+        
+        izquierda.add(txtLblAlumnoDepartamento);
+        
+        JPanel p9 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p9.add(txtFldAlumnoDepartamento);
+        derecha.add(p9);
+        
+        izquierda.add(txtLblAlumnoCodPostal);
+        
+        JPanel p10 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p10.add(txtFldAlumnoCodPostal);
+        derecha.add(p10);
+        
+        izquierda.add(txtLblAlumnoLocalidad);
+        
+        JPanel p11 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p11.add(txtFldAlumnoLocalidad);
+        derecha.add(p11);
+        
+        izquierda.add(txtLblAlumnoTelFijo);
+        
+        JPanel p12 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p12.add(txtFldAlumnoTelFijo);
+        derecha.add(p12);
+        
+        izquierda.add(txtLblAlumnoTelCel);
+        
+        JPanel p13 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p13.add(txtFldAlumnoTelCel);
+        derecha.add(p13);
+        
+        izquierda.add(txtLblAlumnoMail);
+        
+        JPanel p14 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p14.add(txtFldAlumnoMail);
+        derecha.add(p14);
+        
+        JPanel submitButton = new JPanel();
+        submitButton.add(btnAlumnoSend);
+        
+        panelAlumno.add(formContainer, BorderLayout.NORTH);
+        panelAlumno.add(submitButton, BorderLayout.SOUTH);
+        
+        contenedor.add(panelAlumno);
     }
-
-    public void pantallaAltaCurso(){
-        panelAltaCurso = new JPanel();
-
-        txtLblCursoCodCurso = new JLabel("Nro Curso : ");
-        txtFldCursoCodCurso = new JTextField(4);
-        txtLblCursoNombre = new JLabel("Nombre : ");
-        txtFldCursoNombre = new JTextField(50);
-        txtLblCursoProf = new JLabel("Profesor : ");
-        txtFldCursoProf = new JTextField(50);
     
-        panelAltaCurso.add(txtLblCursoCodCurso);
-        panelAltaCurso.add(txtFldCursoCodCurso);
-        panelAltaCurso.add(txtLblCursoNombre);
-        panelAltaCurso.add(txtFldCursoNombre);
-        panelAltaCurso.add(txtLblCursoProf);
-        panelAltaCurso.add(txtFldCursoProf);
+    public void pantallaModificarAlumno(){
+        panelAlumno = new JPanel(new BorderLayout());
+        pantallaActual = panelAlumno;
+        
+        JPanel controlsContainer = new JPanel();
+        btnAlumnoPrev = new JButton("Anterior");
+        btnAlumnoNext = new JButton("Siguiente");
 
-        contenedor.add(panelAltaCurso);
+        controlsContainer.add(btnAlumnoPrev);
+        controlsContainer.add(btnAlumnoNext);
+        
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(14, 1));
+        derecha.setLayout(new GridLayout(14, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ", JLabel.RIGHT);
+        txtFldAlumnoNroLegajo = new JTextField(4);
+        txtLblAlumnoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
+        txtFldAlumnoNombre = new JTextField(20);
+        txtLblAlumnoApellido = new JLabel("Apellido : ", JLabel.RIGHT);
+        txtFldAlumnoApellido = new JTextField(20);
+        txtLblAlumnoFechaNacimiento = new JLabel("Fecha Nacimiento : ", JLabel.RIGHT);
+        txtFldAlumnoFechaNacimiento = new JTextField(10);
+        txtLblAlumnoNroDoc = new JLabel("Nro Doc : ", JLabel.RIGHT);
+        txtFldAlumnoNroDoc = new JTextField(10);
+        txtLblAlumnoCalle = new JLabel("Calle : ", JLabel.RIGHT);
+        txtFldAlumnoCalle = new JTextField(20);
+        txtLblAlumnoNro = new JLabel("Nro : ", JLabel.RIGHT);
+        txtFldAlumnoNro = new JTextField(5);
+        txtLblAlumnoPiso = new JLabel("Piso : ", JLabel.RIGHT);
+        txtFldAlumnoPiso = new JTextField(2);
+        txtLblAlumnoDepartamento = new JLabel("Depto : ", JLabel.RIGHT);
+        txtFldAlumnoDepartamento = new JTextField(1);
+        txtLblAlumnoCodPostal = new JLabel("Cod Postal : ", JLabel.RIGHT);
+        txtFldAlumnoCodPostal = new JTextField(5);
+        txtLblAlumnoLocalidad = new JLabel("Localidad : ", JLabel.RIGHT);
+        txtFldAlumnoLocalidad = new JTextField(20);
+        txtLblAlumnoTelFijo = new JLabel("Tel Fijo : ", JLabel.RIGHT);
+        txtFldAlumnoTelFijo = new JTextField(10);
+        txtLblAlumnoTelCel = new JLabel("Tel Cel : ", JLabel.RIGHT);
+        txtFldAlumnoTelCel = new JTextField(10);
+        txtLblAlumnoMail = new JLabel("E-Mail : ", JLabel.RIGHT);
+        txtFldAlumnoMail = new JTextField(20);
+        
+        
+        izquierda.add(txtLblAlumnoNroLegajo);
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldAlumnoNroLegajo);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblAlumnoNombre);
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldAlumnoNombre);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblAlumnoApellido);
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldAlumnoApellido);
+        derecha.add(p3);
+        izquierda.add(txtLblAlumnoFechaNacimiento);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldAlumnoFechaNacimiento);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblAlumnoNroDoc);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldAlumnoNroDoc);
+        derecha.add(p5);
+        
+        izquierda.add(txtLblAlumnoCalle);
+        
+        JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p6.add(txtFldAlumnoCalle);
+        derecha.add(p6);
+        
+        izquierda.add(txtLblAlumnoNro);
+        
+        JPanel p7 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p7.add(txtFldAlumnoNro);
+        derecha.add(p7);
+        
+        izquierda.add(txtLblAlumnoPiso);
+        
+        JPanel p8 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p8.add(txtFldAlumnoPiso);
+        derecha.add(p8);
+        
+        izquierda.add(txtLblAlumnoDepartamento);
+        
+        JPanel p9 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p9.add(txtFldAlumnoDepartamento);
+        derecha.add(p9);
+        
+        izquierda.add(txtLblAlumnoCodPostal);
+        
+        JPanel p10 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p10.add(txtFldAlumnoCodPostal);
+        derecha.add(p10);
+        
+        izquierda.add(txtLblAlumnoLocalidad);
+        
+        JPanel p11 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p11.add(txtFldAlumnoLocalidad);
+        derecha.add(p11);
+        
+        izquierda.add(txtLblAlumnoTelFijo);
+        
+        JPanel p12 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p12.add(txtFldAlumnoTelFijo);
+        derecha.add(p12);
+        
+        izquierda.add(txtLblAlumnoTelCel);
+        
+        JPanel p13 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p13.add(txtFldAlumnoTelCel);
+        derecha.add(p13);
+        
+        izquierda.add(txtLblAlumnoMail);
+        
+        JPanel p14 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p14.add(txtFldAlumnoMail);
+        derecha.add(p14);
+        
+        JPanel actionsContainer = new JPanel();
+        btnAlumnoSave = new JButton("Guardar");
+        btnAlumnoDelete = new JButton("Eliminar");
+        //actionsContainer.add(btnAlumnoDelete);
+        actionsContainer.add(btnAlumnoSave);
+        
+        panelAlumno.add(controlsContainer, BorderLayout.NORTH);
+        panelAlumno.add(formContainer, BorderLayout.CENTER);
+        panelAlumno.add(actionsContainer, BorderLayout.SOUTH);
+        
+        contenedor.add(panelAlumno);
     }
+    
+    public void pantallaAltaCurso(){
+        panelCurso = new JPanel(new BorderLayout());
+        pantallaActual = panelCurso;
+        
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(3, 1));
+        derecha.setLayout(new GridLayout(3, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblCursoCodCurso = new JLabel("Nro Curso : ", JLabel.RIGHT);
+        txtFldCursoCodCurso = new JTextField(4);
+        txtLblCursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
+        txtFldCursoNombre = new JTextField(50);
+        txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
+        txtFldCursoProf = new JTextField(50);
+        btnCursoSend = new JButton("Enviar");
+        
+        izquierda.add(txtLblCursoCodCurso);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldCursoCodCurso);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblCursoNombre);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldCursoNombre);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblCursoProf);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldCursoProf);
+        derecha.add(p3);
+        
+        JPanel submitButton = new JPanel();
+        submitButton.add(btnCursoSend);
+        
+        panelCurso.add(formContainer, BorderLayout.NORTH);
+        panelCurso.add(submitButton, BorderLayout.SOUTH);
 
+        contenedor.add(panelCurso);
+    }
+    
+    public void pantallaModificarCurso(){
+        panelCurso = new JPanel(new BorderLayout());
+        pantallaActual = panelCurso;
+
+        JPanel controlsContainer = new JPanel();
+        btnCursoPrev = new JButton("Anterior");
+        btnCursoNext = new JButton("Siguiente");
+
+        controlsContainer.add(btnCursoPrev);
+        controlsContainer.add(btnCursoNext);
+        
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(3, 1));
+        derecha.setLayout(new GridLayout(3, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblCursoCodCurso = new JLabel("Nro Curso : ", JLabel.RIGHT);
+        txtFldCursoCodCurso = new JTextField(4);
+        txtLblCursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
+        txtFldCursoNombre = new JTextField(20);
+        txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
+        txtFldCursoProf = new JTextField(20);
+        
+        izquierda.add(txtLblCursoCodCurso);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldCursoCodCurso);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblCursoNombre);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldCursoNombre);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblCursoProf);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldCursoProf);
+        derecha.add(p3);
+        
+        JPanel actionsContainer = new JPanel();
+        btnCursoSave = new JButton("Guardar");
+        btnCursoDelete = new JButton("Eliminar");
+        actionsContainer.add(btnCursoDelete);
+        actionsContainer.add(btnCursoSave);
+        
+        panelCurso.add(controlsContainer, BorderLayout.EAST);
+        panelCurso.add(formContainer, BorderLayout.NORTH);
+        panelCurso.add(actionsContainer, BorderLayout.SOUTH);
+
+        contenedor.add(panelCurso);
+    }
+    
+    public void pantallaAltaPago(){
+        panelPago = new JPanel(new BorderLayout());
+        pantallaActual = panelPago;
+
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(5, 1));
+        derecha.setLayout(new GridLayout(5, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
+        txtFldPagoNroLegajo = new JTextField(4);
+        txtLblPagoCodCurso = new JLabel("Cod Curso : ");
+        txtFldPagoCodCurso = new JTextField(4);
+        txtLblPagoFecha = new JLabel("Fecha : ");
+        txtFldPagoFecha = new JTextField(10);
+        txtLblPagoImporte = new JLabel("Importe : ");
+        txtFldPagoImporte = new JTextField(6);
+        txtLblPagoComprobante = new JLabel("Comprobante : ");
+        txtFldPagoComprobante = new JTextField(4);
+        btnPagoSend = new JButton("Enviar");
+        
+        izquierda.add(txtLblPagoNroLegajo);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldPagoNroLegajo);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblPagoCodCurso);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldPagoCodCurso);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblPagoFecha);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldPagoFecha);
+        derecha.add(p3);
+        
+        izquierda.add(txtLblPagoImporte);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldPagoImporte);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblPagoComprobante);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldPagoComprobante);
+        derecha.add(p5);
+        
+        JPanel submitButton = new JPanel();
+        submitButton.add(btnPagoSend);
+        
+        panelPago.add(formContainer, BorderLayout.NORTH);
+        panelPago.add(submitButton, BorderLayout.SOUTH);
+        
+        contenedor.add(panelPago);
+
+    }
+    
+    public void pantallaAltaPrestamo(){
+        panelPrestamo = new JPanel(new BorderLayout());
+        
+        pantallaActual = panelPrestamo;
+
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(6, 1));
+        derecha.setLayout(new GridLayout(6, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblPrestamoNroLegajo = new JLabel("Nro Legajo: ", JLabel.RIGHT);
+        txtFldPrestamoNroLegajo = new JTextField(4);
+        txtLblPrestamoCodRecurso = new JLabel("Cod Recurso: ", JLabel.RIGHT);
+        txtFldPrestamoCodRecurso = new JTextField(4);
+        txtLblPrestamoFechaPres = new JLabel("Fecha de préstamo: ", JLabel.RIGHT);
+        txtFldPrestamoFechaPres = new JTextField(10);
+        txtLblPrestamoFechaPrevDevo = new JLabel("Fecha prevista de devolución: ", JLabel.RIGHT);
+        txtFldPrestamoFechaPrevDevo = new JTextField(10);
+        txtLblPrestamoFechaDevo = new JLabel("Fecha de devolución: ", JLabel.RIGHT);
+        txtFldPrestamoFechaDevo = new JTextField(10);
+        btnPrestamoSend = new JButton("Enviar");
+        
+        izquierda.add(txtLblPrestamoNroLegajo);
+                
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldPrestamoNroLegajo);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblPrestamoCodRecurso);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldPrestamoCodRecurso);
+        derecha.add(p2);
+        izquierda.add(txtLblPrestamoFechaPres);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldPrestamoFechaPres);
+        derecha.add(p3);
+                
+        izquierda.add(txtLblPrestamoFechaPrevDevo);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldPrestamoFechaPrevDevo);
+        derecha.add(p4);
+                
+        izquierda.add(txtLblPrestamoFechaDevo);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldPrestamoFechaDevo);
+        derecha.add(p5);
+        
+        JPanel submitButton = new JPanel();
+        submitButton.add(btnPrestamoSend);
+        
+        panelPrestamo.add(formContainer, BorderLayout.NORTH);
+        panelPrestamo.add(submitButton, BorderLayout.SOUTH);
+        
+        contenedor.add(panelPrestamo);
+    }
+    
     public void pantallaAltaRecurso(){
-        panelAltaRecurso = new JPanel();
+        panelRecurso = new JPanel(new BorderLayout());
+        
+        pantallaActual = panelRecurso;
 
-        txtLblRecursoCodRec = new JLabel("Cod Recurso : ");
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(6, 1));
+        derecha.setLayout(new GridLayout(6, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+
+        txtLblRecursoCodRec = new JLabel("Cod Recurso : ", JLabel.RIGHT);
         txtFldRecursoCodRec = new JTextField(4);
-        txtLblRecursoCategoria = new JLabel("Categoría : ");
+        txtLblRecursoCategoria = new JLabel("Categoría : ", JLabel.RIGHT);
         txtFldRecursoCategoria = new JTextField(2);
-        txtLblRecursoNombre = new JLabel("Nombre : ");
+        txtLblRecursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldRecursoNombre = new JTextField(50);
-        txtLblRecursoAutor = new JLabel("Autor : ");
+        txtLblRecursoAutor = new JLabel("Autor : ", JLabel.RIGHT);
         txtFldRecursoAutor = new JTextField(50);
-        txtLblRecursoAnio = new JLabel("Año : ");
+        txtLblRecursoAnio = new JLabel("Año : ", JLabel.RIGHT);
         txtFldRecursoAnio = new JTextField(4);
-        txtLblRecursoCant = new JLabel("Cant. : ");
+        txtLblRecursoCant = new JLabel("Cant. : ", JLabel.RIGHT);
         txtFldRecursoCant = new JTextField(3);
+        btnRecursoSend = new JButton("Enviar");
 
-        panelAltaRecurso.add(txtLblRecursoCodRec);
-        panelAltaRecurso.add(txtFldRecursoCodRec);
-        panelAltaRecurso.add(txtLblRecursoCategoria);
-        panelAltaRecurso.add(txtFldRecursoCategoria);
-        panelAltaRecurso.add(txtLblRecursoNombre);
-        panelAltaRecurso.add(txtFldRecursoNombre);
-        panelAltaRecurso.add(txtLblRecursoAutor);
-        panelAltaRecurso.add(txtFldRecursoAutor);
-        panelAltaRecurso.add(txtLblRecursoAnio);
-        panelAltaRecurso.add(txtFldRecursoAnio);
-        panelAltaRecurso.add(txtLblRecursoCant);
-        panelAltaRecurso.add(txtFldRecursoCant);
+        izquierda.add(txtLblRecursoCodRec);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldRecursoCodRec);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblRecursoCategoria);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldRecursoCategoria);
+        derecha.add(p2);
 
-        contenedor.add(panelAltaRecurso);
+        izquierda.add(txtLblRecursoNombre);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldRecursoNombre);
+        derecha.add(p3);
+        
+        izquierda.add(txtLblRecursoAutor);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldRecursoAutor);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblRecursoAnio);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldRecursoAnio);
+        derecha.add(p5);
+        
+        izquierda.add(txtLblRecursoCant);
+        
+        JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p6.add(txtFldRecursoCant);
+        derecha.add(p6);
+        
+        JPanel submitButton = new JPanel();
+        submitButton.add(btnRecursoSend);
+        
+        panelRecurso.add(formContainer, BorderLayout.NORTH);
+        panelRecurso.add(submitButton, BorderLayout.SOUTH);
+
+        contenedor.add(panelRecurso);
     }
     
     public void mostrarPantalla(String pantalla){
@@ -384,7 +863,7 @@ public final class Vista {
             }else if (pantalla.equals("PAGOS")){
                 pantallaAltaPago();
             }else if (pantalla.equals("PRESTAMOS")){
-                
+                pantallaAltaPrestamo();
             }else if (pantalla.equals("RECURSOS")){
                 pantallaAltaRecurso();
             }
@@ -408,9 +887,9 @@ public final class Vista {
             pantalla = pantalla.replace("MODIFICACION_", "");
             
             if (pantalla.equals("ALUMNO")){
-                
+                pantallaModificarAlumno();
             }else if (pantalla.equals("CURSOS")){
-                
+                pantallaModificarCurso();
             }else if (pantalla.equals("PAGOS")){
                 
             }else if (pantalla.equals("PRESTAMOS")){
@@ -702,8 +1181,24 @@ public final class Vista {
         addItem1_1.addActionListener(al);
     }
     
-    public void addActionListenerAltaAlumno(ActionListener al){
+    public void addActionListenerAltaAlumnoSend(ActionListener al){
         btnAlumnoSend.addActionListener(al);
+    }
+    
+    public void addActionListenerAltaCursoSend(ActionListener al){
+        btnCursoSend.addActionListener(al);
+    }
+    
+    public void addActionListenerAltaRecursoSend(ActionListener al){
+        btnRecursoSend.addActionListener(al);
+    }
+    
+    public void addActionListenerAltaPrestamoSend(ActionListener al){
+        btnPrestamoSend.addActionListener(al);
+    }
+    
+    public void addActionListenerAltaPagoSend(ActionListener al){
+        btnPagoSend.addActionListener(al);
     }
     
     public void showErrorMsg(String err){

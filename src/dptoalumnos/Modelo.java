@@ -276,7 +276,9 @@ public final class Modelo {
         qry = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
         qry+= "VALUES ("+nroLegajo+",'"+nombre+"','"+apellido+"','"+fechaNacimiento+"','"+nroDoc+"','"+calle+"','"+nroCalle+"','"+piso+"','"+dpto+"','"+codPostal+"','"+localidad+"','"+telFijo+"','"+telCel+"','"+eMail+"');";
         
+        openDBConnection();
         executeUpdate(qry);
+        closeDBConnection();
     }
     
     public void qryAltaCurso(String codCurso , String nombre , String prof){
@@ -284,28 +286,39 @@ public final class Modelo {
         qry = "INSERT INTO cursos (codCurso , nombre , prof)";
         qry+= "VALUES ("+ codCurso +" , '"+ nombre +"' , '"+ prof +"');";
         
+        openDBConnection();
         executeUpdate(qry);
+        closeDBConnection();
     }
     
     public void qryAltaRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
         String qry; // revisar los campos de la tabla 
-        qry = "INSERT INTO recursos (codRec , nombre , anio , categoria , autor , cantidad)";
+        qry = "INSERT INTO recursos (codRec , nombre , anio , categoria , autor , cant)";
         qry+= "VALUES ("+codRecurso+" , '"+nombre+"' , '"+anio+"' , '"+categoria+"' , '"+autor+"' , '"+cant+"');";
         
+        openDBConnection();
         executeUpdate(qry);
+        closeDBConnection();
     }   
+    
+    public void qryAltaPagos(String nroLegajo , String codCurso , String fecha , String importe , String comprobante){
+        String qry; // revisar los campos de la tabla 
+        qry = "INSERT INTO pagos (nroLegajo , codCurso , fecha , importe , comprobante) ";
+        qry+= "VALUES ("+nroLegajo+" , "+codCurso+" , '"+fecha+"' , "+importe+" , '"+comprobante+"' );";
+        
+        openDBConnection();
+        executeUpdate(qry);
+        closeDBConnection();
+    }
     
     public void qryAltaPrestamo(String nroLegajo , String codRecurso , String fechaPrestamo , String fechaPrevistaDevolucion , String fechaDevolucion ){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO prestamos (nroLegajo , codRecurso , fechaPres , fechaDevo , fechaPrevDevo) ";
         qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fechaPrestamo+"' , '"+fechaDevolucion+"' , '"+fechaPrevistaDevolucion+"');";
         
+        openDBConnection();
         executeUpdate(qry);
+        closeDBConnection();
     }
     
-    public void aryAltaPagos(String nroLegajo , String codRecurso , String fecha , String importe , String comprobante){
-        String qry; // revisar los campos de la tabla 
-        qry = "INSERT INTO prestamo (nroLegajo , codRecurso , fecha , importe , comprobante) ";
-        qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fecha+"' , "+importe+" , '"+comprobante+"' );";
-    }
 }

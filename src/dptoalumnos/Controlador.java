@@ -56,8 +56,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_ALUMNO");
-            
-            v.addActionListenerAltaAlumno(new funcionSendAltaAlumno());
+            v.addActionListenerAltaAlumnoSend(new funcionSendAltaAlumno());
         }
     }
     
@@ -79,6 +78,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_CURSOS");
+            v.addActionListenerAltaCursoSend(new funcionSendAltaCurso());
         }
     }
     
@@ -100,6 +100,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_PAGOS");
+            v.addActionListenerAltaPagoSend(new funcionSendAltaPago());
         }
     }
     
@@ -121,6 +122,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_PRESTAMOS");
+            v.addActionListenerAltaPrestamoSend(new funcionSendAltaPrestamo());
         }
     }
     
@@ -142,6 +144,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_RECURSOS");
+            v.addActionListenerAltaRecursoSend(new funcionSendAltaRecurso());
         }
     }
     
@@ -361,7 +364,7 @@ public class Controlador {
             }
             
             if(validacion){
-                m.aryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
+                m.qryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
             }else{
                 v.showErrorMsg("La validación ha fallado.");
             }
