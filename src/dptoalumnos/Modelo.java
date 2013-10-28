@@ -13,11 +13,13 @@ public final class Modelo {
     private ArrayList<Pago> arrayPagos; // array de todos los pagos
     private ArrayList<Prestamo> arrayPrestamos; // array de todos los prestamos
     private ArrayList<Recurso> arrayRecursos; // arrayde todos los recursos
+    private ArrayList<Asistencia> arrayAsistencias; // array de todos las asistencias
     private int posAlumnos; // posición actual del array de registro 
     private int posCursos; // posición actual del array de registro 
     private int posPagos; // posición actual del array de registro 
     private int posPrestamos; // posición actual del array de registro 
     private int posRecursos; // posición actual del array de recurso 
+    private int posAsistencias;
     private Connection db;
     private Statement statement;
     private String databaseName;
@@ -30,6 +32,7 @@ public final class Modelo {
         arrayPagos = new ArrayList<Pago>();
         arrayPrestamos = new ArrayList<Prestamo>();
         arrayRecursos = new ArrayList<Recurso>();
+        arrayAsistencias = new ArrayList<Asistencia>();
     }
     
     // ----- CONEXION BASE DE DATOS -----
@@ -226,6 +229,41 @@ public final class Modelo {
         this.closeDBConnection();
     }
 
+    public void cargaArrayAsistencia(String codCurso , Integer nroClase , int mode){ // cargo en un array los datos requeridos de la tabla Asistencia.
+        // mode = 0 -> Levanta una sola fecha para volcar en los inputs
+        // mode = 1 -> Levanta todas las fechas para realizar el informe de asistencias
+        String qry;
+        if(mode == 0){
+            qry = "SELECT * FROM asistencia WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY nroLegajo;";    
+        }else{
+            qry = "SELECT * FROM asistencia WHERE codCurso = '"+codCurso+"' ORDER BY nroLegajo , nroClase;";
+        }
+        ResultSet rs = null;
+        this.arrayAsistencias.clear(); // borro el array para despues cargarlo denuevo . 
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                Asistencia a = new Asistencia();
+                a.setNroLegajo(rs.getString(1));
+                a.setCodCurso(rs.getString(2));
+                a.setNroClase(rs.getInt(3));
+                a.setAsistencia(rs.getInt(4));
+                
+                arrayAsistencias.add(a);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.closeDBConnection();
+    }
     
     // ----- MUESTRA DATOS -----
     public String getAlumnos(){ // levanto un alumno del array list y genero un string por registro para mostrar los datos.
@@ -277,6 +315,17 @@ public final class Modelo {
             rs += arrayPagos.get(i).getPagoNroLegajo();
             rs += arrayPagos.get(i).getPagoFecha();
             rs += arrayPagos.get(i).getPagoComprobante() + "\n";
+        }
+        return rs;
+    }
+    
+    public String getAsistencias(){ // levanto un alumno del array list y genero un string por registro para mostrar los datos.
+        String rs = "";
+        for(int i = 0 ; i < arrayAsistencias.size() ; i++){
+            rs += arrayAsistencias.get(i).getNroLegajo();
+            rs += arrayAsistencias.get(i).getCodCurso();
+            rs += arrayAsistencias.get(i).getNroClase();
+            rs += arrayAsistencias.get(i).getAsistencia() + "\n";
         }
         return rs;
     }
@@ -380,6 +429,10 @@ public final class Modelo {
         return arrayPagos.size();
     }
     
+    public int getCantAsistencias(){
+        return arrayAsistencias.size();
+    }
+    
       // Devuelve posicion actual del array de registros 
     public int getPosAlumnos() {
         return posAlumnos;
@@ -400,6 +453,11 @@ public final class Modelo {
     public int getPosRecursos() {
         return posRecursos;
     }
+    
+    public int getPosAsistencias(){
+        return posAsistencias;
+    }
+    
     
     
     
@@ -423,6 +481,10 @@ public final class Modelo {
     
     public void setPosPagos(int posPagos) {
         this.posPagos = posPagos;
+    }
+    
+    public void setPosAsistencias(int posAsistencias){
+        this.posAsistencias = posAsistencias;
     }
     
 }
