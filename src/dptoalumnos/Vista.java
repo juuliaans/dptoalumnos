@@ -1,5 +1,6 @@
 package dptoalumnos;
 
+import com.sun.codemodel.internal.fmt.JBinaryFile;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -214,6 +215,8 @@ public final class Vista {
         delItem1_1.setVisible(false);
         delItem1_4.setVisible(false);
         delItem1_5.setVisible(false);
+        delItem1_2.setVisible(false);
+        delItem1_3.setVisible(false);
         
         menuBar.add(archivo);
         contenedor.setJMenuBar(menuBar);
@@ -386,12 +389,8 @@ public final class Vista {
         panelAlumno = new JPanel(new BorderLayout());
         pantallaActual = panelAlumno;
         
-        JPanel controlsContainer = new JPanel();
-        btnAlumnoPrev = new JButton("Anterior");
-        btnAlumnoNext = new JButton("Siguiente");
-
-        controlsContainer.add(btnAlumnoPrev);
-        controlsContainer.add(btnAlumnoNext);
+        //JPanel controlsContainer = new JPanel();
+        
         
         JPanel formContainer = new JPanel(new BorderLayout());
         
@@ -517,11 +516,15 @@ public final class Vista {
         JPanel actionsContainer = new JPanel();
         btnAlumnoSave = new JButton("Guardar");
         btnAlumnoDelete = new JButton("Eliminar");
+        btnAlumnoPrev = new JButton("Anterior");
+        btnAlumnoNext = new JButton("Siguiente");
         //actionsContainer.add(btnAlumnoDelete);
         actionsContainer.add(btnAlumnoSave);
+        actionsContainer.add(btnAlumnoPrev);
+        actionsContainer.add(btnAlumnoNext);
         
-        panelAlumno.add(controlsContainer, BorderLayout.NORTH);
-        panelAlumno.add(formContainer, BorderLayout.CENTER);
+        //panelAlumno.add(controlsContainer, BorderLayout.NORTH);
+        panelAlumno.add(formContainer, BorderLayout.NORTH);
         panelAlumno.add(actionsContainer, BorderLayout.SOUTH);
         
         contenedor.add(panelAlumno);
@@ -581,12 +584,11 @@ public final class Vista {
         panelCurso = new JPanel(new BorderLayout());
         pantallaActual = panelCurso;
 
-        JPanel controlsContainer = new JPanel();
-        btnCursoPrev = new JButton("Anterior");
-        btnCursoNext = new JButton("Siguiente");
+        //JPanel controlsContainer = new JPanel();
+        
 
-        controlsContainer.add(btnCursoPrev);
-        controlsContainer.add(btnCursoNext);
+        //controlsContainer.add(btnCursoPrev);
+        //controlsContainer.add(btnCursoNext);
         
         JPanel formContainer = new JPanel(new BorderLayout());
         
@@ -627,10 +629,14 @@ public final class Vista {
         JPanel actionsContainer = new JPanel();
         btnCursoSave = new JButton("Guardar");
         btnCursoDelete = new JButton("Eliminar");
-        actionsContainer.add(btnCursoDelete);
-        actionsContainer.add(btnCursoSave);
+        btnCursoPrev = new JButton("Anterior");
+        btnCursoNext = new JButton("Siguiente");
         
-        panelCurso.add(controlsContainer, BorderLayout.EAST);
+        actionsContainer.add(btnCursoSave);
+        actionsContainer.add(btnCursoDelete);
+        actionsContainer.add(btnCursoPrev);
+        actionsContainer.add(btnCursoNext);
+        
         panelCurso.add(formContainer, BorderLayout.NORTH);
         panelCurso.add(actionsContainer, BorderLayout.SOUTH);
 
@@ -704,6 +710,81 @@ public final class Vista {
 
     }
     
+    public void pantallaModificarPago(){
+        panelPago = new JPanel(new BorderLayout());
+        pantallaActual = panelPago;
+
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(5, 1));
+        derecha.setLayout(new GridLayout(5, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
+        txtFldPagoNroLegajo = new JTextField(4);
+        txtLblPagoCodCurso = new JLabel("Cod Curso : ");
+        txtFldPagoCodCurso = new JTextField(4);
+        txtLblPagoFecha = new JLabel("Fecha : ");
+        txtFldPagoFecha = new JTextField(10);
+        txtLblPagoImporte = new JLabel("Importe : ");
+        txtFldPagoImporte = new JTextField(6);
+        txtLblPagoComprobante = new JLabel("Comprobante : ");
+        txtFldPagoComprobante = new JTextField(4);
+        btnPagoSend = new JButton("Enviar");
+        
+        izquierda.add(txtLblPagoNroLegajo);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldPagoNroLegajo);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblPagoCodCurso);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldPagoCodCurso);
+        derecha.add(p2);
+        
+        izquierda.add(txtLblPagoFecha);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldPagoFecha);
+        derecha.add(p3);
+        
+        izquierda.add(txtLblPagoImporte);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldPagoImporte);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblPagoComprobante);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldPagoComprobante);
+        derecha.add(p5);
+        
+        JPanel actionsContainer = new JPanel();
+        btnPagoNext = new JButton("Siguiente");
+        btnPagoPrev = new JButton("Anterior");
+        btnPagoSave = new JButton("Guardar");
+        btnPagoDelete = new JButton("Eliminar");
+        
+        actionsContainer.add(btnPagoSave);
+        actionsContainer.add(btnPagoDelete);
+        actionsContainer.add(btnPagoPrev);
+        actionsContainer.add(btnPagoNext);
+        
+        panelPago.add(formContainer, BorderLayout.NORTH);
+        panelPago.add(actionsContainer, BorderLayout.SOUTH);
+        
+        contenedor.add(panelPago);
+
+    }
+    
     public void pantallaAltaPrestamo(){
         panelPrestamo = new JPanel(new BorderLayout());
         
@@ -766,6 +847,80 @@ public final class Vista {
         
         panelPrestamo.add(formContainer, BorderLayout.NORTH);
         panelPrestamo.add(submitButton, BorderLayout.SOUTH);
+        
+        contenedor.add(panelPrestamo);
+    }
+    
+    public void pantallaModificarPrestamo(){
+        panelPrestamo = new JPanel(new BorderLayout());
+        
+        pantallaActual = panelPrestamo;
+
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(6, 1));
+        derecha.setLayout(new GridLayout(6, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+        
+        txtLblPrestamoNroLegajo = new JLabel("Nro Legajo: ", JLabel.RIGHT);
+        txtFldPrestamoNroLegajo = new JTextField(4);
+        txtLblPrestamoCodRecurso = new JLabel("Cod Recurso: ", JLabel.RIGHT);
+        txtFldPrestamoCodRecurso = new JTextField(4);
+        txtLblPrestamoFechaPres = new JLabel("Fecha de préstamo: ", JLabel.RIGHT);
+        txtFldPrestamoFechaPres = new JTextField(10);
+        txtLblPrestamoFechaPrevDevo = new JLabel("Fecha prevista de devolución: ", JLabel.RIGHT);
+        txtFldPrestamoFechaPrevDevo = new JTextField(10);
+        txtLblPrestamoFechaDevo = new JLabel("Fecha de devolución: ", JLabel.RIGHT);
+        txtFldPrestamoFechaDevo = new JTextField(10);
+        btnPrestamoSend = new JButton("Enviar");
+        
+        izquierda.add(txtLblPrestamoNroLegajo);
+                
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldPrestamoNroLegajo);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblPrestamoCodRecurso);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldPrestamoCodRecurso);
+        derecha.add(p2);
+        izquierda.add(txtLblPrestamoFechaPres);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldPrestamoFechaPres);
+        derecha.add(p3);
+                
+        izquierda.add(txtLblPrestamoFechaPrevDevo);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldPrestamoFechaPrevDevo);
+        derecha.add(p4);
+                
+        izquierda.add(txtLblPrestamoFechaDevo);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldPrestamoFechaDevo);
+        derecha.add(p5);
+        
+        JPanel actionsContainer = new JPanel();
+        btnPrestamoNext = new JButton("Siguiente");
+        btnPrestamoPrev = new JButton("Anterior");
+        btnPrestamoSave = new JButton("Guardar");
+        //btnPrestamoDelete = new JButton("Eliminar");
+        
+        actionsContainer.add(btnPrestamoSave);
+        //actionsContainer.add(btnPrestamoDelete);
+        actionsContainer.add(btnPrestamoPrev);
+        actionsContainer.add(btnPrestamoNext);
+        
+        panelPrestamo.add(formContainer, BorderLayout.NORTH);
+        panelPrestamo.add(actionsContainer, BorderLayout.SOUTH);
         
         contenedor.add(panelPrestamo);
     }
@@ -845,6 +1000,89 @@ public final class Vista {
         contenedor.add(panelRecurso);
     }
     
+    public void pantallaModificarRecurso(){
+        panelRecurso = new JPanel(new BorderLayout());
+        
+        pantallaActual = panelRecurso;
+
+        JPanel formContainer = new JPanel(new BorderLayout());
+        
+        JPanel izquierda = new JPanel();
+        JPanel derecha = new JPanel();
+        
+        izquierda.setLayout(new GridLayout(6, 1));
+        derecha.setLayout(new GridLayout(6, 1));
+        
+        formContainer.add(izquierda, BorderLayout.WEST);
+        formContainer.add(derecha, BorderLayout.CENTER);
+
+        txtLblRecursoCodRec = new JLabel("Cod Recurso : ", JLabel.RIGHT);
+        txtFldRecursoCodRec = new JTextField(4);
+        txtLblRecursoCategoria = new JLabel("Categoría : ", JLabel.RIGHT);
+        txtFldRecursoCategoria = new JTextField(2);
+        txtLblRecursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
+        txtFldRecursoNombre = new JTextField(50);
+        txtLblRecursoAutor = new JLabel("Autor : ", JLabel.RIGHT);
+        txtFldRecursoAutor = new JTextField(50);
+        txtLblRecursoAnio = new JLabel("Año : ", JLabel.RIGHT);
+        txtFldRecursoAnio = new JTextField(4);
+        txtLblRecursoCant = new JLabel("Cant. : ", JLabel.RIGHT);
+        txtFldRecursoCant = new JTextField(3);
+        btnRecursoSend = new JButton("Enviar");
+
+        izquierda.add(txtLblRecursoCodRec);
+        
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p1.add(txtFldRecursoCodRec);
+        derecha.add(p1);
+        
+        izquierda.add(txtLblRecursoCategoria);
+        
+        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p2.add(txtFldRecursoCategoria);
+        derecha.add(p2);
+
+        izquierda.add(txtLblRecursoNombre);
+        
+        JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p3.add(txtFldRecursoNombre);
+        derecha.add(p3);
+        
+        izquierda.add(txtLblRecursoAutor);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldRecursoAutor);
+        derecha.add(p4);
+        
+        izquierda.add(txtLblRecursoAnio);
+        
+        JPanel p5 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p5.add(txtFldRecursoAnio);
+        derecha.add(p5);
+        
+        izquierda.add(txtLblRecursoCant);
+        
+        JPanel p6 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p6.add(txtFldRecursoCant);
+        derecha.add(p6);
+        
+        JPanel actionsContainer = new JPanel();
+        btnRecursoNext = new JButton("Siguiente");
+        btnRecursoPrev = new JButton("Anterior");
+        btnRecursoSave = new JButton("Guardar");
+        //btnRecursoDelete = new JButton("Eliminar");
+        
+        actionsContainer.add(btnRecursoSave);
+        //actionsContainer.add(btnRecursoDelete);
+        actionsContainer.add(btnRecursoPrev);
+        actionsContainer.add(btnRecursoNext);
+        
+        panelRecurso.add(formContainer, BorderLayout.NORTH);
+        panelRecurso.add(actionsContainer, BorderLayout.SOUTH);
+
+        contenedor.add(panelRecurso);
+    }
+    
     public void mostrarPantalla(String pantalla){
         //System.out.println("La pantalla a mostrar es: " + pantalla);
         if (pantallaActual != null){
@@ -867,22 +1105,6 @@ public final class Vista {
             }else if (pantalla.equals("RECURSOS")){
                 pantallaAltaRecurso();
             }
-            
-        }else if (pantalla.startsWith("BAJA")){
-            pantalla = pantalla.replace("BAJA_", "");
-            
-            if (pantalla.equals("ALUMNO")){
-                
-            }else if (pantalla.equals("CURSOS")){
-                
-            }else if (pantalla.equals("PAGOS")){
-                
-            }else if (pantalla.equals("PRESTAMOS")){
-                
-            }else if (pantalla.equals("RECURSOS")){
-                
-            }
-            
         }else if (pantalla.startsWith("MODIFICACION")){
             pantalla = pantalla.replace("MODIFICACION_", "");
             
@@ -891,13 +1113,12 @@ public final class Vista {
             }else if (pantalla.equals("CURSOS")){
                 pantallaModificarCurso();
             }else if (pantalla.equals("PAGOS")){
-                
+                pantallaModificarPago();
             }else if (pantalla.equals("PRESTAMOS")){
-                
+                pantallaModificarPrestamo();
             }else if (pantalla.equals("RECURSOS")){
-                
+                pantallaModificarRecurso();
             }
-            
         }
         
         contenedor.setVisible(true);
