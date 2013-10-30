@@ -16,6 +16,11 @@ public class Controlador {
     public void comenzar(){
         v.iniciarVentanaPrincipal();
         addFunciones();
+        m.cargaArrayAlumno();
+        m.cargaArrayCurso();
+        m.cargaArrayPago();
+        m.cargaArrayPrestamo();
+        m.cargaArrayRecurso();
     }
     
     public void addFunciones(){
@@ -71,6 +76,13 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_ALUMNO");
+            
+            if (m.getCantAlumnos() > 0){
+            v.cargaInputsAlumno(m.getAlumno(m.getPosAlumnos()));
+            v.addActionListenersModificarAlumno(new funcionUpdateAlumno(),new RetrocederAlumnoHandler(), new AvanzarAlumnoHandler());
+            }else{
+                v.showErrorMsg("No hay Alumnos cargados en el sistema. Dirigase a la pantalla de alta de Alumnos para cargar alumnos en el sistema.");
+            }
         }
     }
     
@@ -93,6 +105,13 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_CURSOS");
+            
+            if (m.getCantCursos() > 0){
+                v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
+                v.addActionListenersModificarCurso(null,new RetrocederCursoHandler(), new AvanzarCursoHandler(), null);
+            }else{
+                v.showErrorMsg("No hay cursos cargados en el sistema. Dirigase a la pantalla de alta de Cursos para cargar cursos en el sistema.");
+            }
         }
     }
     
@@ -115,6 +134,13 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_PAGOS");
+            
+            if (m.getCantPagos() > 0){
+            v.cargaInputsPago(m.getPago(m.getPosPagos()));
+            v.addActionListenersModificarPago(null,new RetrocederPagoHandler(), new AvanzarPagoHandler(), null);
+            }else{
+                v.showErrorMsg("No hay pagos cargados en el sistema. Dirigase a la pantalla de alta de pagos para insertar pagos en el sistema.");
+            }
         }
     }
     
@@ -137,6 +163,13 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_PRESTAMOS");
+            
+            if (m.getCantPrestamos() > 0){
+            v.cargaInputsPrestamo(m.getPrestamo(m.getPosPrestamos()));
+            v.addActionListenersModificarPrestamo(null,new RetrocederPrestamoHandler(), new AvanzarPrestamoHandler());
+            }else{
+                v.showErrorMsg("No hay prestamos cargados en el sistema. Dirigase a la pantalla de alta para insertar nuevos prestamos");
+            }
         }
     }
     
@@ -159,12 +192,50 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_RECURSOS");
+            
+            if (m.getCantRecursos() > 0){
+            v.cargaInputsRecurso(m.getRecurso(m.getPosRecursos()));
+            v.addActionListenersModificarRecurso(null,new RetrocederRecursoHandler(), new AvanzarRecursoHandler());
+            }else{
+                v.showErrorMsg("No hay recursos cargados en el sistema. Dirigase a la pantalla de alta para ingresar nuevos recursos.");
+            }
         }
     }
     // ----- Levanta datos form , envía a armado de Query -----
     private class funcionSendAltaAlumno implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarAlumno("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El alumno ha sido agregado.");
+                v.cargaInputsAlumno(new Alumno());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            m.cargaArrayAlumno();
+        }
+        
+    }
+    
+    private class funcionUpdateAlumno implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarAlumno("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El alumno ha sido modificado.");
+                int pos = m.getPosAlumnos();
+                m.cargaArrayAlumno();
+                m.setPosAlumnos(pos);
+                v.cargaInputsAlumno(m.getAlumno(pos));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
+    private int insertarModificarAlumno(String modo){
             Alumno alumno = new Alumno();
             Boolean validacion = true;
             
@@ -228,13 +299,16 @@ public class Controlador {
             }
             
             if(validacion){
-                m.qryAltaAlumno(nroLegajo, nombre, apellido, fechaNacimiento, nroDoc, calle, nroCalle, piso, dpto, codPostal, localidad, telFijo, telCel, eMail);
+                if (modo.equals("INSERT")){
+                    return m.qryAltaAlumno(nroLegajo, nombre, apellido, fechaNacimiento, nroDoc, calle, nroCalle, piso, dpto, codPostal, localidad, telFijo, telCel, eMail);
+                }else if (modo.equals("UPDATE")){
+                    return m.qryModificarAlumno(nroLegajo, nombre, apellido, fechaNacimiento, nroDoc, calle, nroCalle, piso, dpto, codPostal, localidad, telFijo, telCel, eMail);
+                }
+                return 0;
             }else{
                 v.showErrorMsg("La validación ha fallado.");
+                return -2;
             }
-            
-        }
-        
     }
     
     private class funcionSendAltaCurso implements ActionListener{
@@ -259,7 +333,15 @@ public class Controlador {
             }
             
             if(validacion){
-                m.qryAltaCurso(codCurso, nombre, prof);
+                int q = m.qryAltaCurso(codCurso, nombre, prof);
+                
+                if (q == 1){
+                    v.showSuccessMsg("El curso ha sido agregado.");
+                    v.cargaInputsCurso(new Curso());
+                }
+                else v.showErrorMsg("Algo ha fallado en la base de datos");
+                
+                m.cargaArrayCurso();
             }else{
                 v.showErrorMsg("La validación ha fallado.");
             }
@@ -302,7 +384,15 @@ public class Controlador {
             }
             
             if(validacion){
-                m.qryAltaRecurso(codRecurso, nombre, anio, categoria, autor, cant);
+                int q = m.qryAltaRecurso(codRecurso, nombre, anio, categoria, autor, cant);
+                
+                if (q == 1){
+                    v.showSuccessMsg("El recurso ha sido agregado.");
+                    v.cargaInputsRecurso(new Recurso());
+                }
+                else v.showErrorMsg("Algo ha fallado en la base de datos");
+                
+                m.cargaArrayRecurso();
             }else{
                 v.showErrorMsg("La validación ha fallado.");
             }
@@ -341,7 +431,15 @@ public class Controlador {
             }
             
             if(validacion){
-                m.qryAltaPrestamo(nroLegajo, codRecurso, fechaPrestamo, fechaDevolucion, fechaPrevistaDevolucion);
+               int q = m.qryAltaPrestamo(nroLegajo, codRecurso, fechaPrestamo, fechaDevolucion, fechaPrevistaDevolucion);
+               
+               if (q == 1){ 
+                   v.showSuccessMsg("El prestamo ha sido agregado."); 
+                   v.cargaInputsPrestamo(new Prestamo());
+               }
+               else v.showErrorMsg("Algo ha fallado en la base de datos");
+               
+               m.cargaArrayPrestamo();
             }else{
                 v.showErrorMsg("La validación ha fallado.");
             }
@@ -380,7 +478,15 @@ public class Controlador {
             }
             
             if(validacion){
-                m.qryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
+                int q = m.qryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
+                
+                if (q == 1){
+                    v.showSuccessMsg("El pago ha sido agregado.");
+                    v.cargaInputsPago(new Pago());
+                }
+                else v.showErrorMsg("Algo ha fallado en la base de datos");
+                
+                m.cargaArrayPago();
             }else{
                 v.showErrorMsg("La validación ha fallado.");
             }
@@ -502,6 +608,35 @@ public class Controlador {
                     m.setPosPrestamos(m.getCantPrestamos()- 1);
                 }
                 v.cargaInputsPrestamo(m.getPrestamo(m.getPosPrestamos()));
+            }
+        }
+    }
+    
+      // RECURSO
+    class RetrocederRecursoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantRecursos()> 0) {
+                m.setPosRecursos(m.getPosRecursos()- 1);
+                if (m.getPosRecursos()== -1) {
+                    m.setPosRecursos(0);
+                }
+                v.cargaInputsRecurso(m.getRecurso(m.getPosRecursos()));
+            }
+        }
+    }
+    
+    class AvanzarRecursoHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (m.getCantRecursos() > 0) {
+                m.setPosRecursos(m.getPosRecursos()+ 1);
+                if (m.getPosRecursos()== m.getCantRecursos()) {
+                    m.setPosRecursos(m.getCantRecursos()- 1);
+                }
+                v.cargaInputsRecurso(m.getRecurso(m.getPosRecursos()));
             }
         }
     }

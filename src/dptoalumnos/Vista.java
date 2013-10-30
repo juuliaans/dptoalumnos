@@ -1168,6 +1168,7 @@ public final class Vista {
     
     public void cargaInputsRecurso(Recurso recurso){
         setTxtFldRecursoAnio(recurso.getAnio());
+        setTxtFldRecursoNombre(recurso.getNombre());
         setTxtFldRecursoAutor(recurso.getAutor());
         setTxtFldRecursoCant(recurso.getCant());
         setTxtFldRecursoCategoria(recurso.getCategoria());
@@ -1392,6 +1393,10 @@ public final class Vista {
     public void setTxtFldRecursoCategoria(String txtFldRecursoCategoria) {
         this.txtFldRecursoCategoria.setText(txtFldRecursoCategoria);
     }
+    
+    public void setTxtFldRecursoNombre(String txtFldRecursoNombre) {
+        this.txtFldRecursoNombre.setText(txtFldRecursoNombre);
+    }
 
     public void setTxtFldRecursoAutor(String txtFldRecursoAutor) {
         this.txtFldRecursoAutor.setText(txtFldRecursoAutor);
@@ -1472,8 +1477,44 @@ public final class Vista {
         btnPagoSend.addActionListener(al);
     }
     
+    public void addActionListenersModificarAlumno(ActionListener save, ActionListener prev, ActionListener next){
+        btnAlumnoSave.addActionListener(save);
+        btnAlumnoNext.addActionListener(next);
+        btnAlumnoPrev.addActionListener(prev);
+    }
+    
+    public void addActionListenersModificarCurso(ActionListener save, ActionListener prev, ActionListener next, ActionListener delete){
+        btnCursoSave.addActionListener(save);
+        btnCursoNext.addActionListener(next);
+        btnCursoPrev.addActionListener(prev);
+        btnCursoDelete.addActionListener(delete);
+    }
+    
+    public void addActionListenersModificarRecurso(ActionListener save, ActionListener prev, ActionListener next){
+        btnRecursoSave.addActionListener(save);
+        btnRecursoNext.addActionListener(next);
+        btnRecursoPrev.addActionListener(prev);
+    }
+    
+    public void addActionListenersModificarPrestamo(ActionListener save, ActionListener prev, ActionListener next){
+        btnPrestamoSave.addActionListener(save);
+        btnPrestamoNext.addActionListener(next);
+        btnPrestamoPrev.addActionListener(prev);
+    }
+    
+    public void addActionListenersModificarPago(ActionListener save, ActionListener prev, ActionListener next, ActionListener delete){
+        btnPagoSave.addActionListener(save);
+        btnPagoNext.addActionListener(next);
+        btnPagoPrev.addActionListener(prev);
+        btnPagoDelete.addActionListener(delete);
+    }
+    
     public void showErrorMsg(String err){
         JOptionPane.showMessageDialog(contenedor, err);
+    }
+    
+    public void showSuccessMsg(String msg){
+        JOptionPane.showMessageDialog(contenedor, msg);
     }
 
 }

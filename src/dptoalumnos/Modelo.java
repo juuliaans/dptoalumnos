@@ -14,12 +14,12 @@ public final class Modelo {
     private ArrayList<Prestamo> arrayPrestamos; // array de todos los prestamos
     private ArrayList<Recurso> arrayRecursos; // arrayde todos los recursos
     private ArrayList<Asistencia> arrayAsistencias; // array de todos las asistencias
-    private int posAlumnos; // posición actual del array de registro 
-    private int posCursos; // posición actual del array de registro 
-    private int posPagos; // posición actual del array de registro 
-    private int posPrestamos; // posición actual del array de registro 
-    private int posRecursos; // posición actual del array de recurso 
-    private int posAsistencias;
+    private int posAlumnos = 0; // posición actual del array de registro 
+    private int posCursos = 0; // posición actual del array de registro 
+    private int posPagos = 0; // posición actual del array de registro 
+    private int posPrestamos = 0; // posición actual del array de registro 
+    private int posRecursos = 0; // posición actual del array de recurso 
+    private int posAsistencias = 0;
     private Connection db;
     private Statement statement;
     private String databaseName;
@@ -97,8 +97,8 @@ public final class Modelo {
             return statement.executeUpdate(strSql);
         } catch (SQLException ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
         }
-        return 0;
     }
     
     // ----- LEVANTA DATOS -----
@@ -106,6 +106,7 @@ public final class Modelo {
         String qry = "SELECT * FROM alumnos";
         ResultSet rs = null;
         this.arrayAlumnos.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posAlumnos = 0; //reseteo la posicion a 0 por si hay menos o mas alumnos
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -145,6 +146,7 @@ public final class Modelo {
         String qry = "SELECT * FROM cursos";
         ResultSet rs = null;
         this.arrayCursos.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posCursos = 0;
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -173,6 +175,7 @@ public final class Modelo {
         String qry = "SELECT * FROM pagos";
         ResultSet rs = null;
         this.arrayPagos.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posPagos = 0;
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -203,6 +206,7 @@ public final class Modelo {
         String qry = "SELECT * FROM prestamos";
         ResultSet rs = null;
         this.arrayPrestamos.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posPrestamos = 0;
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -228,6 +232,39 @@ public final class Modelo {
         }
         this.closeDBConnection();
     }
+    
+    public void cargaArrayRecurso(){ // cargo en un array todos los registros de la tabla Prestamos.
+        String qry = "SELECT * FROM recursos";
+        ResultSet rs = null;
+        this.arrayRecursos.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posRecursos = 0;
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                Recurso a = new Recurso();
+                a.setCodRecurso(rs.getString(1));
+                a.setCategoria(rs.getString(2));
+                a.setNombre(rs.getString(3));
+                a.setAutor(rs.getString(4));
+                a.setAnio(rs.getString(5));
+                a.setCant(rs.getString(6));
+                a.setFoto(rs.getString(7));
+                
+                arrayRecursos.add(a);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.closeDBConnection();
+    }
 
     public void cargaArrayAsistencia(String codCurso , Integer nroClase , int mode){ // cargo en un array los datos requeridos de la tabla Asistencia.
         // mode = 0 -> Levanta una sola fecha para volcar en los inputs
@@ -240,6 +277,7 @@ public final class Modelo {
         }
         ResultSet rs = null;
         this.arrayAsistencias.clear(); // borro el array para despues cargarlo denuevo . 
+        this.posAsistencias = 0;
         this.openDBConnection();
         try {
             rs = this.executeQuery(qry);
@@ -331,60 +369,84 @@ public final class Modelo {
     }
     
     // ------ CONSULTAS -------
-    public void qryAltaAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
+    public int qryAltaAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
         String qry;
         qry = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
         qry+= "VALUES ("+nroLegajo+",'"+nombre+"','"+apellido+"','"+fechaNacimiento+"','"+nroDoc+"','"+calle+"','"+nroCalle+"','"+piso+"','"+dpto+"','"+codPostal+"','"+localidad+"','"+telFijo+"','"+telCel+"','"+eMail+"');";
         
         openDBConnection();
-        executeUpdate(qry);
+        int q = executeUpdate(qry);
         closeDBConnection();
+        return q;
     }
     
-    public void qryAltaCurso(String codCurso , String nombre , String prof){
+    public int qryAltaCurso(String codCurso , String nombre , String prof){
         String qry; // revisar los campos de la tabla
         qry = "INSERT INTO cursos (codCurso , nombre , prof)";
         qry+= "VALUES ("+ codCurso +" , '"+ nombre +"' , '"+ prof +"');";
         
         openDBConnection();
-        executeUpdate(qry);
+        int q = executeUpdate(qry);
         closeDBConnection();
+        return q;
     }
     
-    public void qryAltaRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
+    public int qryAltaRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO recursos (codRec , nombre , anio , categoria , autor , cant)";
         qry+= "VALUES ("+codRecurso+" , '"+nombre+"' , '"+anio+"' , '"+categoria+"' , '"+autor+"' , '"+cant+"');";
         
         openDBConnection();
-        executeUpdate(qry);
+        int q = executeUpdate(qry);
         closeDBConnection();
+        return q;
     }   
     
-    public void qryAltaPagos(String nroLegajo , String codCurso , String fecha , String importe , String comprobante){
+    public int qryAltaPagos(String nroLegajo , String codCurso , String fecha , String importe , String comprobante){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO pagos (nroLegajo , codCurso , fecha , importe , comprobante) ";
         qry+= "VALUES ("+nroLegajo+" , "+codCurso+" , '"+fecha+"' , "+importe+" , '"+comprobante+"' );";
         
         openDBConnection();
-        executeUpdate(qry);
+        int q = executeUpdate(qry);
         closeDBConnection();
+        return q;
     }
     
-    public void qryAltaPrestamo(String nroLegajo , String codRecurso , String fechaPrestamo , String fechaPrevistaDevolucion , String fechaDevolucion ){
+    public int qryAltaPrestamo(String nroLegajo , String codRecurso , String fechaPrestamo , String fechaPrevistaDevolucion , String fechaDevolucion ){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO prestamos (nroLegajo , codRecurso , fechaPres , fechaDevo , fechaPrevDevo) ";
         qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fechaPrestamo+"' , '"+fechaDevolucion+"' , '"+fechaPrevistaDevolucion+"');";
         
         openDBConnection();
-        executeUpdate(qry);
+        int q = executeUpdate(qry);
         closeDBConnection();
+        return q;
     }
     
-    public void aryAltaPagos(String nroLegajo , String codRecurso , String fecha , String importe , String comprobante){
-        String qry; // revisar los campos de la tabla 
-        qry = "INSERT INTO prestamo (nroLegajo , codRecurso , fecha , importe , comprobante) ";
-        qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fecha+"' , "+importe+" , '"+comprobante+"' );";
+    public int qryModificarAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
+        String qry;
+        qry = "UPDATE alumnos SET "
+                + "nombre = " + "'"+nombre+"'"
+                + ", apellido = '" + apellido + "' "
+                + ", fechaNacimiento = " + "'"+fechaNacimiento+"'"
+                + ", nroDoc = "+ "'"+nroDoc+"'"
+                + ", calle = "+ "'"+calle+"'"
+                + ", nro = "+ "'"+nroCalle+"'"
+                + ", piso = "+ "'"+piso+"'"
+                + ", depto = "+ "'"+dpto+"'"
+                + ", codPostal = "+ "'"+codPostal+"'"
+                + ", localidad = "+ "'"+localidad+"'"
+                + ", telFijo = "+ "'"+telFijo+"'"
+                + ", telCel = "+ "'"+telCel+"'"
+                + ", eMail = "+ "'"+eMail+"'"
+                ;
+        qry+= " WHERE nroLegajo = " + nroLegajo;
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
     }
     
     // ----- Getters -----
