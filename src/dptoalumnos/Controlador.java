@@ -201,6 +201,9 @@ public class Controlador {
             }
         }
     }
+
+
+
     // ----- Levanta datos form , envía a armado de Query -----
     private class funcionSendAltaAlumno implements ActionListener{
         @Override
@@ -312,48 +315,104 @@ public class Controlador {
     }
     
     private class funcionSendAltaCurso implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent ae) {
-            Curso curso = new Curso();
-            Boolean validacion = true;
+            int q = insertarModificarCurso("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El curso ha sido agregado.");
+                v.cargaInputsCurso(new Curso());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
 
-            String codCurso = v.getTxtFldCursoCodCurso();
-            String nombre = v.getTxtFldCursoNombre();
-            String prof = v.getTxtFldCursoProf();
-
-            if(codCurso.isEmpty()){
-                validacion = false;
-            }
-            if(nombre.isEmpty()){
-                validacion = false;
-            }
-            if(prof.isEmpty()){
-                validacion = false;
-            }
-            
-            if(validacion){
-                int q = m.qryAltaCurso(codCurso, nombre, prof);
-                
-                if (q == 1){
-                    v.showSuccessMsg("El curso ha sido agregado.");
-                    v.cargaInputsCurso(new Curso());
-                }
-                else v.showErrorMsg("Algo ha fallado en la base de datos");
-                
-                m.cargaArrayCurso();
-            }else{
-                v.showErrorMsg("La validación ha fallado.");
-            }
-            
+            m.cargaArrayCurso();
         }
-            
+        
     }
     
-    private class funcionSendAltaRecurso implements ActionListener{
-
+    private class funcionUpdateCurso implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarCurso("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El curso ha sido modificado.");
+                int pos = m.getPosCursos();
+                m.cargaArrayCurso();
+                m.setPosCursos(pos);
+                v.cargaInputsCurso(m.getCurso(pos));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
+    private int insertarModificarCurso(String modo){
+        Curso curso = new Curso();
+        Boolean validacion = true;
+
+        String codCurso = v.getTxtFldCursoCodCurso();
+        String nombre = v.getTxtFldCursoNombre();
+        String prof = v.getTxtFldCursoProf();
+
+        if(codCurso.isEmpty()){
+            validacion = false;
+        }
+        if(nombre.isEmpty()){
+            validacion = false;
+        }
+        if(prof.isEmpty()){
+            validacion = false;
+        }
+
+        if(validacion){
+                if (modo.equals("INSERT")){
+                    return m.qryAltaCurso(codCurso, nombre, prof);
+                }else if (modo.equals("UPDATE")){
+                    return m.qryModificarCurso(codCurso , nombre , prof);
+                }
+                return 0;
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+                return -2;
+            }
+    }
+
+    private class funcionSendAltaRecurso implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarRecurso("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El recurso ha sido agregado.");
+                v.cargaInputsRecurso(new Recurso());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            m.cargaArrayRecurso();
+        }
+        
+    }
+    
+    private class funcionUpdateRecurso implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarRecurso("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El recurso ha sido modificado.");
+                int pos = m.getPosRecursos();
+                m.cargaArrayRecurso();
+                m.setPosRecursos(pos);
+                v.cargaInputsRecurso(m.getRecurso(pos));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
+    private int insertarModificarRecurso(String modo){
+
             Recurso recurso = new Recurso();
             Boolean validacion = true;
 
@@ -384,74 +443,122 @@ public class Controlador {
             }
             
             if(validacion){
-                int q = m.qryAltaRecurso(codRecurso, nombre, anio, categoria, autor, cant);
-                
-                if (q == 1){
-                    v.showSuccessMsg("El recurso ha sido agregado.");
-                    v.cargaInputsRecurso(new Recurso());
+                if (modo.equals("INSERT")){
+                    return m.qryAltaRecurso(codRecurso , categoria , nombre , autor , anio , cant);
+                }else if (modo.equals("UPDATE")){
+                    return m.qryModificarRecurso(codRecurso , categoria , nombre , autor , anio , cant);
                 }
-                else v.showErrorMsg("Algo ha fallado en la base de datos");
-                
-                m.cargaArrayRecurso();
+                return 0;
             }else{
                 v.showErrorMsg("La validación ha fallado.");
+                return -2;
             }
-            
-        }
-            
+                
     }
     
     private class funcionSendAltaPrestamo implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent ae) {
-            Prestamo prestamo = new Prestamo();
-            Boolean validacion = true;
+            int q = insertarModificarPrestamo("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El prestamo ha sido agregado.");
+                v.cargaInputsPrestamo(new Prestamo());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
 
-            String nroLegajo = v.getTxtFldPrestamoNroLegajo();
-            String codRecurso = v.getTxtFldPrestamoCodRecurso();
-            String fechaPrestamo = v.getTxtFldPrestamoFechaPres();
-            String fechaPrevistaDevolucion = v.getTxtFldPrestamoFechaPrevDevo();
-            String fechaDevolucion = v.getTxtFldPrestamoFechaDevo();
-            
-            if(nroLegajo.isEmpty()){
-                validacion = false;
+            m.cargaArrayPrestamo();
+        }
+        
+    }
+    
+    private class funcionUpdatePrestamo implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarPrestamo("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El prestamo ha sido modificado.");
+                int pos = m.getPosPrestamos();
+                m.cargaArrayPrestamo();
+                m.setPosPrestamos(pos);
+                v.cargaInputsPrestamo(m.getPrestamo(pos));
             }
-            if(codRecurso.isEmpty()){
-                validacion = false;
-            }
-            if(fechaPrestamo.isEmpty()){
-                validacion = false;
-            }
-            if(fechaPrevistaDevolucion.isEmpty()){
-                validacion = false;
-            }
-            if(fechaDevolucion.isEmpty()){
-                validacion = false;
-            }
-            
-            if(validacion){
-               int q = m.qryAltaPrestamo(nroLegajo, codRecurso, fechaPrestamo, fechaDevolucion, fechaPrevistaDevolucion);
-               
-               if (q == 1){ 
-                   v.showSuccessMsg("El prestamo ha sido agregado."); 
-                   v.cargaInputsPrestamo(new Prestamo());
-               }
-               else v.showErrorMsg("Algo ha fallado en la base de datos");
-               
-               m.cargaArrayPrestamo();
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+        }
+    }
+    
+    private int insertarModificarPrestamo(String modo){
+
+        Prestamo prestamo = new Prestamo();
+        Boolean validacion = true;
+
+        String nroLegajo = v.getTxtFldPrestamoNroLegajo();
+        String codRecurso = v.getTxtFldPrestamoCodRecurso();
+        String fechaPrestamo = v.getTxtFldPrestamoFechaPres();
+        String fechaPrevistaDevolucion = v.getTxtFldPrestamoFechaPrevDevo();
+        String fechaDevolucion = v.getTxtFldPrestamoFechaDevo();
+
+        if(nroLegajo.isEmpty()){
+            validacion = false;
+        }
+        if(codRecurso.isEmpty()){
+            validacion = false;
+        }
+        if(fechaPrestamo.isEmpty()){
+            validacion = false;
+        }
+        if(fechaPrevistaDevolucion.isEmpty()){
+            validacion = false;
+        }
+        if(fechaDevolucion.isEmpty()){
+            validacion = false;
+        }
+
+        if(validacion){
+                if (modo.equals("INSERT")){
+                    return m.qryAltaPrestamo(nroLegajo , codRecurso , fechaPrestamo , fechaPrevistaDevolucion , fechaDevolucion);
+                }else if (modo.equals("UPDATE")){
+                    return m.qryModificarPrestamo(nroLegajo , codRecurso , fechaPrestamo , fechaPrevistaDevolucion , fechaDevolucion);
+                }
+                return 0;
             }else{
                 v.showErrorMsg("La validación ha fallado.");
+                return -2;
             }
-            
-        }
             
     }  
     
     private class funcionSendAltaPago implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarPago("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El pago ha sido agregado.");
+                v.cargaInputsPago(new Pago());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            m.cargaArrayPago();
+        }
+        
+    }
+    
+    private class funcionUpdatePago implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarPago("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El pago ha sido modificado.");
+                int pos = m.getPosPagos();
+                m.cargaArrayPago();
+                m.setPosPagos(pos);
+                v.cargaInputsPago(m.getPago(pos));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+        }
+    }
+    
+    private int insertarModificarPago(String modo){
+
             Pago pago = new Pago();
             Boolean validacion = true;
 
@@ -478,21 +585,16 @@ public class Controlador {
             }
             
             if(validacion){
-                int q = m.qryAltaPagos(nroLegajo, codCurso, fecha, importe, comprobante);
-                
-                if (q == 1){
-                    v.showSuccessMsg("El pago ha sido agregado.");
-                    v.cargaInputsPago(new Pago());
+                if (modo.equals("INSERT")){
+                    return m.qryAltaPago(nroLegajo , codCurso , fecha , importe , comprobante);
+                }else if (modo.equals("UPDATE")){
+                    return m.qryModificarPago(nroLegajo , codCurso , fecha , importe , comprobante);
                 }
-                else v.showErrorMsg("Algo ha fallado en la base de datos");
-                
-                m.cargaArrayPago();
+                return 0;
             }else{
                 v.showErrorMsg("La validación ha fallado.");
-            }
-            
-        }
-            
+                return -2;
+            }            
     }  
     
     // ----- Handlers botones avanzar / retroceder -----

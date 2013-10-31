@@ -1,6 +1,5 @@
 package dptoalumnos;
 
-import com.sun.codemodel.internal.fmt.JBinaryFile;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
