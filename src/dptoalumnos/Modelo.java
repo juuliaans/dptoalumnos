@@ -451,9 +451,9 @@ public final class Modelo {
     
     public int qryModificarCurso(String codCurso , String nombre , String prof){
         String qry;
-        qry = "UPDATE curso SET "
+        qry = "UPDATE cursos SET "
                 + "nombre = " + "'"+nombre+"' "
-                + "prof = " + "'"+prof+"' ";
+                + ", prof = " + "'"+prof+"' ";
         qry += "WHERE codCurso = " + codCurso;
         
         openDBConnection();
@@ -462,15 +462,15 @@ public final class Modelo {
         return q;
     }
     
-    public int qryModificarRecurso(String codRecurso , String categoria , String nombre , String autor , String anio , String cant){
+    public int qryModificarRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
         String qry;
-        qry = "UPDATE recurso SET "
+        qry = "UPDATE recursos SET "
                 + "categoria = " + "'"+categoria+"' "
-                + "nombre = " + "'"+nombre+"' "
-                + "autor = " + "'"+autor+"' "
-                + "anio = " + "'"+anio+"' "
-                + "cant = " + "'"+cant+"' ";
-        qry += "WHERE codRecurso = " + codRecurso;
+                + ", nombre = " + "'"+nombre+"' "
+                + ", autor = " + "'"+autor+"' "
+                + ", anio = " + "'"+anio+"' "
+                + ", cant = " + "'"+cant+"' ";
+        qry += "WHERE codRec = " + codRecurso;
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -480,13 +480,13 @@ public final class Modelo {
     
     public int qryModificarPrestamo(String nroLegajo , String codRec , String fechaPres , String fechaPrevDevo , String fechaDevo){
         String qry;
-        qry = "UPDATE pretamo SET "
+        qry = "UPDATE prestamos SET "
                 + "nroLegajo = " + "'"+nroLegajo+"' "
-                + "codRec = " + "'"+codRec+"' "
-                + "fechaPres = " + "'"+fechaPres+"' "
-                + "fechaPrevDevo = " + "'"+fechaPrevDevo+"' "
-                + "fechaDevo = " + "'"+fechaDevo+"' ";
-        qry += "WHERE nroLegajo = " + nroLegajo +" AND codRec = " + codRec;
+                + ", codRecurso = " + "'"+codRec+"' "
+                + ", fechaPres = " + "'"+fechaPres+"' "
+                + ", fechaPrevDevo = " + "'"+fechaPrevDevo+"' "
+                + ", fechaDevo = " + "'"+fechaDevo+"' ";
+        qry += "WHERE nroLegajo = " + nroLegajo +" AND codRecurso = " + codRec;
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -496,12 +496,12 @@ public final class Modelo {
     
     public int qryModificarPago(String nroLegajo , String codCurso , String fecha , String importe , String comprobante){
         String qry;
-        qry = "UPDATE pago SET "
+        qry = "UPDATE pagos SET "
                 + "nroLegajo = " + "'"+nroLegajo+"' "
-                + "codCurso = " + "'"+codCurso+"' "
-                + "fecha = " + "'"+fecha+"' "
-                + "importe = " +importe+" "
-                + "comprobante = " + "'"+comprobante+"' ";
+                + ", codCurso = " + "'"+codCurso+"' "
+                + ", fecha = " + "'"+fecha+"' "
+                + ", importe = " +importe+" "
+                + ", comprobante = " + "'"+comprobante+"' ";
         qry += "WHERE nroLegajo = " + nroLegajo +" AND codCurso = " + codCurso;
         
         openDBConnection();

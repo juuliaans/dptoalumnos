@@ -108,7 +108,7 @@ public class Controlador {
             
             if (m.getCantCursos() > 0){
                 v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
-                v.addActionListenersModificarCurso(null,new RetrocederCursoHandler(), new AvanzarCursoHandler(), null);
+                v.addActionListenersModificarCurso(new funcionUpdateCurso(),new RetrocederCursoHandler(), new AvanzarCursoHandler(), null);
             }else{
                 v.showErrorMsg("No hay cursos cargados en el sistema. Dirigase a la pantalla de alta de Cursos para cargar cursos en el sistema.");
             }
@@ -137,7 +137,7 @@ public class Controlador {
             
             if (m.getCantPagos() > 0){
             v.cargaInputsPago(m.getPago(m.getPosPagos()));
-            v.addActionListenersModificarPago(null,new RetrocederPagoHandler(), new AvanzarPagoHandler(), null);
+            v.addActionListenersModificarPago(new funcionUpdatePago(),new RetrocederPagoHandler(), new AvanzarPagoHandler(), null);
             }else{
                 v.showErrorMsg("No hay pagos cargados en el sistema. Dirigase a la pantalla de alta de pagos para insertar pagos en el sistema.");
             }
@@ -166,7 +166,7 @@ public class Controlador {
             
             if (m.getCantPrestamos() > 0){
             v.cargaInputsPrestamo(m.getPrestamo(m.getPosPrestamos()));
-            v.addActionListenersModificarPrestamo(null,new RetrocederPrestamoHandler(), new AvanzarPrestamoHandler());
+            v.addActionListenersModificarPrestamo(new funcionUpdatePrestamo(),new RetrocederPrestamoHandler(), new AvanzarPrestamoHandler());
             }else{
                 v.showErrorMsg("No hay prestamos cargados en el sistema. Dirigase a la pantalla de alta para insertar nuevos prestamos");
             }
@@ -195,7 +195,7 @@ public class Controlador {
             
             if (m.getCantRecursos() > 0){
             v.cargaInputsRecurso(m.getRecurso(m.getPosRecursos()));
-            v.addActionListenersModificarRecurso(null,new RetrocederRecursoHandler(), new AvanzarRecursoHandler());
+            v.addActionListenersModificarRecurso(new funcionUpdateRecurso(),new RetrocederRecursoHandler(), new AvanzarRecursoHandler());
             }else{
                 v.showErrorMsg("No hay recursos cargados en el sistema. Dirigase a la pantalla de alta para ingresar nuevos recursos.");
             }
@@ -444,9 +444,9 @@ public class Controlador {
             
             if(validacion){
                 if (modo.equals("INSERT")){
-                    return m.qryAltaRecurso(codRecurso , categoria , nombre , autor , anio , cant);
+                    return m.qryAltaRecurso(codRecurso , nombre , anio , categoria , autor , cant);
                 }else if (modo.equals("UPDATE")){
-                    return m.qryModificarRecurso(codRecurso , categoria , nombre , autor , anio , cant);
+                    return m.qryModificarRecurso(codRecurso , nombre , anio , categoria , autor , cant);
                 }
                 return 0;
             }else{
