@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import java.sql.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Controlador {
 
@@ -239,6 +241,17 @@ public class Controlador {
     public boolean isAlpha(String name) {
         return name.matches("[a-zA-Z]+");
     }
+    
+    public boolean validateDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            sdf.parse(date);
+            return true;
+        }
+        catch(ParseException ex) {
+            return false;
+    }
+}
 
 
 
@@ -302,7 +315,7 @@ public class Controlador {
             }else{
                 if(nroLegajo.length() != 4){
                     validacion = false;
-                    v.showErrorMsg("Nro Legajo debe contener 4 dígitos.");
+                    v.showErrorMsg("Cant de dígitos necesarios = 4");
                 }else{
                     if(!isNumeric(nroLegajo)){
                         validacion = false;
@@ -340,21 +353,61 @@ public class Controlador {
             }
             if(fechaNacimiento.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Fecha Nacimiento Vacío.");
+            }else{
+                if(!validateDate(fechaNacimiento)){
+                    validacion = false;
+                    v.showErrorMsg("Formato Incorrecto de Fecha");
+                }
             }
             if(nroDoc.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Nro Doc Vacío");
+            }else{
+                if(nroDoc.length()!=4){
+                    validacion = false;
+                    v.showErrorMsg("Cant de dígitos necesarios = 4");
+                }else{
+                    if(!isNumeric(nroDoc)){
+                        validacion = false;
+                        v.showErrorMsg("Ingrese solo nros en campo Nro Doc");
+                    }
+                }
             }
             if(calle.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Calle vacío");
+            }else{
+                if(calle.length() > 50){
+                    validacion = false;
+                    v.showErrorMsg("Máxima cant de caracteres = 50");
+                }
             }
             if(nroCalle.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Nro Calle vacío");
+            }else{
+                if(!isNumeric(nroCalle)){
+                    validacion = false;
+                    v.showErrorMsg("Ingrese solo nros en campo Nro Calle");
+                }
             }
             if(piso.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Piso vacío");
+            }else{
+                if(isAlpha(piso)){
+                    validacion = false;
+                    v.showErrorMsg("Ingrese solo nros en el campo Piso");                    
+                }
             }
             if(dpto.isEmpty()){ 
                 validacion = false;
+            }else{
+                if(isAlpha(dpto)){
+                    validacion = false;
+                    v.showErrorMsg("Ingrese solo nros en el campo Departamento");                    
+                }
             }
             if(codPostal.isEmpty()){ 
                 validacion = false;
@@ -364,9 +417,19 @@ public class Controlador {
             }
             if(telFijo.isEmpty()){ 
                 validacion = false;
+            }else{
+                if(!isNumeric(telFijo)){
+                    validacion = false;
+                    v.showErrorMsg("Ingrese solo nros en campo Tel Fijo");
+                }
             }
             if(telCel.isEmpty()){ 
                 validacion = false;
+            }else{
+                if(!isNumeric(telCel)){
+                    validacion = false;
+                    v.showErrorMsg("Ingrese solo nros en campo Tel Cel");
+                }
             }
             if(eMail.isEmpty()){ 
                 validacion = false;
