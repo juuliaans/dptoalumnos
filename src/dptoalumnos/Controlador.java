@@ -34,7 +34,9 @@ public class Controlador {
                         
                     new menuItem_altaCursos(), 
                     new menuItem_bajaCursos(), 
-                    new menuItem_modificacionCursos(), 
+                    new menuItem_modificacionCursos(),
+                    new menuItem_altaAsistencias(), 
+                    new menuItem_modificacionAsistencias(), 
                     
                     new menuItem_altaPagos(), 
                     new menuItem_bajaPagos(), 
@@ -118,6 +120,23 @@ public class Controlador {
             }else{
                 v.showErrorMsg("No hay cursos cargados en el sistema. Dirigase a la pantalla de alta de Cursos para cargar cursos en el sistema.");
             }
+        }
+    }
+    
+    private class menuItem_altaAsistencias implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("ALTA_ASISTENCIAS");
+            //v.cargaInputsAsistencia();
+            
+        }
+    }
+    
+    private class menuItem_modificacionAsistencias implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("MODIFICACION_ASISTENCIAS");
+            
         }
     }
     
@@ -778,7 +797,7 @@ public class Controlador {
             if (q == 1){
                 v.showSuccessMsg("El registro de asistencias ha sido modificado.");
                 int pos = m.getPosAsistencias();
-                //m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso() , v.getTxtFldAsistNroClase() , 0);
+                m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso() , Integer.parseInt(v.getTxtFldAsistNroClase()) , 0);
                 m.setPosAsistencias(pos);
                 v.cargaInputsAsistencia(m.getArrayAsistencias());
             }
@@ -794,12 +813,12 @@ public class Controlador {
             boolean[] arrayAsistencias = new boolean[16];
             String[] arrayNroLegajo = new String[16];
             
-            String codCurso = null; // v.getTxtFldAsistCodCurso;
-            String nroClase = null; // v.getTxtFldAsistNroClase;
+            String codCurso = v.getTxtFldAsistCodCurso();
+            String nroClase = v.getTxtFldAsistNroClase();
             
             for(int i = 0 ; i<16 ; i++){
-                arrayAsistencias[i] = false; // v.getTxtFldAsist(i);
-                arrayNroLegajo[i] = null; //v.getTxtFldAsistNroLegajo(i);
+                arrayAsistencias[i] = v.getTxtFldAsistValue(i);
+                arrayNroLegajo[i] = v.getTxtFldAsistNroLegajo(i);
             }
             
             
@@ -975,7 +994,7 @@ public class Controlador {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            int cantClases = 0; // m.qryCantAsistCurso(v.getTxtFldAsistNroCurso());
+            int cantClases = m.qryCantAsistCurso(v.getTxtFldAsistCodCurso());
             //qry que calcula la cant de clases que tiene cargada la materia
         
             if (cantClases > 0) {
@@ -983,7 +1002,7 @@ public class Controlador {
                 if (m.getPosAsistencias()== -1) {
                     m.setPosAsistencias(0);
                 }
-                //m.cargaArrayAsistencia(v.getTxtFldAsistNroCurso(), m.getPosAsistencias(), 0);
+                m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso(), m.getPosAsistencias(), 0);
                 v.cargaInputsAsistencia(m.getArrayAsistencias());
             }
         }
@@ -993,7 +1012,7 @@ public class Controlador {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int cantClases = 0; // m.qryCantAsistCurso(v.getTxtFldAsistNroCurso());
+            int cantClases = m.qryCantAsistCurso(v.getTxtFldAsistCodCurso());
             //qry que calcula la cant de clases que tiene cargada la materia
         
             if (cantClases > 0) {
@@ -1001,7 +1020,7 @@ public class Controlador {
                 if (m.getPosAsistencias()== cantClases) {
                     m.setPosAsistencias(cantClases- 1);
                 }
-                //m.cargaArrayAsistencia(v.getTxtFldAsistNroCurso(), m.getPosAsistencias(), 0);
+                m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso(), m.getPosAsistencias(), 0);
                 v.cargaInputsAsistencia(m.getArrayAsistencias());
             }
         }

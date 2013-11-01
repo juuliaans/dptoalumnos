@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -329,6 +330,33 @@ public final class Modelo {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.closeDBConnection();
+    }
+    
+    public Dictionary<Integer, String> getAlumnosAsistencias(){
+        String qry;
+        qry = "SELECT nroLegajo, nombre , apellido FROM alumnos "
+                + " ORDER BY nroLegajo";
+        ResultSet rs = null;
+        Dictionary<Integer, String> arrayAlumnosCurso = null;
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                arrayAlumnosCurso.put(Integer.parseInt(rs.getString(1)), rs.getString(2) + " " + rs.getString(3));
+            }
+            return arrayAlumnosCurso;
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.closeDBConnection();
+        return null;
     }
     
     // ----- MUESTRA DATOS -----

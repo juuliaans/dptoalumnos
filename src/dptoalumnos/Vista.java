@@ -24,6 +24,8 @@ public final class Vista {
     private JMenuItem addItem1_2;
     private JMenuItem delItem1_2;
     private JMenuItem modItem1_2;
+    private JMenuItem asistAlta;
+    private JMenuItem asistModificar;
     private JMenu item1_3;
     private JMenuItem addItem1_3;
     private JMenuItem delItem1_3;
@@ -154,6 +156,20 @@ public final class Vista {
     private JButton btnPagoPrev;
     private JButton btnPagoSave;
     private JButton btnPagoDelete;
+    
+    //Pantalla Asistencias
+    private JPanel panelAsistencias;
+    private JLabel txtLblAsistCodCurso;
+    private JTextField txtFldAsistCodCurso;
+    private JLabel txtLblAsistNroClase;
+    private JTextField txtFldAsistNroClase;
+    private JButton btnAsistSend;
+    private JButton btnAsistNext;
+    private JButton btnAsistPrev;
+    private JButton btnAsistSave;
+    private JTextField txtFldAsistNroLegajo [];
+    private JLabel txtLblAsistNombre [];
+    private JCheckBox txtFldAsistValue [];
 
     public Vista() {
         contenedor = new JFrame();
@@ -180,9 +196,13 @@ public final class Vista {
         addItem1_2 = new JMenuItem("Alta");
         delItem1_2 = new JMenuItem("Baja");
         modItem1_2 = new JMenuItem("Modificacion");
+        asistAlta = new JMenuItem("Alta de asistencias");
+        asistModificar = new JMenuItem("Modificacion de asistencias");
         item1_2.add(addItem1_2);
         item1_2.add(delItem1_2);
         item1_2.add(modItem1_2);
+        item1_2.add(asistAlta);
+        item1_2.add(asistModificar);
         archivo.add(item1_2);
         
         item1_3 = new JMenu("Pagos");
@@ -252,23 +272,25 @@ public final class Vista {
         addItem1_2.addActionListener(al[3]);
         delItem1_2.addActionListener(al[4]);
         modItem1_2.addActionListener(al[5]);
+        asistAlta.addActionListener(al[6]);
+        asistModificar.addActionListener(al[7]);
         
-        addItem1_3.addActionListener(al[6]);
-        delItem1_3.addActionListener(al[7]);
-        modItem1_3.addActionListener(al[8]);
+        addItem1_3.addActionListener(al[8]);
+        delItem1_3.addActionListener(al[9]);
+        modItem1_3.addActionListener(al[10]);
         
-        addItem1_4.addActionListener(al[9]);
-        delItem1_4.addActionListener(al[10]);
-        modItem1_4.addActionListener(al[11]);
+        addItem1_4.addActionListener(al[11]);
+        delItem1_4.addActionListener(al[12]);
+        modItem1_4.addActionListener(al[13]);
         
-        addItem1_5.addActionListener(al[12]);
-        delItem1_5.addActionListener(al[13]);
-        modItem1_5.addActionListener(al[14]);
+        addItem1_5.addActionListener(al[14]);
+        delItem1_5.addActionListener(al[15]);
+        modItem1_5.addActionListener(al[16]);
         
-        report1.addActionListener(al[15]);
-        report2.addActionListener(al[16]);
-        report3.addActionListener(al[17]);
-        report4.addActionListener(al[18]);
+        report1.addActionListener(al[17]);
+        report2.addActionListener(al[18]);
+        report3.addActionListener(al[19]);
+        report4.addActionListener(al[20]);
     }
     
     public void addCloseEventToMenuItem(ActionListener al){
@@ -1122,6 +1144,54 @@ public final class Vista {
         contenedor.add(panelRecurso);
     }
     
+    public void pantallaAltaAsistencias(){
+        panelAsistencias = new JPanel(new BorderLayout());
+        
+        pantallaActual = panelAsistencias;
+
+        JPanel top = new JPanel();
+        
+        txtLblAsistCodCurso = new JLabel("Cod Curso: ");
+        txtFldAsistCodCurso = new JTextField(4);
+        
+        txtLblAsistNroClase = new JLabel("Nro Clase: ");
+        txtFldAsistNroClase = new JTextField(4);
+        
+        top.add(txtLblAsistCodCurso);
+        top.add(txtFldAsistCodCurso);
+        top.add(txtLblAsistNroClase);
+        top.add(txtFldAsistNroClase);
+        
+        JPanel center = new JPanel(new GridLayout(16, 3));
+        
+        txtFldAsistNroLegajo = new JTextField[16];
+        txtLblAsistNombre = new JLabel[16];
+        txtFldAsistValue = new JCheckBox[16];
+        
+        for (int i = 0; i < 16; i++){
+            txtFldAsistNroLegajo[i] = new JTextField();
+            txtFldAsistNroLegajo[i].setVisible(false);
+            
+            txtLblAsistNombre[i] = new JLabel();
+            txtFldAsistValue[i] = new JCheckBox();
+            
+            center.add(txtFldAsistNroLegajo[i]);
+            center.add(txtLblAsistNombre[i]);
+            center.add(txtFldAsistValue[i]);
+        }
+        
+        JPanel bottom = new JPanel();
+        btnAsistSend = new JButton("Enviar");
+        
+        bottom.add(btnAsistSend);
+        
+        panelAsistencias.add(top, BorderLayout.NORTH);
+        panelAsistencias.add(center, BorderLayout.CENTER);
+        panelAsistencias.add(bottom, BorderLayout.SOUTH);
+        
+        contenedor.add(panelAsistencias);
+    }
+    
     public void mostrarPantalla(String pantalla){
         //System.out.println("La pantalla a mostrar es: " + pantalla);
         if (pantallaActual != null){
@@ -1143,6 +1213,8 @@ public final class Vista {
                 pantallaAltaPrestamo();
             }else if (pantalla.equals("RECURSOS")){
                 pantallaAltaRecurso();
+            }else if (pantalla.equals("ASISTENCIAS")){
+                pantallaAltaAsistencias();
             }
         }else if (pantalla.startsWith("MODIFICACION")){
             pantalla = pantalla.replace("MODIFICACION_", "");
@@ -1157,6 +1229,8 @@ public final class Vista {
                 pantallaModificarPrestamo();
             }else if (pantalla.equals("RECURSOS")){
                 pantallaModificarRecurso();
+            }else if (pantalla.equals("ASISTENCIAS")){
+                
             }
         }
         
@@ -1216,9 +1290,9 @@ public final class Vista {
     
     public void cargaInputsAsistencia(ArrayList<Asistencia> asistencia){
         for (int i =0;i < 16; i++){
-            //setTxtFldAsistNroLegajo(i, asistencia.get(i).getNroLegajo());
-            //setTxtFldAsistNombre(i, asistencia.get(i).getNombreApellido()); //alguna forma de obtener el nombre del alumno, no se si esta adentro de la clase asistencia
-            //setTxtFldAsistValue(i, asistencia.get(i).getAsistencia());
+            setTxtFldAsistNroLegajo(i, asistencia.get(i).getNroLegajo());
+            setTxtFldAsistNombre(i, asistencia.get(i).getNombreApellido()); //alguna forma de obtener el nombre del alumno, no se si esta adentro de la clase asistencia
+            setTxtFldAsistValue(i, asistencia.get(i).getAsistencia());
         }
     }
     
@@ -1362,6 +1436,26 @@ public final class Vista {
         return txtFldPagoComprobante.getText();
     }
     
+    public String getTxtFldAsistCodCurso(){
+        return txtFldAsistCodCurso.getText();
+    }
+    
+    public String getTxtFldAsistNroClase(){
+        return txtFldAsistNroClase.getText();
+    }
+    
+    public String getTxtFldAsistNroLegajo(int i){
+        return txtFldAsistNroLegajo[i].getText();
+    }
+    
+    public String getTxtFldAsistNombre(int i){
+        return txtLblAsistNombre[i].getText();
+    }
+    
+    public boolean getTxtFldAsistValue(int i){
+        return txtFldAsistValue[i].isSelected();
+    }
+    
     // ----- Seters inputs -----
     public void setTxtFldAlumnoNroLegajo(String txtFldAlumnoNroLegajo) {
         this.txtFldAlumnoNroLegajo.setText(txtFldAlumnoNroLegajo);
@@ -1499,6 +1593,21 @@ public final class Vista {
         this.txtFldPagoComprobante.setText(txtFldPagoComprobante);
     }
     
+    public void setTxtFldAsistNombre(int i, String txtFldAsistNombre) {
+        this.txtLblAsistNombre[i].setText(txtFldAsistNombre);
+    }
+    
+    public void setTxtFldAsistNroLegajo(int i, String txtFldAsistNroLegajo){
+        this.txtFldAsistNroLegajo[i].setText(txtFldAsistNroLegajo);
+    }
+    
+    public void setTxtFldAsistValue(int i, int txtFldAsistValue){
+        boolean val = false;
+        if (txtFldAsistValue == 1) val = true;
+        else if (txtFldAsistValue == 0) val = false;
+        
+        this.txtFldAsistValue[i].setSelected(val);
+    }
         
     // ----- Listeners ----- 
     
