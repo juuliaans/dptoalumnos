@@ -308,119 +308,123 @@ public class Controlador {
             String telCel = v.getTxtFldAlumnoTelCel();
             String eMail = v.getTxtFldAlumnoMail();
             
-            // validacioens de ingreso de datos . 
+            // ----- VALIDACION ------. 
             if(nroLegajo.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Nro. Legajo Vacío.");
+                v.showErrorMsg("Nro. Legajo : Campo Vacío.");
             }else{
                 if(nroLegajo.length() != 4){
                     validacion = false;
-                    v.showErrorMsg("Cant de dígitos necesarios = 4");
+                    v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
                 }else{
                     if(!isNumeric(nroLegajo)){
                         validacion = false;
-                        v.showErrorMsg("Inserte solo dígitos numéricos.");
+                        v.showErrorMsg("Nro Legajo : Inserte solo dígitos numéricos.");
                     }
                 }
             }
             if(nombre.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Nombre Vacío.");
+                v.showErrorMsg("Nombre : Campo Vacío.");
             }else{
                 if(nombre.length()> 50){
                     validacion = false;
-                    v.showErrorMsg("Máxima cant de dígitos = 50");
+                    v.showErrorMsg("Nombre : Máxima cant de dígitos = 50.");
                 }else{
-                    if(isAlpha(nombre)){
+                    if(!isAlpha(nombre)){
                         validacion = false;
-                        v.showErrorMsg("Ingrese solo letras.");
+                        v.showErrorMsg("Nombre : Ingrese solo letras.");
                     }
                 }
             }
             if(apellido.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Apellido Vacío.");
+                v.showErrorMsg("Apellido : Campo Vacío.");
             }else{
                 if(apellido.length()> 50){
                     validacion = false;
-                    v.showErrorMsg("Máxima cant de dígitos = 50");
+                    v.showErrorMsg("Apellido : Máxima cant de dígitos = 50");
                 }else{
-                    if(isAlpha(apellido)){
+                    if(!isAlpha(apellido)){
                         validacion = false;
-                        v.showErrorMsg("Ingrese solo letras.");
+                        v.showErrorMsg("Apellido : Ingrese solo letras.");
                     }
                 }
             }
             if(fechaNacimiento.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Fecha Nacimiento Vacío.");
+                v.showErrorMsg("Fecha Nacimiento : Campo Vacío.");
             }else{
                 if(!validateDate(fechaNacimiento)){
                     validacion = false;
-                    v.showErrorMsg("Formato Incorrecto de Fecha");
+                    v.showErrorMsg("Fecha Nacimiento: Formato Incorrecto.");
                 }
             }
             if(nroDoc.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Nro Doc Vacío");
+                v.showErrorMsg("Nro Doc : Campo Vacío");
             }else{
                 if(nroDoc.length()!=4){
                     validacion = false;
-                    v.showErrorMsg("Cant de dígitos necesarios = 4");
+                    v.showErrorMsg("Nro Doc : Cant de dígitos necesarios = 4");
                 }else{
                     if(!isNumeric(nroDoc)){
                         validacion = false;
-                        v.showErrorMsg("Ingrese solo nros en campo Nro Doc");
+                        v.showErrorMsg("Nro Doc : Ingrese solo nros.");
                     }
                 }
             }
             if(calle.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Calle vacío");
+                v.showErrorMsg("Calle : Campo vacío");
             }else{
                 if(calle.length() > 50){
                     validacion = false;
-                    v.showErrorMsg("Máxima cant de caracteres = 50");
+                    v.showErrorMsg("Calle : Máxima cant de caracteres = 50");
                 }
             }
             if(nroCalle.isEmpty()){ 
                 validacion = false;
-                v.showErrorMsg("Campo Nro Calle vacío");
+                v.showErrorMsg("Nro Calle : Campo vacío");
             }else{
                 if(!isNumeric(nroCalle)){
                     validacion = false;
-                    v.showErrorMsg("Ingrese solo nros en campo Nro Calle");
+                    v.showErrorMsg("Nro Calle : Ingrese solo nros.");
                 }
             }
-            if(piso.isEmpty()){ 
+            if(isAlpha(piso)){
                 validacion = false;
-                v.showErrorMsg("Campo Piso vacío");
-            }else{
-                if(isAlpha(piso)){
-                    validacion = false;
-                    v.showErrorMsg("Ingrese solo nros en el campo Piso");                    
-                }
+                v.showErrorMsg("Piso : Ingrese solo nros.");                    
             }
-            if(dpto.isEmpty()){ 
+
+            if(isAlpha(dpto)){
                 validacion = false;
-            }else{
-                if(isAlpha(dpto)){
-                    validacion = false;
-                    v.showErrorMsg("Ingrese solo nros en el campo Departamento");                    
-                }
+                v.showErrorMsg("Departamento : Ingrese solo nros.");                    
             }
+
             if(codPostal.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Cod Postal : Campo vacío.");               
+            }else{
+                if(isAlpha(codPostal)){
+                    validacion = false;
+                    v.showErrorMsg("Cod Postal : Ingrese solo nros.");                    
+                }
             }
             if(localidad.isEmpty()){ 
                 validacion = false;
+            }else{
+                if(localidad.length() > 50){
+                    validacion = false;
+                    v.showErrorMsg("Localidad : Máxima cant de caracteres = 50");
+                }
             }
             if(telFijo.isEmpty()){ 
                 validacion = false;
             }else{
                 if(!isNumeric(telFijo)){
                     validacion = false;
-                    v.showErrorMsg("Ingrese solo nros en campo Tel Fijo");
+                    v.showErrorMsg("Tel Fijo : Ingrese solo nros. ");
                 }
             }
             if(telCel.isEmpty()){ 
@@ -428,11 +432,18 @@ public class Controlador {
             }else{
                 if(!isNumeric(telCel)){
                     validacion = false;
-                    v.showErrorMsg("Ingrese solo nros en campo Tel Cel");
+                    v.showErrorMsg("Tel Cel : Ingrese solo nros.");
                 }
             }
             if(eMail.isEmpty()){ 
                 validacion = false;
+            }else{
+                String emailreg = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+                Boolean b = eMail.matches(emailreg);
+                if(!b){
+                    validacion = false;
+                    v.showErrorMsg("E-Mail : Ingrese un E-Mail válido");
+                }
             }
             
             if(validacion){
@@ -506,27 +517,55 @@ public class Controlador {
         String nombre = v.getTxtFldCursoNombre();
         String prof = v.getTxtFldCursoProf();
 
-        if(codCurso.isEmpty()){
+        if(codCurso.isEmpty()){ 
             validacion = false;
+            v.showErrorMsg("Cod Curso : Campo Vacío.");
+        }else{
+            if(codCurso.length() != 4){
+                validacion = false;
+                v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
+            }else{
+                if(!isNumeric(codCurso)){
+                    validacion = false;
+                    v.showErrorMsg("Cod Curso : Inserte solo dígitos numéricos.");
+                }
+            }
         }
-        if(nombre.isEmpty()){
+        if(nombre.isEmpty()){ 
             validacion = false;
+            v.showErrorMsg("Nombre : Campo Vacío.");
+        }else{
+            if(nombre.length()> 50){
+                validacion = false;
+                v.showErrorMsg("Nombre : Máxima cant de dígitos = 50.");
+            }
         }
-        if(prof.isEmpty()){
+        if(prof.isEmpty()){ 
             validacion = false;
+            v.showErrorMsg("Profesor : Campo Vacío.");
+        }else{
+            if(prof.length()> 50){
+                validacion = false;
+                v.showErrorMsg("Profesor : Máxima cant de dígitos = 50.");
+            }else{
+                if(!isAlpha(prof)){
+                    validacion = false;
+                    v.showErrorMsg("Profesor : Ingrese solo letras.");
+                }
+            }
         }
 
         if(validacion){
-                if (modo.equals("INSERT")){
-                    return m.qryAltaCurso(codCurso, nombre, prof);
-                }else if (modo.equals("UPDATE")){
-                    return m.qryModificarCurso(codCurso , nombre , prof);
-                }
-                return 0;
-            }else{
-                v.showErrorMsg("La validación ha fallado.");
-                return -2;
+            if (modo.equals("INSERT")){
+                return m.qryAltaCurso(codCurso, nombre, prof);
+            }else if (modo.equals("UPDATE")){
+                return m.qryModificarCurso(codCurso , nombre , prof);
             }
+            return 0;
+        }else{
+            v.showErrorMsg("La validación ha fallado.");
+            return -2;
+        }
     }
 
     private class funcionSendAltaRecurso implements ActionListener{
@@ -574,23 +613,74 @@ public class Controlador {
             String anio = v.getTxtFldRecursoAnio();
             String cant = v.getTxtFldRecursoCant();
 
-            if(codRecurso.isEmpty()){
+            if(codRecurso.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Cod Recurso : Campo Vacío.");
+            }else{
+                if(codRecurso.length() != 4){
+                    validacion = false;
+                    v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
+                }else{
+                    if(!isNumeric(codRecurso)){
+                        validacion = false;
+                        v.showErrorMsg("Cod Recurso : Inserte solo dígitos numéricos.");
+                    }
+                }
             }
-            if(categoria.isEmpty()){
+            if(categoria.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Categoría : Campo Vacío.");
+            }else{
+                if(categoria.length()> 50){
+                    validacion = false;
+                    v.showErrorMsg("Categoría : Máxima cant de dígitos = 50.");
+                }else{
+                    if(!isAlpha(categoria)){
+                        validacion = false;
+                        v.showErrorMsg("Categoría : Ingrese solo letras.");
+                    }
+                }
             }
-            if(nombre.isEmpty()){
+            if(nombre.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Nombre : Campo Vacío.");
+            }else{
+                if(nombre.length()> 50){
+                    validacion = false;
+                    v.showErrorMsg("Nombre : Máxima cant de dígitos = 50.");
+                }
             }
-            if(autor.isEmpty()){
+            if(autor.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Autor : Campo Vacío.");
+            }else{
+                if(autor.length()> 50){
+                    validacion = false;
+                    v.showErrorMsg("Autor : Máxima cant de dígitos = 50.");
+                }else{
+                    if(!isAlpha(autor)){
+                        validacion = false;
+                        v.showErrorMsg("Autor : Ingrese solo letras.");
+                    }
+                }
             }
-            if(anio.isEmpty()){
+            if(isAlpha(anio)){
                 validacion = false;
+                v.showErrorMsg("Año : Ingrese solo nros.");                    
+            }else{
+                if(anio.length() > 4){
+                    validacion = false;
+                    v.showErrorMsg("Año : Ingrese un año válido");
+                }
             }
             if(cant.isEmpty()){
                 validacion = false;
+                v.showErrorMsg("Cantidad : Campo vacío.");
+            }else{
+                if(isAlpha(cant)){
+                    validacion = false;
+                    v.showErrorMsg("Cantidad : Ingrese solo nros.");                    
+                }
             }
             
             if(validacion){
@@ -648,17 +738,51 @@ public class Controlador {
         String fechaPrevistaDevolucion = v.getTxtFldPrestamoFechaPrevDevo();
         String fechaDevolucion = v.getTxtFldPrestamoFechaDevo();
 
-        if(nroLegajo.isEmpty()){
-            validacion = false;
+        if(nroLegajo.isEmpty()){ 
+                validacion = false;
+                v.showErrorMsg("Nro Legajo : Campo Vacío.");
+        }else{
+            if(nroLegajo.length() != 4){
+                validacion = false;
+                v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
+            }else{
+                if(!isNumeric(nroLegajo)){
+                    validacion = false;
+                    v.showErrorMsg("Nro Legajo : Inserte solo dígitos numéricos.");
+                }
+            }
         }
-        if(codRecurso.isEmpty()){
-            validacion = false;
+        if(codRecurso.isEmpty()){ 
+                validacion = false;
+                v.showErrorMsg("Cod Recurso : Campo Vacío.");
+        }else{
+            if(codRecurso.length() != 4){
+                validacion = false;
+                v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
+            }else{
+                if(!isNumeric(codRecurso)){
+                    validacion = false;
+                    v.showErrorMsg("Cod Recurso : Inserte solo dígitos numéricos.");
+                }
+            }
         }
-        if(fechaPrestamo.isEmpty()){
-            validacion = false;
+        if(fechaPrestamo.isEmpty()){ 
+                validacion = false;
+                v.showErrorMsg("Fecha Prestamo : Campo Vacío.");
+        }else{
+            if(!validateDate(fechaPrestamo)){
+                validacion = false;
+                v.showErrorMsg("Fecha Prestamo: Formato Incorrecto.");
+            }
         }
-        if(fechaPrevistaDevolucion.isEmpty()){
-            validacion = false;
+        if(fechaDevolucion.isEmpty()){ 
+                validacion = false;
+                v.showErrorMsg("Fecha Devolucion : Campo Vacío.");
+        }else{
+            if(!validateDate(fechaDevolucion)){
+                validacion = false;
+                v.showErrorMsg("Fecha Devolucion: Formato Incorrecto.");
+            }
         }
         //if(fechaDevolucion.isEmpty()){
         //    validacion = false;
@@ -736,20 +860,59 @@ public class Controlador {
             String importe = v.getTxtFldPagoImporte();
             String comprobante = v.getTxtFldPagoComprobante();
             
-            if(nroLegajo.isEmpty()){
+            if(nroLegajo.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Nro Legajo : Campo Vacío.");
+            }else{
+                if(nroLegajo.length() != 4){
+                    validacion = false;
+                    v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
+                }else{
+                    if(!isNumeric(nroLegajo)){
+                        validacion = false;
+                        v.showErrorMsg("Nro Legajo : Inserte solo dígitos numéricos.");
+                    }
+                }
             }
-            if(codCurso.isEmpty()){
+            if(codCurso.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Cod Curso : Campo Vacío.");
+            }else{
+                if(codCurso.length() != 4){
+                    validacion = false;
+                    v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
+                }else{
+                    if(!isNumeric(codCurso)){
+                        validacion = false;
+                        v.showErrorMsg("Cod Curso : Inserte solo dígitos numéricos.");
+                    }
+                }
             }
-            if(fecha.isEmpty()){
+            if(fecha.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Fecha : Campo Vacío.");
+            }else{
+                if(!validateDate(fecha)){
+                    validacion = false;
+                    v.showErrorMsg("Fecha : Formato Incorrecto.");
+                }
             }
             if(importe.isEmpty()){
                 validacion = false;
             }
-            if(comprobante.isEmpty()){
+            if(comprobante.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Comprobante : Campo Vacío.");
+            }else{
+                if(comprobante.length() != 4){
+                    validacion = false;
+                    v.showErrorMsg("Comprobante : Cant de dígitos necesarios = 4");
+                }else{
+                    if(!isNumeric(comprobante)){
+                        validacion = false;
+                        v.showErrorMsg("Comprobante : Inserte solo dígitos numéricos.");
+                    }
+                }
             }
             
             if(validacion){
