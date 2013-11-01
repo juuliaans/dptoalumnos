@@ -1,5 +1,8 @@
 package dptoalumnos;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -462,6 +465,17 @@ public final class Modelo {
         return q;
     }
     
+    public int qryEliminarCurso(String codCurso){
+        String qry;
+        qry = "DELETE FROM cursos ";
+        qry += "WHERE codCurso = " + codCurso;
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
+    }
+    
     public int qryModificarRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
         String qry;
         qry = "UPDATE recursos SET "
@@ -510,26 +524,251 @@ public final class Modelo {
         return q;
     }
     
+    public int qryEliminarPago(String nroLegajo , String codCurso){
+        String qry;
+        qry = "DELETE FROM pagos ";
+        qry += "WHERE nroLegajo = " + nroLegajo +" AND codCurso = " + codCurso;
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
+    }
+    
+    public int generateAlumnosRegularesPorCurso(int codCurso){
+        String qry = "SELECT alumnos.nroLegajo, alumnos.Nombre, alumnos.Apellido "
+                + "FROM prestamos JOIN alumnos ON prestamos.nroLegajo = alumnos.nroLegajo "
+                + "WHERE fechaDevo IS NULL or fechaDevo = ''";
+        ResultSet rs = null;
+        
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("prestamosNoDevueltos.txt", "UTF-8");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.println("Alumnos con prestamos no devueltos");
+        writer.println("------------------------------");
+        
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                writer.println("Nro legajo: " + rs.getString(1));
+                writer.println("Nombre: " + rs.getString(2));
+                writer.println("Apellido: " + rs.getString(3));
+                writer.println("------------------------------");
+                //rs.getString();
+               
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.close();
+        this.closeDBConnection();
+        return 1;
+    }
+    
+    public int generatePrestamosNoDevueltos(){
+        String qry = "SELECT alumnos.nroLegajo, alumnos.Nombre, alumnos.Apellido "
+                + "FROM prestamos JOIN alumnos ON prestamos.nroLegajo = alumnos.nroLegajo "
+                + "WHERE fechaDevo IS NULL or fechaDevo = ''";
+        ResultSet rs = null;
+        
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("prestamosNoDevueltos.txt", "UTF-8");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.println("Alumnos con prestamos no devueltos");
+        writer.println("------------------------------");
+        
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                writer.println("Nro legajo: " + rs.getString(1));
+                writer.println("Nombre: " + rs.getString(2));
+                writer.println("Apellido: " + rs.getString(3));
+                writer.println("------------------------------");
+                //rs.getString();
+               
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.close();
+        this.closeDBConnection();
+        return 1;
+    }
+    
+    public int generatePrestamosPorAlumno(int nroLegajo){
+        String qry = "SELECT alumnos.nroLegajo, alumnos.Nombre, alumnos.Apellido, prestamos.codRecurso, prestamos.fechaPres"
+                + ", prestamos.fechaPrevDevo, prestamos.fechaDevo "
+                + " FROM prestamos JOIN alumnos ON prestamos.nroLegajo = alumnos.nroLegajo";
+        
+        if (nroLegajo != -1) qry += " WHERE alumnos.nroLegajo = " + nroLegajo;
+        
+        ResultSet rs = null;
+        
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("prestamosPorAlumno_"+ ((nroLegajo != -1) ? "legajo_" + nroLegajo : "todos") +".txt", "UTF-8");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.println("Prestamos por alumno");
+        writer.println("------------------------------");
+        
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            
+            String lastLegajo = "";
+            
+            while (rs.next()) {
+                
+                if (!lastLegajo.equals(rs.getString(1))){
+                    writer.println("Nro legajo: " + rs.getString(1));
+                    writer.println("Nombre: " + rs.getString(2));
+                    writer.println("Apellido: " + rs.getString(3));
+                    writer.println("------------------------------");
+                    lastLegajo = rs.getString(1);
+                }
+                
+                writer.println("---Prestamo---");
+                writer.println("Cod Recurso: " + rs.getString(4));
+                writer.println("Fecha Prestado: " + rs.getString(5));
+                writer.println("Fecha Prevista de Devolución: " + rs.getString(6));
+                writer.println("Fecha de devolución: " + rs.getString(5));
+                writer.println("------------------------------");
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.close();
+        this.closeDBConnection();
+        return 1;
+    }
+    
+    public int generatePagosPorMes(int monthNumber, int yearNumber){
+        String qry = "SELECT alumnos.nroLegajo, alumnos.Nombre, alumnos.Apellido, "
+                + " cursos.codCurso, cursos.Nombre, pagos.fecha, pagos.importe, pagos.comprobante "
+                + "FROM pagos JOIN alumnos ON alumnos.nroLegajo = pagos.nroLegajo "
+                + "JOIN cursos ON cursos.codCurso = pagos.codCurso "
+                + " WHERE MONTH(pagos.fecha) = " + monthNumber + " AND "
+                + " YEAR(pagos.fecha) = " + yearNumber;
+        ResultSet rs = null;
+        
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("pagosPorMes_mes_" + monthNumber + "_" + yearNumber + ".txt", "UTF-8");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.println("Pagos del mes: " + monthNumber);
+        writer.println("------------------------------");
+        
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                writer.println("--- Pago ---");
+                writer.println("Nro Legajo: " + rs.getString(1));
+                writer.println("Nombre y Apellido: " + rs.getString(2) + " " + rs.getString(3));
+                writer.println("Cod Curso: " + rs.getString(4));
+                writer.println("Nombre curso: " + rs.getString(5));
+                writer.println("Fecha de pago: " + rs.getString(6));
+                writer.println("Importe: " + rs.getString(7));
+                writer.println("Comprobante: " + rs.getString(8));
+                writer.println("------------------------------");
+                //rs.getString();
+               
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        writer.close();
+        this.closeDBConnection();
+        return 1;
+    }
+    
     // ----- Getters -----
       // Levanta objetos de array
-    public Alumno getAlumno(int i) { 
-        return arrayAlumnos.get(i);
+    public Alumno getAlumno(int i) {
+        if (i < arrayAlumnos.size()){
+            return arrayAlumnos.get(i);
+        }else return new Alumno();
     }
     
     public Prestamo getPrestamo(int i) { 
-        return arrayPrestamos.get(i);
+        if (i < arrayPrestamos.size())
+            return arrayPrestamos.get(i);
+        else return new Prestamo();
     }
     
-    public Recurso getRecurso(int i) { 
-        return arrayRecursos.get(i);
+    public Recurso getRecurso(int i) {
+        if (i < arrayRecursos.size())
+            return arrayRecursos.get(i);
+        else return new Recurso();
     }
     
-    public Curso getCurso(int i) { 
-        return arrayCursos.get(i);
+    public Curso getCurso(int i) {
+        if (i < arrayCursos.size())
+            return arrayCursos.get(i);
+        else return new Curso();
     }
     
     public Pago getPago(int i) { 
-        return arrayPagos.get(i);
+        if (i < arrayPagos.size())
+            return arrayPagos.get(i);
+        else return new Pago();
     }
       // Devuelve tamaño de array 
     public int getCantAlumnos() {

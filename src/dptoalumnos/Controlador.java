@@ -2,6 +2,7 @@ package dptoalumnos;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
 
 public class Controlador {
 
@@ -45,6 +46,10 @@ public class Controlador {
                     new menuItem_altaRecursos(), 
                     new menuItem_bajaRecursos(), 
                     new menuItem_modificacionRecursos(), 
+                    new funcionGenerarListado1(), 
+                    new funcionGenerarListado2(), 
+                    new funcionGenerarListado3(), 
+                    new funcionGenerarListado4()
                 }
                 );
         v.addCloseEventToMenuItem(new menuItem_close());
@@ -108,7 +113,7 @@ public class Controlador {
             
             if (m.getCantCursos() > 0){
                 v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
-                v.addActionListenersModificarCurso(new funcionUpdateCurso(),new RetrocederCursoHandler(), new AvanzarCursoHandler(), null);
+                v.addActionListenersModificarCurso(new funcionUpdateCurso(),new RetrocederCursoHandler(), new AvanzarCursoHandler(), new funcionEliminarCurso());
             }else{
                 v.showErrorMsg("No hay cursos cargados en el sistema. Dirigase a la pantalla de alta de Cursos para cargar cursos en el sistema.");
             }
@@ -137,7 +142,7 @@ public class Controlador {
             
             if (m.getCantPagos() > 0){
             v.cargaInputsPago(m.getPago(m.getPosPagos()));
-            v.addActionListenersModificarPago(new funcionUpdatePago(),new RetrocederPagoHandler(), new AvanzarPagoHandler(), null);
+            v.addActionListenersModificarPago(new funcionUpdatePago(),new RetrocederPagoHandler(), new AvanzarPagoHandler(), new funcionEliminarPago());
             }else{
                 v.showErrorMsg("No hay pagos cargados en el sistema. Dirigase a la pantalla de alta de pagos para insertar pagos en el sistema.");
             }
@@ -347,6 +352,23 @@ public class Controlador {
         
     }
     
+    private class funcionEliminarCurso implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            String codCurso = v.getTxtFldCursoCodCurso();
+            int q = m.qryEliminarCurso(codCurso);
+            if (q == 1){
+                v.showSuccessMsg("El curso ha sido eliminado.");
+                m.cargaArrayCurso();
+                v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
     private int insertarModificarCurso(String modo){
         Curso curso = new Curso();
         Boolean validacion = true;
@@ -509,9 +531,9 @@ public class Controlador {
         if(fechaPrevistaDevolucion.isEmpty()){
             validacion = false;
         }
-        if(fechaDevolucion.isEmpty()){
-            validacion = false;
-        }
+        //if(fechaDevolucion.isEmpty()){
+        //    validacion = false;
+        //}
 
         if(validacion){
                 if (modo.equals("INSERT")){
@@ -557,6 +579,23 @@ public class Controlador {
         }
     }
     
+    private class funcionEliminarPago implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            
+            String nroLegajo = v.getTxtFldPagoNroLegajo();
+            String codCurso = v.getTxtFldPagoCodCurso();
+            
+            int q = m.qryEliminarPago(nroLegajo, codCurso);
+            if (q == 1){
+                v.showSuccessMsg("El pago ha sido eliminado.");
+                m.cargaArrayPago();
+                v.cargaInputsPago(m.getPago(m.getPosPagos()));
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+        }
+    }
+    
     private int insertarModificarPago(String modo){
 
             Pago pago = new Pago();
@@ -596,6 +635,79 @@ public class Controlador {
                 return -2;
             }            
     }  
+    
+    class funcionGenerarListado1 implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            String t = v.showInputDialog("Ingrese codigo de curso a buscar regularidades: ");
+            if (t == null) return;
+            
+            int codCurso = Integer.parseInt(t);
+            
+            int response = m.generateAlumnosRegularesPorCurso(codCurso);
+            if (response == 1) v.showSuccessMsg("El listado ha sido generado."); 
+            
+        }
+    }
+    
+    class funcionGenerarListado2 implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int response = m.generatePrestamosNoDevueltos();
+            if (response == 1) v.showSuccessMsg("El listado ha sido generado."); 
+        }
+    }
+    
+    class funcionGenerarListado3 implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object[] options = {"Cancelar",
+                    "Todos los alumnos",
+                    "Un alumno en particular"};
+            
+            int opc = v.showOptionDialog("Desea generar listado de un alumno en particular o de todos los alumnos al mismo tiempo?"
+                    , "Listado de prestamos", JOptionPane.YES_NO_CANCEL_OPTION
+                    , options , 2);
+            
+            int nroLegajo = -1;
+            if (opc != 0){
+                if (opc == 2){
+                    String t = v.showInputDialog("Nro legajo de Alumno a generar listado: ");
+                    if (t == null) return;
+                    
+                    nroLegajo = Integer.parseInt(t);
+                }else if (opc == 1){
+                    nroLegajo = -1;
+                }
+                
+                int response = m.generatePrestamosPorAlumno(nroLegajo);
+                if (response == 1) v.showSuccessMsg("El listado ha sido generado");
+                
+            }
+            
+        }
+    }
+    
+    class funcionGenerarListado4 implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String mnumber = v.showInputDialog("Numero de mes a generar listado: ");
+            if (mnumber == null) return;
+            int monthnumber = Integer.parseInt(mnumber);
+            
+            String ynumber = v.showInputDialog("Numero de año a generar listado: ");
+            if (ynumber == null) return;
+            int yearnumber = Integer.parseInt(ynumber);
+            
+            int response = m.generatePagosPorMes(monthnumber, yearnumber);
+            if (response == 1) v.showSuccessMsg("El listado ha sido generado."); 
+        }
+    }
     
     // ----- Handlers botones avanzar / retroceder -----
       // ALUMNO

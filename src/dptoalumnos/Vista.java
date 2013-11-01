@@ -36,6 +36,12 @@ public final class Vista {
     private JMenuItem delItem1_5;
     private JMenuItem modItem1_5;
     private JMenuItem item1_6;
+    private JMenu item1_7;
+    private JMenuItem report1;
+    private JMenuItem report2;
+    private JMenuItem report3;
+    private JMenuItem report4;
+    
     
     //Globals
     private JPanel pantallaActual;
@@ -205,6 +211,19 @@ public final class Vista {
         item1_5.add(modItem1_5);
         archivo.add(item1_5);
         
+        item1_7 = new JMenu("Listados");
+        report1 = new JMenuItem("Alumnos regulares por curso");
+        report2 = new JMenuItem("Alumnos con préstamos no devueltos");
+        report3 = new JMenuItem("Préstamos por alumno");
+        report4 = new JMenuItem("Pagos por mes");
+        
+        item1_7.add(report1);
+        item1_7.add(report2);
+        item1_7.add(report3);
+        item1_7.add(report4);
+        
+        archivo.add(item1_7);
+        
         archivo.addSeparator();
         item1_6 = new JMenuItem("Cerrar");
         archivo.add(item1_6);
@@ -244,6 +263,11 @@ public final class Vista {
         addItem1_5.addActionListener(al[12]);
         delItem1_5.addActionListener(al[13]);
         modItem1_5.addActionListener(al[14]);
+        
+        report1.addActionListener(al[15]);
+        report2.addActionListener(al[16]);
+        report3.addActionListener(al[17]);
+        report4.addActionListener(al[18]);
     }
     
     public void addCloseEventToMenuItem(ActionListener al){
@@ -522,6 +546,10 @@ public final class Vista {
         actionsContainer.add(btnAlumnoPrev);
         actionsContainer.add(btnAlumnoNext);
         
+        //disabling keys
+        txtFldAlumnoNroLegajo.setEnabled(false);
+        
+        
         //panelAlumno.add(controlsContainer, BorderLayout.NORTH);
         panelAlumno.add(formContainer, BorderLayout.NORTH);
         panelAlumno.add(actionsContainer, BorderLayout.SOUTH);
@@ -635,6 +663,9 @@ public final class Vista {
         actionsContainer.add(btnCursoDelete);
         actionsContainer.add(btnCursoPrev);
         actionsContainer.add(btnCursoNext);
+        
+        //disabling keys
+        txtFldCursoCodCurso.setEnabled(false);
         
         panelCurso.add(formContainer, BorderLayout.NORTH);
         panelCurso.add(actionsContainer, BorderLayout.SOUTH);
@@ -777,6 +808,9 @@ public final class Vista {
         actionsContainer.add(btnPagoPrev);
         actionsContainer.add(btnPagoNext);
         
+        txtFldPagoNroLegajo.setEnabled(false);
+        txtFldPagoCodCurso.setEnabled(false);
+        
         panelPago.add(formContainer, BorderLayout.NORTH);
         panelPago.add(actionsContainer, BorderLayout.SOUTH);
         
@@ -917,6 +951,9 @@ public final class Vista {
         //actionsContainer.add(btnPrestamoDelete);
         actionsContainer.add(btnPrestamoPrev);
         actionsContainer.add(btnPrestamoNext);
+        
+        txtFldPrestamoNroLegajo.setEnabled(false);
+        txtFldPrestamoCodRecurso.setEnabled(false);
         
         panelPrestamo.add(formContainer, BorderLayout.NORTH);
         panelPrestamo.add(actionsContainer, BorderLayout.SOUTH);
@@ -1075,6 +1112,8 @@ public final class Vista {
         //actionsContainer.add(btnRecursoDelete);
         actionsContainer.add(btnRecursoPrev);
         actionsContainer.add(btnRecursoNext);
+        
+        txtFldRecursoCodRec.setEnabled(false);
         
         panelRecurso.add(formContainer, BorderLayout.NORTH);
         panelRecurso.add(actionsContainer, BorderLayout.SOUTH);
@@ -1509,11 +1548,27 @@ public final class Vista {
     }
     
     public void showErrorMsg(String err){
-        JOptionPane.showMessageDialog(contenedor, err);
+        JOptionPane.showMessageDialog(contenedor, err, "Error!", JOptionPane.ERROR_MESSAGE);
     }
     
     public void showSuccessMsg(String msg){
-        JOptionPane.showMessageDialog(contenedor, msg);
+        JOptionPane.showMessageDialog(contenedor, msg, "", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public String showInputDialog(String msg){
+        return JOptionPane.showInputDialog(msg);
+    }
+    
+    public int showOptionDialog(String msg, String title, int option, Object[] options, int defaultSelected){
+        
+        return JOptionPane.showOptionDialog(contenedor,
+            msg,
+            title,
+            option,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[defaultSelected]);
     }
 
 }
