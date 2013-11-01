@@ -8,7 +8,31 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
+class JTextFieldLimit extends PlainDocument {
+  private int limit;
+  JTextFieldLimit(int limit) {
+    super();
+    this.limit = limit;
+  }
+
+  JTextFieldLimit(int limit, boolean upper) {
+    super();
+    this.limit = limit;
+  }
+
+  public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+    if (str == null)
+      return;
+
+    if ((getLength() + str.length()) <= limit) {
+      super.insertString(offset, str, attr);
+    }
+  }
+}
 
 public final class Vista {
     // Pantalla Principal
@@ -314,32 +338,46 @@ public final class Vista {
         
         txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ", JLabel.RIGHT);
         txtFldAlumnoNroLegajo = new JTextField(4);
+        txtFldAlumnoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblAlumnoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldAlumnoNombre = new JTextField(20);
+        txtFldAlumnoNombre.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoApellido = new JLabel("Apellido : ", JLabel.RIGHT);
         txtFldAlumnoApellido = new JTextField(20);
+        txtFldAlumnoApellido.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoFechaNacimiento = new JLabel("Fecha Nacimiento : ", JLabel.RIGHT);
         txtFldAlumnoFechaNacimiento = new JTextField(10);
+        txtFldAlumnoFechaNacimiento.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoNroDoc = new JLabel("Nro Doc : ", JLabel.RIGHT);
-        txtFldAlumnoNroDoc = new JTextField(10);
+        txtFldAlumnoNroDoc = new JTextField(8);
+        txtFldAlumnoNroDoc.setDocument(new JTextFieldLimit(8));
         txtLblAlumnoCalle = new JLabel("Calle : ", JLabel.RIGHT);
         txtFldAlumnoCalle = new JTextField(20);
+        txtFldAlumnoCalle.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoNro = new JLabel("Nro : ", JLabel.RIGHT);
         txtFldAlumnoNro = new JTextField(5);
+        txtFldAlumnoNro.setDocument(new JTextFieldLimit(5));
         txtLblAlumnoPiso = new JLabel("Piso : ", JLabel.RIGHT);
         txtFldAlumnoPiso = new JTextField(2);
+        txtFldAlumnoPiso.setDocument(new JTextFieldLimit(2));
         txtLblAlumnoDepartamento = new JLabel("Depto : ", JLabel.RIGHT);
         txtFldAlumnoDepartamento = new JTextField(1);
+        txtFldAlumnoDepartamento.setDocument(new JTextFieldLimit(1));
         txtLblAlumnoCodPostal = new JLabel("Cod Postal : ", JLabel.RIGHT);
         txtFldAlumnoCodPostal = new JTextField(5);
+        txtFldAlumnoCodPostal.setDocument(new JTextFieldLimit(5));
         txtLblAlumnoLocalidad = new JLabel("Localidad : ", JLabel.RIGHT);
         txtFldAlumnoLocalidad = new JTextField(20);
+        txtFldAlumnoLocalidad.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoTelFijo = new JLabel("Tel Fijo : ", JLabel.RIGHT);
         txtFldAlumnoTelFijo = new JTextField(10);
+        txtFldAlumnoTelFijo.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoTelCel = new JLabel("Tel Cel : ", JLabel.RIGHT);
         txtFldAlumnoTelCel = new JTextField(10);
+        txtFldAlumnoTelCel.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoMail = new JLabel("E-Mail : ", JLabel.RIGHT);
-        txtFldAlumnoMail = new JTextField(20);
+        txtFldAlumnoMail = new JTextField(50);
+        txtFldAlumnoMail.setDocument(new JTextFieldLimit(50));
         btnAlumnoSend = new JButton("Enviar");
         
         izquierda.add(txtLblAlumnoNroLegajo);
@@ -451,32 +489,46 @@ public final class Vista {
         
         txtLblAlumnoNroLegajo = new JLabel("Nro Legajo : ", JLabel.RIGHT);
         txtFldAlumnoNroLegajo = new JTextField(4);
+        txtFldAlumnoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblAlumnoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldAlumnoNombre = new JTextField(20);
+        txtFldAlumnoNombre.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoApellido = new JLabel("Apellido : ", JLabel.RIGHT);
         txtFldAlumnoApellido = new JTextField(20);
+        txtFldAlumnoApellido.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoFechaNacimiento = new JLabel("Fecha Nacimiento : ", JLabel.RIGHT);
         txtFldAlumnoFechaNacimiento = new JTextField(10);
+        txtFldAlumnoFechaNacimiento.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoNroDoc = new JLabel("Nro Doc : ", JLabel.RIGHT);
-        txtFldAlumnoNroDoc = new JTextField(10);
+        txtFldAlumnoNroDoc = new JTextField(8);
+        txtFldAlumnoNroDoc.setDocument(new JTextFieldLimit(8));
         txtLblAlumnoCalle = new JLabel("Calle : ", JLabel.RIGHT);
         txtFldAlumnoCalle = new JTextField(20);
+        txtFldAlumnoCalle.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoNro = new JLabel("Nro : ", JLabel.RIGHT);
         txtFldAlumnoNro = new JTextField(5);
+        txtFldAlumnoNro.setDocument(new JTextFieldLimit(5));
         txtLblAlumnoPiso = new JLabel("Piso : ", JLabel.RIGHT);
         txtFldAlumnoPiso = new JTextField(2);
+        txtFldAlumnoPiso.setDocument(new JTextFieldLimit(2));
         txtLblAlumnoDepartamento = new JLabel("Depto : ", JLabel.RIGHT);
         txtFldAlumnoDepartamento = new JTextField(1);
+        txtFldAlumnoDepartamento.setDocument(new JTextFieldLimit(1));
         txtLblAlumnoCodPostal = new JLabel("Cod Postal : ", JLabel.RIGHT);
         txtFldAlumnoCodPostal = new JTextField(5);
+        txtFldAlumnoCodPostal.setDocument(new JTextFieldLimit(5));
         txtLblAlumnoLocalidad = new JLabel("Localidad : ", JLabel.RIGHT);
         txtFldAlumnoLocalidad = new JTextField(20);
+        txtFldAlumnoLocalidad.setDocument(new JTextFieldLimit(20));
         txtLblAlumnoTelFijo = new JLabel("Tel Fijo : ", JLabel.RIGHT);
         txtFldAlumnoTelFijo = new JTextField(10);
+        txtFldAlumnoTelFijo.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoTelCel = new JLabel("Tel Cel : ", JLabel.RIGHT);
         txtFldAlumnoTelCel = new JTextField(10);
+        txtFldAlumnoTelCel.setDocument(new JTextFieldLimit(10));
         txtLblAlumnoMail = new JLabel("E-Mail : ", JLabel.RIGHT);
-        txtFldAlumnoMail = new JTextField(20);
+        txtFldAlumnoMail = new JTextField(50);
+        txtFldAlumnoMail.setDocument(new JTextFieldLimit(50));
         
         
         izquierda.add(txtLblAlumnoNroLegajo);
@@ -597,10 +649,13 @@ public final class Vista {
         
         txtLblCursoCodCurso = new JLabel("Nro Curso : ", JLabel.RIGHT);
         txtFldCursoCodCurso = new JTextField(4);
+        txtFldCursoCodCurso.setDocument(new JTextFieldLimit(4));
         txtLblCursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
-        txtFldCursoNombre = new JTextField(50);
+        txtFldCursoNombre = new JTextField(20);
+        txtFldCursoNombre.setDocument(new JTextFieldLimit(20));
         txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
-        txtFldCursoProf = new JTextField(50);
+        txtFldCursoProf = new JTextField(20);
+        txtFldCursoProf.setDocument(new JTextFieldLimit(20));
         btnCursoSend = new JButton("Enviar");
         
         izquierda.add(txtLblCursoCodCurso);
@@ -650,13 +705,15 @@ public final class Vista {
         
         formContainer.add(izquierda, BorderLayout.WEST);
         formContainer.add(derecha, BorderLayout.CENTER);
-        
         txtLblCursoCodCurso = new JLabel("Nro Curso : ", JLabel.RIGHT);
         txtFldCursoCodCurso = new JTextField(4);
+        txtFldCursoCodCurso.setDocument(new JTextFieldLimit(4));
         txtLblCursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldCursoNombre = new JTextField(20);
+        txtFldCursoNombre.setDocument(new JTextFieldLimit(20));
         txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
         txtFldCursoProf = new JTextField(20);
+        txtFldCursoProf.setDocument(new JTextFieldLimit(20));
         
         izquierda.add(txtLblCursoCodCurso);
         
@@ -713,14 +770,19 @@ public final class Vista {
         
         txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
         txtFldPagoNroLegajo = new JTextField(4);
+        txtFldPagoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblPagoCodCurso = new JLabel("Cod Curso : ");
         txtFldPagoCodCurso = new JTextField(4);
+        txtFldPagoCodCurso.setDocument(new JTextFieldLimit(4));
         txtLblPagoFecha = new JLabel("Fecha : ");
         txtFldPagoFecha = new JTextField(10);
+        txtFldPagoFecha.setDocument(new JTextFieldLimit(10));
         txtLblPagoImporte = new JLabel("Importe : ");
         txtFldPagoImporte = new JTextField(6);
+        txtFldPagoImporte.setDocument(new JTextFieldLimit(6));
         txtLblPagoComprobante = new JLabel("Comprobante : ");
         txtFldPagoComprobante = new JTextField(4);
+        txtFldPagoComprobante.setDocument(new JTextFieldLimit(4));
         btnPagoSend = new JButton("Enviar");
         
         izquierda.add(txtLblPagoNroLegajo);
@@ -780,14 +842,19 @@ public final class Vista {
         
         txtLblPagoNroLegajo = new JLabel("Nro Legajo : ");
         txtFldPagoNroLegajo = new JTextField(4);
+        txtFldPagoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblPagoCodCurso = new JLabel("Cod Curso : ");
         txtFldPagoCodCurso = new JTextField(4);
+        txtFldPagoCodCurso.setDocument(new JTextFieldLimit(4));
         txtLblPagoFecha = new JLabel("Fecha : ");
         txtFldPagoFecha = new JTextField(10);
+        txtFldPagoFecha.setDocument(new JTextFieldLimit(10));
         txtLblPagoImporte = new JLabel("Importe : ");
         txtFldPagoImporte = new JTextField(6);
+        txtFldPagoImporte.setDocument(new JTextFieldLimit(6));
         txtLblPagoComprobante = new JLabel("Comprobante : ");
         txtFldPagoComprobante = new JTextField(4);
+        txtFldPagoComprobante.setDocument(new JTextFieldLimit(4));
         btnPagoSend = new JButton("Enviar");
         
         izquierda.add(txtLblPagoNroLegajo);
@@ -859,14 +926,19 @@ public final class Vista {
         
         txtLblPrestamoNroLegajo = new JLabel("Nro Legajo: ", JLabel.RIGHT);
         txtFldPrestamoNroLegajo = new JTextField(4);
+        txtFldPrestamoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblPrestamoCodRecurso = new JLabel("Cod Recurso: ", JLabel.RIGHT);
         txtFldPrestamoCodRecurso = new JTextField(4);
+        txtFldPrestamoCodRecurso.setDocument(new JTextFieldLimit(4));
         txtLblPrestamoFechaPres = new JLabel("Fecha de préstamo: ", JLabel.RIGHT);
         txtFldPrestamoFechaPres = new JTextField(10);
+        txtFldPrestamoFechaPres.setDocument(new JTextFieldLimit(10));
         txtLblPrestamoFechaPrevDevo = new JLabel("Fecha prevista de devolución: ", JLabel.RIGHT);
         txtFldPrestamoFechaPrevDevo = new JTextField(10);
+        txtFldPrestamoFechaPrevDevo.setDocument(new JTextFieldLimit(10));
         txtLblPrestamoFechaDevo = new JLabel("Fecha de devolución: ", JLabel.RIGHT);
         txtFldPrestamoFechaDevo = new JTextField(10);
+        txtFldPrestamoFechaDevo.setDocument(new JTextFieldLimit(10));
         btnPrestamoSend = new JButton("Enviar");
         
         izquierda.add(txtLblPrestamoNroLegajo);
@@ -925,14 +997,19 @@ public final class Vista {
         
         txtLblPrestamoNroLegajo = new JLabel("Nro Legajo: ", JLabel.RIGHT);
         txtFldPrestamoNroLegajo = new JTextField(4);
+        txtFldPrestamoNroLegajo.setDocument(new JTextFieldLimit(4));
         txtLblPrestamoCodRecurso = new JLabel("Cod Recurso: ", JLabel.RIGHT);
         txtFldPrestamoCodRecurso = new JTextField(4);
+        txtFldPrestamoCodRecurso.setDocument(new JTextFieldLimit(4));
         txtLblPrestamoFechaPres = new JLabel("Fecha de préstamo: ", JLabel.RIGHT);
         txtFldPrestamoFechaPres = new JTextField(10);
+        txtFldPrestamoFechaPres.setDocument(new JTextFieldLimit(10));
         txtLblPrestamoFechaPrevDevo = new JLabel("Fecha prevista de devolución: ", JLabel.RIGHT);
         txtFldPrestamoFechaPrevDevo = new JTextField(10);
+        txtFldPrestamoFechaPrevDevo.setDocument(new JTextFieldLimit(10));
         txtLblPrestamoFechaDevo = new JLabel("Fecha de devolución: ", JLabel.RIGHT);
         txtFldPrestamoFechaDevo = new JTextField(10);
+        txtFldPrestamoFechaDevo.setDocument(new JTextFieldLimit(10));
         btnPrestamoSend = new JButton("Enviar");
         
         izquierda.add(txtLblPrestamoNroLegajo);
@@ -1002,16 +1079,22 @@ public final class Vista {
 
         txtLblRecursoCodRec = new JLabel("Cod Recurso : ", JLabel.RIGHT);
         txtFldRecursoCodRec = new JTextField(4);
+        txtFldRecursoCodRec.setDocument(new JTextFieldLimit(4));
         txtLblRecursoCategoria = new JLabel("Categoría : ", JLabel.RIGHT);
         txtFldRecursoCategoria = new JTextField(2);
+        txtFldRecursoCategoria.setDocument(new JTextFieldLimit(2));
         txtLblRecursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldRecursoNombre = new JTextField(50);
+        txtFldRecursoNombre.setDocument(new JTextFieldLimit(50));
         txtLblRecursoAutor = new JLabel("Autor : ", JLabel.RIGHT);
         txtFldRecursoAutor = new JTextField(50);
+        txtFldRecursoAutor.setDocument(new JTextFieldLimit(50));
         txtLblRecursoAnio = new JLabel("Año : ", JLabel.RIGHT);
         txtFldRecursoAnio = new JTextField(4);
+        txtFldRecursoAnio.setDocument(new JTextFieldLimit(4));
         txtLblRecursoCant = new JLabel("Cant. : ", JLabel.RIGHT);
         txtFldRecursoCant = new JTextField(3);
+        txtFldRecursoCant.setDocument(new JTextFieldLimit(3));
         btnRecursoSend = new JButton("Enviar");
 
         izquierda.add(txtLblRecursoCodRec);
@@ -1077,16 +1160,22 @@ public final class Vista {
 
         txtLblRecursoCodRec = new JLabel("Cod Recurso : ", JLabel.RIGHT);
         txtFldRecursoCodRec = new JTextField(4);
+        txtFldRecursoCodRec.setDocument(new JTextFieldLimit(4));
         txtLblRecursoCategoria = new JLabel("Categoría : ", JLabel.RIGHT);
         txtFldRecursoCategoria = new JTextField(2);
+        txtFldRecursoCategoria.setDocument(new JTextFieldLimit(2));
         txtLblRecursoNombre = new JLabel("Nombre : ", JLabel.RIGHT);
         txtFldRecursoNombre = new JTextField(50);
+        txtFldRecursoNombre.setDocument(new JTextFieldLimit(50));
         txtLblRecursoAutor = new JLabel("Autor : ", JLabel.RIGHT);
         txtFldRecursoAutor = new JTextField(50);
+        txtFldRecursoAutor.setDocument(new JTextFieldLimit(50));
         txtLblRecursoAnio = new JLabel("Año : ", JLabel.RIGHT);
         txtFldRecursoAnio = new JTextField(4);
+        txtFldRecursoAnio.setDocument(new JTextFieldLimit(4));
         txtLblRecursoCant = new JLabel("Cant. : ", JLabel.RIGHT);
         txtFldRecursoCant = new JTextField(3);
+        txtFldRecursoCant.setDocument(new JTextFieldLimit(3));
         btnRecursoSend = new JButton("Enviar");
 
         izquierda.add(txtLblRecursoCodRec);

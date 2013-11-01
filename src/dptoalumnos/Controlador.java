@@ -129,7 +129,7 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_ASISTENCIAS");
-            //v.cargaInputsAsistencia();
+            v.cargaInputsAsistencia(m.getArrayAsistencias());
             
         }
     }
@@ -239,7 +239,7 @@ public class Controlador {
     }
     
     public boolean isAlpha(String name) {
-        return name.matches("[a-zA-Z]+");
+        return name.matches("[a-zA-Z ]+");
     }
     
     public boolean validateDate(String date) {
@@ -364,9 +364,9 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Doc : Campo Vacío");
             }else{
-                if(nroDoc.length()!=4){
+                if(nroDoc.length() != 8){
                     validacion = false;
-                    v.showErrorMsg("Nro Doc : Cant de dígitos necesarios = 4");
+                    v.showErrorMsg("Nro Doc : Cant de dígitos necesarios = 8");
                 }else{
                     if(!isNumeric(nroDoc)){
                         validacion = false;
@@ -413,6 +413,7 @@ public class Controlador {
             }
             if(localidad.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Localidad : Campo vacío.");         
             }else{
                 if(localidad.length() > 50){
                     validacion = false;
@@ -421,6 +422,7 @@ public class Controlador {
             }
             if(telFijo.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Tel Fijo : Campo vacío.");         
             }else{
                 if(!isNumeric(telFijo)){
                     validacion = false;
@@ -429,6 +431,7 @@ public class Controlador {
             }
             if(telCel.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Tel Cel : Campo vacío.");         
             }else{
                 if(!isNumeric(telCel)){
                     validacion = false;
@@ -437,6 +440,7 @@ public class Controlador {
             }
             if(eMail.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("E-Mail : Campo vacío.");         
             }else{
                 String emailreg = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
                 Boolean b = eMail.matches(emailreg);
@@ -775,6 +779,15 @@ public class Controlador {
                 v.showErrorMsg("Fecha Prestamo: Formato Incorrecto.");
             }
         }
+        if(fechaPrevistaDevolucion.isEmpty()){ 
+                validacion = false;
+                v.showErrorMsg("Fecha Prevista Devolución : Campo Vacío.");
+        }else{
+            if(!validateDate(fechaPrevistaDevolucion)){
+                validacion = false;
+                v.showErrorMsg("Fecha Prevista Devolución: Formato Incorrecto.");
+            }
+        }
         if(fechaDevolucion.isEmpty()){ 
                 validacion = false;
                 v.showErrorMsg("Fecha Devolucion : Campo Vacío.");
@@ -1051,7 +1064,7 @@ public class Controlador {
             if(validacion){
                 if (modo.equals("INSERT")){
                     for(int i=0;i<16;i++){
-                        if(arrayNroLegajo[i].toString() == ""){
+                        if(arrayNroLegajo[i].toString() != ""){
                             m.qryAltaAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
                         }
                     }

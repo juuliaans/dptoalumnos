@@ -299,9 +299,9 @@ public final class Modelo {
         // mode = 1 -> Levanta todas las fechas para realizar el informe de asistencias
         String qry;
         if(mode == 0){
-            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY nroLegajo;";    
+            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY apellido;";    
         }else{
-            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' ORDER BY nroLegajo , nroClase;";
+            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' ORDER BY apellido , nroClase;";
         }
         ResultSet rs = null;
         this.arrayAsistencias.clear(); // borro el array para despues cargarlo denuevo . 
