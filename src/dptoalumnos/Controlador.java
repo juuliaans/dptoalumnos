@@ -1,7 +1,9 @@
 package dptoalumnos;
 
+import com.mysql.jdbc.StringUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 
 public class Controlador {
 
@@ -201,6 +203,19 @@ public class Controlador {
             }
         }
     }
+    
+    // ----- funciones de validacion -----
+    public static boolean isNumeric(String str){
+        for (char c : str.toCharArray())
+        {
+            if (!Character.isDigit(c)) return false;
+        }
+        return true;
+    }
+    
+    public boolean isAlpha(String name) {
+        return name.matches("[a-zA-Z]+");
+    }
 
 
 
@@ -260,12 +275,45 @@ public class Controlador {
             // validacioens de ingreso de datos . 
             if(nroLegajo.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Nro. Legajo Vacío.");
+            }else{
+                if(nroLegajo.length() != 4){
+                    validacion = false;
+                    v.showErrorMsg("Nro Legajo debe contener 4 dígitos.");
+                }else{
+                    if(!isNumeric(nroLegajo)){
+                        validacion = false;
+                        v.showErrorMsg("Inserte solo dígitos numéricos.");
+                    }
+                }
             }
             if(nombre.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Nombre Vacío.");
+            }else{
+                if(nombre.length()> 50){
+                    validacion = false;
+                    v.showErrorMsg("Máxima cant de dígitos = 50");
+                }else{
+                    if(isAlpha(nombre)){
+                        validacion = false;
+                        v.showErrorMsg("Ingrese solo letras.");
+                    }
+                }
             }
             if(apellido.isEmpty()){ 
                 validacion = false;
+                v.showErrorMsg("Campo Apellido Vacío.");
+            }else{
+                if(apellido.length()> 50){
+                    validacion = false;
+                    v.showErrorMsg("Máxima cant de dígitos = 50");
+                }else{
+                    if(isAlpha(apellido)){
+                        validacion = false;
+                        v.showErrorMsg("Ingrese solo letras.");
+                    }
+                }
             }
             if(fechaNacimiento.isEmpty()){ 
                 validacion = false;
@@ -597,6 +645,74 @@ public class Controlador {
             }            
     }  
     
+    private class funcionSendAltaAsistencia implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarAsistencia("INSERT");
+            if (q == 1){
+                v.showSuccessMsg("El registro de asistencias ha sido agregado.");
+                v.cargaInputsAsistencia(new Asistencia());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            m.cargaArrayAsistencia();
+        }
+        
+    }
+    
+    private class funcionUpdateAsistencia implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int q = insertarModificarAsistencia("UPDATE");
+            if (q == 1){
+                v.showSuccessMsg("El registro de asistencias ha sido modificado.");
+                int pos = m.getPosAsistencias();
+                m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso , v.getTxtFldAsistNroClase , 0);
+                m.setPosAsistencias(pos);
+                v.cargaInputsAsistencia(m.getArrayAsistencias());
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+        }
+    }
+    
+    private int insertarModificarAsistencia(String modo){
+
+            Asistencia asistencia = new Asistencia();
+            Boolean validacion = true;
+            
+            boolean[] arrayAsistencias = new boolean[16];
+            String[] arrayNroLegajo = new String[16];
+            
+            String codCurso = v.getTxtFldAsistCodCurso;
+            String nroClase = v.getTxtFldAsistNroClase;
+            
+            for(int i = 0 ; i<16 ; i++){
+                arrayAsistencias[i] = v.getTxtFldAsist(i);
+                arrayNroLegajo[i] = v.getTxtFldAsistNroLegajo(i);
+            }
+            
+            
+            if(validacion){
+                if (modo.equals("INSERT")){
+                    for(int i=0;i<16;i++){
+                        if(arrayNroLegajo[i].toString() == ""){
+                            m.qryAltaAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
+                        }
+                    }
+                }else if (modo.equals("UPDATE")){
+                    for(int i=0;i<16;i++){
+                        if(arrayNroLegajo[i].toString() == ""){
+                            m.qryModificarAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
+                        }
+                    }
+                }
+                return 0;
+            }else{
+                v.showErrorMsg("La validación ha fallado.");
+                return -2;
+            }            
+    }  
+    
     // ----- Handlers botones avanzar / retroceder -----
       // ALUMNO
     class RetrocederAlumnoHandler implements ActionListener {
@@ -739,6 +855,41 @@ public class Controlador {
                     m.setPosRecursos(m.getCantRecursos()- 1);
                 }
                 v.cargaInputsRecurso(m.getRecurso(m.getPosRecursos()));
+            }
+        }
+    }
+    
+      // ASISTENCIA
+    class RetrocederAsistenciaHandler implements ActionListener {
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int cantClases = m.qryCantAsistCurso(v.getTxtFldAsistNroCurso());//qry que calcula la cant de clases que tiene cargada la materia
+        
+            if (cantClases > 0) {
+                m.setPosAsistencias(m.getPosAsistencias()- 1);
+                if (m.getPosAsistencias()== -1) {
+                    m.setPosAsistencias(0);
+                }
+                m.cargaArrayAsistencia(v.getTxtFldAsistNroCurso(), m.getPosAsistencias(), 0);
+                v.cargaInputsAsistencia(m.getArrayAsistencias());
+            }
+        }
+    }
+    
+    class AvanzarAsistenciaHandler implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int cantClases = m.qryCantAsistCurso(v.getTxtFldAsistNroCurso());//qry que calcula la cant de clases que tiene cargada la materia
+        
+            if (cantClases > 0) {
+                m.setPosAsistencias(m.getPosAsistencias()+ 1);
+                if (m.getPosAsistencias()== cantClases) {
+                    m.setPosAsistencias(cantClases- 1);
+                }
+                m.cargaArrayAsistencia(v.getTxtFldAsistNroCurso(), m.getPosAsistencias(), 0);
+                v.cargaInputsAsistencia(m.getArrayAsistencias());
             }
         }
     }

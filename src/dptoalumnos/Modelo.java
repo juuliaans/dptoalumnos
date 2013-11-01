@@ -265,15 +265,39 @@ public final class Modelo {
         }
         this.closeDBConnection();
     }
+    
+    public int qryCantAsistCurso(String codCurso){ //calcula cuantas clases tiene cargadas asistencia un curso
+        String qry;
+        qry = "SELECT COUNT(nroClase) FROM asistencias WHERE codCurso = "+codCurso+" GROUP BY codCurso;";
+        ResultSet rs = null;
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.closeDBConnection();
+        return -1;
+    }
 
     public void cargaArrayAsistencia(String codCurso , Integer nroClase , int mode){ // cargo en un array los datos requeridos de la tabla Asistencia.
         // mode = 0 -> Levanta una sola fecha para volcar en los inputs
         // mode = 1 -> Levanta todas las fechas para realizar el informe de asistencias
         String qry;
         if(mode == 0){
-            qry = "SELECT * FROM asistencia WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY nroLegajo;";    
+            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY nroLegajo;";    
         }else{
-            qry = "SELECT * FROM asistencia WHERE codCurso = '"+codCurso+"' ORDER BY nroLegajo , nroClase;";
+            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' ORDER BY nroLegajo , nroClase;";
         }
         ResultSet rs = null;
         this.arrayAsistencias.clear(); // borro el array para despues cargarlo denuevo . 
@@ -287,6 +311,7 @@ public final class Modelo {
                 a.setCodCurso(rs.getString(2));
                 a.setNroClase(rs.getInt(3));
                 a.setAsistencia(rs.getInt(4));
+                a.setNombreApellido(rs.getString(5)+" "+rs.getString(6));
                 
                 arrayAsistencias.add(a);
             }
@@ -424,6 +449,17 @@ public final class Modelo {
         return q;
     }
     
+    public int qryAltaAsistencia(String nroLegajo , String codCurso , String nroClase , boolean asistencia){
+        String qry; // revisar los campos de la tabla 
+        qry = "INSERT INTO asistencias (nroLegajo , codCurso , nroClase , asistencia) ";
+        qry+= "VALUES ("+nroLegajo+" , "+codCurso+" , '"+nroClase+"' , "+asistencia+");";
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
+    }
+    
     public int qryModificarAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
         String qry;
         qry = "UPDATE alumnos SET "
@@ -510,6 +546,21 @@ public final class Modelo {
         return q;
     }
     
+    public int qryModificarAsistencia(String nroLegajo , String codCurso , String nroClase , boolean asistencia){
+        String qry;
+        qry = "UPDATE asistencias SET "
+                + "nroLegajo = " + "'"+nroLegajo+"' "
+                + ", codCurso = " + "'"+codCurso+"' "
+                + ", nroClase = " + "'"+nroClase+"' "
+                + ", asistencia = " +asistencia+" ";
+        qry += "WHERE nroLegajo = " + nroLegajo +" AND codCurso = " + codCurso;
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
+    }
+    
     // ----- Getters -----
       // Levanta objetos de array
     public Alumno getAlumno(int i) { 
@@ -531,6 +582,12 @@ public final class Modelo {
     public Pago getPago(int i) { 
         return arrayPagos.get(i);
     }
+
+    public ArrayList<Asistencia> getArrayAsistencias() {
+        return arrayAsistencias;
+    }
+    
+    
       // Devuelve tamaño de array 
     public int getCantAlumnos() {
         return arrayAlumnos.size();

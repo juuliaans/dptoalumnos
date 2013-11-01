@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -1173,6 +1174,16 @@ public final class Vista {
         setTxtFldRecursoCategoria(recurso.getCategoria());
         setTxtFldRecursoCodRec(recurso.getCodRecurso());
     }
+    
+    public void cargaInputsAsistencia(ArrayList<Asistencia> asistencia){
+        for (int i =0;i < 16; i++){
+            setTxtFldAsistNroLegajo(i, asistencia.get(i).getNroLegajo());
+            setTxtFldAsistNombre(i, asistencia.get(i).getNombreApellido()); //alguna forma de obtener el nombre del alumno, no se si esta adentro de la clase asistencia
+            setTxtFldAsistValue(i, asistencia.get(i).getAsistencia());
+        }
+    }
+    
+    
     
     
     // ----- Getters inputs -----
