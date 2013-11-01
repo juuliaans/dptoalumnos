@@ -789,6 +789,32 @@ public final class Modelo {
         this.closeDBConnection();
         return 1;
     }
+    
+    public ArrayList<String> getAlumnosCurso(String codCurso){ //calcula cuantas clases tiene cargadas asistencia un curso
+        String qry;
+        qry = "SELECT nombre , apellido FROM alumnos INNER JOIN cursos ON cursos.nroLegajo = alumnos.nroLegajo WHERE cursos.codCurso = "+codCurso;
+        ResultSet rs = null;
+        ArrayList<String> arrayAlumnosCurso = null;
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+            while (rs.next()) {
+                arrayAlumnosCurso.add(rs.getString(1)+" "+rs.getString(2));
+            }
+            return arrayAlumnosCurso;
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.closeDBConnection();
+        return null;
+    }
 
     // ----- Getters -----
       // Levanta objetos de array
