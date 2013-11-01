@@ -5,12 +5,14 @@ public class Asistencia {
 
     private String nroLegajo;
     private String codCurso;
+    private String nombreApellido;
     private Integer nroClase;
     private Integer asistencia;
     
     public Asistencia(){
         nroLegajo = "";
         codCurso = "";
+        nombreApellido = "";
         nroClase = 0;
         asistencia = 0;
     }
@@ -22,6 +24,10 @@ public class Asistencia {
 
     public String getCodCurso() {
         return codCurso;
+    }
+    
+    public String getNombreApellido(){
+        return nombreApellido;
     }
 
     public Integer getNroClase() {
@@ -39,6 +45,10 @@ public class Asistencia {
 
     public void setCodCurso(String codCurso) {
         this.codCurso = codCurso;
+    }
+    
+    public void setNombreApellido(String nombreApellido){
+        this.nombreApellido = nombreApellido;
     }
 
     public void setNroClase(Integer nroClase) {
