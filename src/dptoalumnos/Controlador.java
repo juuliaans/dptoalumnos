@@ -243,7 +243,7 @@ public class Controlador {
     }
     
     public boolean validateDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             sdf.parse(date);
             return true;
@@ -313,7 +313,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro. Legajo : Campo Vacío.");
             }else{
-                if(nroLegajo.length() != 4){
+                if(nroLegajo.length() > 4){
                     validacion = false;
                     v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
                 }else{
@@ -397,9 +397,9 @@ public class Controlador {
                 v.showErrorMsg("Piso : Ingrese solo nros.");                    
             }
 
-            if(isAlpha(dpto)){
+            if(!isAlpha(dpto) && !isNumeric(dpto)){
                 validacion = false;
-                v.showErrorMsg("Departamento : Ingrese solo nros.");                    
+                v.showErrorMsg("Departamento : Ingrese solo nros o solo letras.");                    
             }
 
             if(codPostal.isEmpty()){ 
@@ -525,7 +525,7 @@ public class Controlador {
             validacion = false;
             v.showErrorMsg("Cod Curso : Campo Vacío.");
         }else{
-            if(codCurso.length() != 4){
+            if(codCurso.length() > 4){
                 validacion = false;
                 v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
             }else{
@@ -621,7 +621,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Recurso : Campo Vacío.");
             }else{
-                if(codRecurso.length() != 4){
+                if(codRecurso.length() > 4){
                     validacion = false;
                     v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
                 }else{
@@ -746,7 +746,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Campo Vacío.");
         }else{
-            if(nroLegajo.length() != 4){
+            if(nroLegajo.length() > 4){
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
             }else{
@@ -760,7 +760,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Recurso : Campo Vacío.");
         }else{
-            if(codRecurso.length() != 4){
+            if(codRecurso.length() > 4){
                 validacion = false;
                 v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
             }else{
@@ -877,7 +877,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Campo Vacío.");
             }else{
-                if(nroLegajo.length() != 4){
+                if(nroLegajo.length() > 4){
                     validacion = false;
                     v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
                 }else{
@@ -891,7 +891,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Curso : Campo Vacío.");
             }else{
-                if(codCurso.length() != 4){
+                if(codCurso.length() > 4){
                     validacion = false;
                     v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
                 }else{
@@ -917,7 +917,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Comprobante : Campo Vacío.");
             }else{
-                if(comprobante.length() != 4){
+                if(comprobante.length() > 4){
                     validacion = false;
                     v.showErrorMsg("Comprobante : Cant de dígitos necesarios = 4");
                 }else{

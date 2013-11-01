@@ -361,8 +361,8 @@ public final class Vista {
         txtFldAlumnoPiso = new JTextField(2);
         txtFldAlumnoPiso.setDocument(new JTextFieldLimit(2));
         txtLblAlumnoDepartamento = new JLabel("Depto : ", JLabel.RIGHT);
-        txtFldAlumnoDepartamento = new JTextField(1);
-        txtFldAlumnoDepartamento.setDocument(new JTextFieldLimit(1));
+        txtFldAlumnoDepartamento = new JTextField(2);
+        txtFldAlumnoDepartamento.setDocument(new JTextFieldLimit(2));
         txtLblAlumnoCodPostal = new JLabel("Cod Postal : ", JLabel.RIGHT);
         txtFldAlumnoCodPostal = new JTextField(5);
         txtFldAlumnoCodPostal.setDocument(new JTextFieldLimit(5));
