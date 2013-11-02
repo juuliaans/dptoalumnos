@@ -20,7 +20,7 @@ public class Controlador {
     public void comenzar(){
         v.iniciarVentanaPrincipal();
         addFunciones();
-        m.cargaArrayAlumno();
+        m.cargaArrayAlumno(null);
         m.cargaArrayCurso();
         m.cargaArrayPago();
         m.cargaArrayPrestamo();
@@ -54,7 +54,8 @@ public class Controlador {
                     new funcionGenerarListado1(), 
                     new funcionGenerarListado2(), 
                     new funcionGenerarListado3(), 
-                    new funcionGenerarListado4()
+                    new funcionGenerarListado4(), 
+                    new menuItem_consultaAlumno()
                 }
                 );
         v.addCloseEventToMenuItem(new menuItem_close());
@@ -87,12 +88,24 @@ public class Controlador {
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_ALUMNO");
             
+            m.cargaArrayAlumno(null);
             if (m.getCantAlumnos() > 0){
             v.cargaInputsAlumno(m.getAlumno(m.getPosAlumnos()));
-            v.addActionListenersModificarAlumno(new funcionUpdateAlumno(),new RetrocederAlumnoHandler(), new AvanzarAlumnoHandler());
+            v.addActionListenersModificarAlumno(new funcionUpdateAlumno(),new RetrocederAlumnoHandler(), new AvanzarAlumnoHandler(), new funcionBuscarAlumno());
             }else{
                 v.showErrorMsg("No hay Alumnos cargados en el sistema. Dirigase a la pantalla de alta de Alumnos para cargar alumnos en el sistema.");
             }
+        }
+    }
+    
+    private class menuItem_consultaAlumno implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            v.mostrarPantalla("CONSULTA_ALUMNO");
+            
+            
+            v.addActionListenerConsultaAlumno(new funcionBuscarAlumno());
+            
         }
     }
     
@@ -239,7 +252,8 @@ public class Controlador {
     }
     
     public boolean isAlpha(String name) {
-        return name.matches("[a-zA-Z ]+");
+        //return name.matches("[a-zA-Z ]+");
+        return name.matches("[a-zA-Zäáàëéèíìöóòúùñç  .]+");
     }
     
     public boolean validateDate(String date) {
@@ -266,7 +280,7 @@ public class Controlador {
             }
             else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
 
-            m.cargaArrayAlumno();
+            m.cargaArrayAlumno(null);
         }
         
     }
@@ -278,11 +292,24 @@ public class Controlador {
             if (q == 1){
                 v.showSuccessMsg("El alumno ha sido modificado.");
                 int pos = m.getPosAlumnos();
-                m.cargaArrayAlumno();
+                m.cargaArrayAlumno(null);
                 m.setPosAlumnos(pos);
                 v.cargaInputsAlumno(m.getAlumno(pos));
             }
             else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
+    private class funcionBuscarAlumno implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            String nroLegajo = v.getTxtFldAlumnoBusqueda();
+            
+            m.cargaArrayAlumno(nroLegajo);
+            v.cargaInputsAlumno(m.getAlumno(0));
 
             
         }
@@ -313,7 +340,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro. Legajo : Campo Vacío.");
             }else{
-                if(nroLegajo.length() > 4){
+                if(nroLegajo.length() > 10){
                     validacion = false;
                     v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
                 }else{
@@ -364,11 +391,11 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Doc : Campo Vacío");
             }else{
-                if(nroDoc.length() != 8){
+                if(nroDoc.length() < 8){
                     validacion = false;
                     v.showErrorMsg("Nro Doc : Cant de dígitos necesarios = 8");
                 }else{
-                    if(!isNumeric(nroDoc)){
+                    if(!isNumeric(nroDoc.replace(".", ""))){
                         validacion = false;
                         v.showErrorMsg("Nro Doc : Ingrese solo nros.");
                     }
@@ -392,10 +419,10 @@ public class Controlador {
                     v.showErrorMsg("Nro Calle : Ingrese solo nros.");
                 }
             }
-            if(isAlpha(piso)){
+            /*if(isAlpha(piso)){
                 validacion = false;
                 v.showErrorMsg("Piso : Ingrese solo nros.");                    
-            }
+            }*/
 
             if(!isAlpha(dpto) && !isNumeric(dpto)){
                 validacion = false;
@@ -525,7 +552,7 @@ public class Controlador {
             validacion = false;
             v.showErrorMsg("Cod Curso : Campo Vacío.");
         }else{
-            if(codCurso.length() > 4){
+            if(codCurso.length() > 8){
                 validacion = false;
                 v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
             }else{
@@ -621,15 +648,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Recurso : Campo Vacío.");
             }else{
-                if(codRecurso.length() > 4){
-                    validacion = false;
-                    v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
-                }else{
-                    if(!isNumeric(codRecurso)){
-                        validacion = false;
-                        v.showErrorMsg("Cod Recurso : Inserte solo dígitos numéricos.");
-                    }
-                }
+                
             }
             if(categoria.isEmpty()){ 
                 validacion = false;
@@ -746,7 +765,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Campo Vacío.");
         }else{
-            if(nroLegajo.length() > 4){
+            if(nroLegajo.length() > 10){
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
             }else{
@@ -760,15 +779,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Recurso : Campo Vacío.");
         }else{
-            if(codRecurso.length() > 4){
-                validacion = false;
-                v.showErrorMsg("Cod Recurso : Cant de dígitos necesarios = 4");
-            }else{
-                if(!isNumeric(codRecurso)){
-                    validacion = false;
-                    v.showErrorMsg("Cod Recurso : Inserte solo dígitos numéricos.");
-                }
-            }
+            
         }
         if(fechaPrestamo.isEmpty()){ 
                 validacion = false;
@@ -788,15 +799,16 @@ public class Controlador {
                 v.showErrorMsg("Fecha Prevista Devolución: Formato Incorrecto.");
             }
         }
-        if(fechaDevolucion.isEmpty()){ 
-                validacion = false;
-                v.showErrorMsg("Fecha Devolucion : Campo Vacío.");
-        }else{
+        
+        if (!fechaDevolucion.isEmpty()){
             if(!validateDate(fechaDevolucion)){
                 validacion = false;
                 v.showErrorMsg("Fecha Devolucion: Formato Incorrecto.");
             }
+        }else{
+            fechaDevolucion = null;
         }
+        
         //if(fechaDevolucion.isEmpty()){
         //    validacion = false;
         //}
@@ -877,7 +889,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Nro Legajo : Campo Vacío.");
             }else{
-                if(nroLegajo.length() > 4){
+                if(nroLegajo.length() > 10){
                     validacion = false;
                     v.showErrorMsg("Nro Legajo : Cant de dígitos necesarios = 4");
                 }else{
@@ -891,7 +903,7 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Cod Curso : Campo Vacío.");
             }else{
-                if(codCurso.length() > 4){
+                if(codCurso.length() > 8){
                     validacion = false;
                     v.showErrorMsg("Cod Curso : Cant de dígitos necesarios = 4");
                 }else{
@@ -917,15 +929,6 @@ public class Controlador {
                 validacion = false;
                 v.showErrorMsg("Comprobante : Campo Vacío.");
             }else{
-                if(comprobante.length() > 4){
-                    validacion = false;
-                    v.showErrorMsg("Comprobante : Cant de dígitos necesarios = 4");
-                }else{
-                    if(!isNumeric(comprobante)){
-                        validacion = false;
-                        v.showErrorMsg("Comprobante : Inserte solo dígitos numéricos.");
-                    }
-                }
             }
             
             if(validacion){

@@ -106,8 +106,10 @@ public final class Modelo {
     }
     
     // ----- LEVANTA DATOS -----
-    public void cargaArrayAlumno(){ // cargo en un array todos los registros de la tabla alumno.
+    public void cargaArrayAlumno(String nroLegajo){ // cargo en un array todos los registros de la tabla alumno.
         String qry = "SELECT * FROM alumnos";
+        
+        if (nroLegajo != null) qry += " WHERE nroLegajo = " + nroLegajo;
         ResultSet rs = null;
         this.arrayAlumnos.clear(); // borro el array para despues cargarlo denuevo . 
         this.posAlumnos = 0; //reseteo la posicion a 0 por si hay menos o mas alumnos
@@ -450,7 +452,7 @@ public final class Modelo {
     public int qryAltaRecurso(String codRecurso , String nombre , String anio , String categoria , String autor , String cant){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO recursos (codRec , nombre , anio , categoria , autor , cant)";
-        qry+= "VALUES ("+codRecurso+" , '"+nombre+"' , '"+anio+"' , '"+categoria+"' , '"+autor+"' , '"+cant+"');";
+        qry+= "VALUES ('"+codRecurso+"' , '"+nombre+"' , '"+anio+"' , '"+categoria+"' , '"+autor+"' , '"+cant+"');";
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -471,9 +473,13 @@ public final class Modelo {
     
     public int qryAltaPrestamo(String nroLegajo , String codRecurso , String fechaPrestamo , String fechaPrevistaDevolucion , String fechaDevolucion ){
         String qry; // revisar los campos de la tabla 
-        qry = "INSERT INTO prestamos (nroLegajo , codRecurso , fechaPres , fechaDevo , fechaPrevDevo) ";
-        qry+= "VALUES ("+nroLegajo+" , "+codRecurso+" , '"+fechaPrestamo+"' , '"+fechaDevolucion+"' , '"+fechaPrevistaDevolucion+"');";
-        
+        if (fechaDevolucion != null){
+            qry = "INSERT INTO prestamos (nroLegajo , codRecurso , fechaPres , fechaDevo , fechaPrevDevo) ";
+            qry+= "VALUES ("+nroLegajo+" , '"+codRecurso+"' , '"+fechaPrestamo+"' , '"+fechaDevolucion+"' , '"+fechaPrevistaDevolucion+"');";
+        }else{
+            qry = "INSERT INTO prestamos (nroLegajo , codRecurso , fechaPres , fechaPrevDevo) ";
+            qry+= "VALUES ("+nroLegajo+" , '"+codRecurso+"' , '"+fechaPrestamo+"' , '"+fechaPrevistaDevolucion+"');";
+        }
         openDBConnection();
         int q = executeUpdate(qry);
         closeDBConnection();
@@ -563,7 +569,7 @@ public final class Modelo {
                 + ", autor = " + "'"+autor+"' "
                 + ", anio = " + "'"+anio+"' "
                 + ", cant = " + "'"+cant+"' ";
-        qry += "WHERE codRec = " + codRecurso;
+        qry += "WHERE codRec = '" + codRecurso + "'";
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -578,8 +584,8 @@ public final class Modelo {
                 + ", codRecurso = " + "'"+codRec+"' "
                 + ", fechaPres = " + "'"+fechaPres+"' "
                 + ", fechaPrevDevo = " + "'"+fechaPrevDevo+"' "
-                + ", fechaDevo = " + "'"+fechaDevo+"' ";
-        qry += "WHERE nroLegajo = " + nroLegajo +" AND codRecurso = " + codRec;
+                + ((fechaDevo != null) ? ", fechaDevo = " + "'"+fechaDevo+"' " : "");
+        qry += "WHERE nroLegajo = " + nroLegajo +" AND codRecurso = '" + codRec + "'";
         
         openDBConnection();
         int q = executeUpdate(qry);
