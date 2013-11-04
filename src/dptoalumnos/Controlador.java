@@ -20,7 +20,7 @@ public class Controlador {
     public void comenzar(){
         v.iniciarVentanaPrincipal();
         addFunciones();
-        m.cargaArrayAlumno(null);
+        m.cargaArrayAlumno(null , null , null , null);
         m.cargaArrayCurso();
         m.cargaArrayPago();
         m.cargaArrayPrestamo();
@@ -88,7 +88,7 @@ public class Controlador {
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("MODIFICACION_ALUMNO");
             
-            m.cargaArrayAlumno(null);
+            m.cargaArrayAlumno(null , null , null , null);
             if (m.getCantAlumnos() > 0){
             v.cargaInputsAlumno(m.getAlumno(m.getPosAlumnos()));
             v.addActionListenersModificarAlumno(new funcionUpdateAlumno(),new RetrocederAlumnoHandler(), new AvanzarAlumnoHandler(), new funcionBuscarAlumno());
@@ -270,6 +270,9 @@ public class Controlador {
 
 
     // ----- Levanta datos form , envía a armado de Query -----
+    
+    
+    
     private class funcionSendAltaAlumno implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -280,7 +283,7 @@ public class Controlador {
             }
             else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
 
-            m.cargaArrayAlumno(null);
+            m.cargaArrayAlumno(null , null , null , null );
         }
         
     }
@@ -292,7 +295,7 @@ public class Controlador {
             if (q == 1){
                 v.showSuccessMsg("El alumno ha sido modificado.");
                 int pos = m.getPosAlumnos();
-                m.cargaArrayAlumno(null);
+                m.cargaArrayAlumno(null , null , null , null);
                 m.setPosAlumnos(pos);
                 v.cargaInputsAlumno(m.getAlumno(pos));
             }
@@ -308,7 +311,7 @@ public class Controlador {
         public void actionPerformed(ActionEvent ae) {
             String nroLegajo = v.getTxtFldAlumnoBusqueda();
             
-            m.cargaArrayAlumno(nroLegajo);
+            m.cargaArrayAlumno(nroLegajo , null , null , null);
             v.cargaInputsAlumno(m.getAlumno(0));
 
             

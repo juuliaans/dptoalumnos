@@ -106,10 +106,16 @@ public final class Modelo {
     }
     
     // ----- LEVANTA DATOS -----
-    public void cargaArrayAlumno(String nroLegajo){ // cargo en un array todos los registros de la tabla alumno.
+    public void cargaArrayAlumno(String nroLegajo , String modo , String nroClase , String nroCurso){ // cargo en un array todos los registros de la tabla alumno.
         String qry = "SELECT * FROM alumnos";
         
         if (nroLegajo != null) qry += " WHERE nroLegajo = " + nroLegajo;
+        if(modo != null && nroClase != null && nroCurso != null){
+            if(modo == "asistencia"){
+                qry = "SELECT * FROM alumnos INNER JOIN asistencias ON alumnos.nroLegajo = asistencias.nroLegajo ";
+                qry+= "WHERE asistencias.nroClase = '"+nroClase+"' AND asistencias.nroCurso = '"+nroCurso+"';";
+            }
+        }
         ResultSet rs = null;
         this.arrayAlumnos.clear(); // borro el array para despues cargarlo denuevo . 
         this.posAlumnos = 0; //reseteo la posicion a 0 por si hay menos o mas alumnos
@@ -362,23 +368,25 @@ public final class Modelo {
     }
     
     // ----- MUESTRA DATOS -----
-    public String getAlumnos(){ // levanto un alumno del array list y genero un string por registro para mostrar los datos.
+    public String getAlumnos(String modo){ // levanto un alumno del array list y genero un string por registro para mostrar los datos.
         String rs = "";
         for(int i = 0 ; i < arrayAlumnos.size() ; i++){
-            rs += arrayAlumnos.get(i).getNroLegajo();
-            rs += arrayAlumnos.get(i).getNombre();
-            rs += arrayAlumnos.get(i).getApellido();
-            rs += arrayAlumnos.get(i).getFechaNacimiento();
-            rs += arrayAlumnos.get(i).getNroDoc();
-            rs += arrayAlumnos.get(i).getCalle();
-            rs += arrayAlumnos.get(i).getNroCalle();
-            rs += arrayAlumnos.get(i).getPiso();
-            rs += arrayAlumnos.get(i).getDepartamento();
-            rs += arrayAlumnos.get(i).getCodPostal();
-            rs += arrayAlumnos.get(i).getLocalidad();
-            rs += arrayAlumnos.get(i).getTelFijo();
-            rs += arrayAlumnos.get(i).getTelCel();
-            rs += arrayAlumnos.get(i).geteMail() + "\n";
+            rs += arrayAlumnos.get(i).getNroLegajo() + " - ";
+            rs += arrayAlumnos.get(i).getNombre() + " ";
+            rs += arrayAlumnos.get(i).getApellido() + "\n";
+            if(modo != "asistencias"){
+                rs += arrayAlumnos.get(i).getFechaNacimiento();
+                rs += arrayAlumnos.get(i).getNroDoc();
+                rs += arrayAlumnos.get(i).getCalle();
+                rs += arrayAlumnos.get(i).getNroCalle();
+                rs += arrayAlumnos.get(i).getPiso();
+                rs += arrayAlumnos.get(i).getDepartamento();
+                rs += arrayAlumnos.get(i).getCodPostal();
+                rs += arrayAlumnos.get(i).getLocalidad();
+                rs += arrayAlumnos.get(i).getTelFijo();
+                rs += arrayAlumnos.get(i).getTelCel();
+                rs += arrayAlumnos.get(i).geteMail() + "\n";
+            }
         }
         return rs;
     }
@@ -427,6 +435,56 @@ public final class Modelo {
     }
     
     // ------ CONSULTAS -------
+    
+    public int alumnoIsAvailable(String nroLegajo , String codCurso , String nroClase){
+        // me fijo si existe el alumno
+        String qry = "SELECT * FROM alumnos WHERE nroLegajo = '"+nroLegajo+"';";
+        ResultSet rs = null;
+        this.openDBConnection();
+        try {
+            rs = this.executeQuery(qry);
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (rs != null) {
+                // si existe el alumno me fijo si ya no se ingreso un registro de asistencia para ese alumno
+                qry = "SELECT * FROM alumnos INNER JOIN asistencias ON alumnos.nroLegajo = asistencias.nroLegajo WHERE nroLegajo = '"+nroLegajo+"' AND asistencias.codCurso = '"+codCurso+"' AND asistencias.nroClase = '"+nroClase+"';";
+                rs = null;
+                this.openDBConnection();
+                try {
+                    rs = this.executeQuery(qry);
+                } catch (Exception ex) {
+                    Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    if (rs != null) {
+                        rs.close();
+                        return 1 ; // el nroLegajo ya tiene ingresado un registro de asistencia
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+                    return 2; // no existe registro de asistencias -> se puede cargar registros de asistencia 
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+            return 0; // no existe el alumno 
+        }
+        this.closeDBConnection();
+        return -1;// error 
+    
+    }
+    
+    public int qryAltaAsistencia(String nroLegajo , String codCurso , String nroClase){
+        String qry = "INSERT INTO asistencias (nroLegajo , codCurso , nroClase) VALUES ('"+nroLegajo+"',";
+        qry += "'"+codCurso+"','"+nroClase+"';";
+        
+        openDBConnection();
+        int q = executeUpdate(qry);
+        closeDBConnection();
+        return q;
+    }
     public int qryAltaAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
         String qry;
         qry = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
