@@ -6,12 +6,14 @@ public class Curso {
     private String cursoNombre;
     private String cursoProf;
     private String cursoAsist;
+    private String cursoCantClases;
 
     public Curso() {
         cursoCod = "";
         cursoNombre = "";
         cursoProf = "";
         cursoAsist = "";
+        cursoCantClases = null;
     }
 
     public void setCursoCod(String cursoCod) {
@@ -30,6 +32,10 @@ public class Curso {
         this.cursoAsist = cursoAsist;
     }
     
+    public void setCursoCantClases(String cursoCantClases) {
+        this.cursoCantClases = cursoCantClases;
+    }
+    
     public String getCursoCod() {
         return cursoCod;
     }
@@ -44,6 +50,10 @@ public class Curso {
 
     public String getCursoAsist() {
         return cursoAsist;
+    }
+    
+    public String getCursoCantClases() {
+        return cursoCantClases;
     }
     
     

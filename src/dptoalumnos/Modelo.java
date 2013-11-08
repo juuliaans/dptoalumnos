@@ -167,7 +167,7 @@ public final class Modelo {
                 a.setCursoCod(rs.getString(1));                
                 a.setCursoNombre(rs.getString(2));
                 a.setCursoProf(rs.getString(3));
-              
+                a.setCursoCantClases(rs.getString(4));
                 arrayCursos.add(a);
             }
         } catch (Exception ex) {
@@ -307,9 +307,19 @@ public final class Modelo {
         // mode = 1 -> Levanta todas las fechas para realizar el informe de asistencias
         String qry;
         if(mode == 0){
-            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY apellido;";    
+            //qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumnos ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' and nroClase = "+Integer.toString(nroClase)+" ORDER BY apellido;";    
+        
+            qry = "SELECT alumnos.nroLegajo, rel_alumnos_cursos.codCurso, IFNULL(asistencias.nroClase, " + nroClase.toString() + ") AS nroClase, IFNULL(asistencias.asistencia, 0) AS asistencia, alumnos.nombre, alumnos.apellido FROM alumnos"
+                   + " INNER JOIN rel_alumnos_cursos ON alumnos.nroLegajo = rel_alumnos_cursos.nroLegajo" 
+                   + " LEFT JOIN asistencias ON asistencias.nroLegajo = alumnos.nroLegajo AND asistencias.codCurso = rel_alumnos_cursos.codCurso AND asistencias.nroClase = " + nroClase.toString()
+                   + " WHERE rel_alumnos_cursos.codCurso = " + codCurso
+                   //+ " AND (asistencias.nroClase = " + nroClase.toString() + " OR asistencias.nroClase IS NULL)"
+                   + " ORDER BY alumnos.nombre, alumnos.apellido";
+            
         }else{
-            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumno.nroLegajo WHERE codCurso = '"+codCurso+"' ORDER BY apellido , nroClase;";
+            qry = "SELECT nroLegajo , codCurso , nroClase , asistencia , nombre , apellido "
+            + "FROM asistencias INNER JOIN alumno ON asistencias.nroLegajo = alumnos.nroLegajo "
+            + "WHERE codCurso = '"+codCurso+"' ORDER BY apellido , nroClase;"; 
         }
         ResultSet rs = null;
         this.arrayAsistencias.clear(); // borro el array para despues cargarlo denuevo . 
@@ -476,15 +486,23 @@ public final class Modelo {
     
     }
     
-    public int qryAltaAsistencia(String nroLegajo , String codCurso , String nroClase){
-        String qry = "INSERT INTO asistencias (nroLegajo , codCurso , nroClase) VALUES ('"+nroLegajo+"',";
-        qry += "'"+codCurso+"','"+nroClase+"';";
-        
+    public int qryUpsertAsistencia(String nroLegajo, String codCurso, String nroClase, boolean asistencia){
+        String qry = "SELECT * FROM asistencias WHERE nroLegajo = " + nroLegajo + " AND nroClase =" + nroClase;
         openDBConnection();
-        int q = executeUpdate(qry);
+        ResultSet rs = executeQuery(qry);
+        try {
+            if (rs.next()){
+                return qryModificarAsistencia(nroLegajo, codCurso, nroClase, asistencia);
+            }else{
+                return qryAltaAsistencia(nroLegajo, codCurso, nroClase, asistencia);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         closeDBConnection();
-        return q;
+        return 0;
     }
+   
     public int qryAltaAlumno(String nroLegajo , String nombre , String apellido , String fechaNacimiento , String nroDoc , String calle , String nroCalle , String piso , String dpto , String codPostal , String localidad , String telFijo , String telCel , String eMail){
         String qry;
         qry = "INSERT INTO alumnos (nroLegajo , nombre , apellido , fechaNacimiento , nroDoc , calle , nro , piso , depto , codPostal , localidad , telFijo , telCel , eMail) ";
@@ -496,10 +514,10 @@ public final class Modelo {
         return q;
     }
     
-    public int qryAltaCurso(String codCurso , String nombre , String prof){
+    public int qryAltaCurso(String codCurso , String nombre , String prof, String cantClases){
         String qry; // revisar los campos de la tabla
-        qry = "INSERT INTO cursos (codCurso , nombre , prof)";
-        qry+= "VALUES ("+ codCurso +" , '"+ nombre +"' , '"+ prof +"');";
+        qry = "INSERT INTO cursos (codCurso , nombre , prof, cantClases)";
+        qry+= "VALUES ("+ codCurso +" , '"+ nombre +"' , '"+ prof +"', " + cantClases + ");";
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -562,7 +580,7 @@ public final class Modelo {
                  + ", codCurso = " + "'"+codCurso+"' "
                  + ", nroClase = " + "'"+nroClase+"' "
                  + ", asistencia = " +asistencia+" ";
-         qry += "WHERE nroLegajo = " + nroLegajo +" AND codCurso = " + codCurso;
+         qry += "WHERE nroLegajo = " + nroLegajo +" AND codCurso = " + codCurso + " AND nroClase = " + nroClase;
          
          openDBConnection();
          int q = executeUpdate(qry);
@@ -595,17 +613,39 @@ public final class Modelo {
         return q;
     }
     
-    public int qryModificarCurso(String codCurso , String nombre , String prof){
+    public int qryModificarCurso(String codCurso , String nombre , String prof, String cantClases){
         String qry;
         qry = "UPDATE cursos SET "
                 + "nombre = " + "'"+nombre+"' "
-                + ", prof = " + "'"+prof+"' ";
-        qry += "WHERE codCurso = " + codCurso;
+                + ", prof = " + "'"+prof+"' "
+                + ", cantClases = " + "'"+cantClases+"' ";
+        
+                qry += "WHERE codCurso = " + codCurso;
         
         openDBConnection();
         int q = executeUpdate(qry);
         closeDBConnection();
         return q;
+    }
+    
+    public int qryAgregarAlumnoACurso(String codCurso, String nroLegajo){
+        String qry;
+        qry = "SELECT * FROM alumnos WHERE nroLegajo = " + nroLegajo;
+        openDBConnection();
+        ResultSet rs = executeQuery(qry);
+        try {
+            if (rs.next() == true){
+                qry = "INSERT INTO rel_alumnos_cursos(nroLegajo, codCurso) VALUES(" + nroLegajo + ", " + codCurso + ")";
+                int res = executeUpdate(qry);
+                return 1;
+            }else{
+                return 2;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        closeDBConnection();
+        return 0;
     }
     
     public int qryEliminarCurso(String codCurso){
@@ -678,22 +718,27 @@ public final class Modelo {
         return q;
     }
     
-    public int generateAlumnosRegularesPorCurso(int codCurso){
-        String qry = "SELECT alumnos.nroLegajo, alumnos.Nombre, alumnos.Apellido "
-                + "FROM prestamos JOIN alumnos ON prestamos.nroLegajo = alumnos.nroLegajo "
-                + "WHERE fechaDevo IS NULL or fechaDevo = ''";
+    public int generateAlumnosRegularesPorCurso(Integer codCurso){
+        Integer percent = 50;
+        String qry = "SELECT alumnos.nroLegajo, alumnos.nombre, alumnos.apellido, COUNT(*) FROM alumnos" +
+        " INNER JOIN rel_alumnos_cursos ON rel_alumnos_cursos.nroLegajo = alumnos.nroLegajo AND rel_alumnos_cursos.codCurso = " + codCurso.toString() +
+        " LEFT JOIN asistencias ON asistencias.nroLegajo = rel_alumnos_cursos.nroLegajo AND asistencias.codCurso = rel_alumnos_cursos.codCurso" +
+        " WHERE asistencias.asistencia = 1"+
+        " GROUP BY alumnos.nroLegajo"+
+        " HAVING COUNT(*) >= (((SELECT cantClases FROM cursos WHERE cursos.codCurso = "+ codCurso.toString() +") * " + percent.toString() + ") / 100)";
+        
         ResultSet rs = null;
         
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter("prestamosNoDevueltos.txt", "UTF-8");
+            writer = new PrintWriter("alumnosRegularesPorCurso_curso_" + codCurso.toString() + ".txt", "UTF-8");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        writer.println("Alumnos con prestamos no devueltos");
+        writer.println("Alumnos regulares || Curso " + codCurso.toString() + " || Clases totales: " + this.getCursoWithCode(codCurso.toString()).getCursoCantClases());
         writer.println("------------------------------");
         
         this.openDBConnection();
@@ -703,6 +748,7 @@ public final class Modelo {
                 writer.println("Nro legajo: " + rs.getString(1));
                 writer.println("Nombre: " + rs.getString(2));
                 writer.println("Apellido: " + rs.getString(3));
+                writer.println("Asistencias: " + rs.getString(4));
                 writer.println("------------------------------");
                 //rs.getString();
                
@@ -932,6 +978,15 @@ public final class Modelo {
         if (i < arrayCursos.size())
             return arrayCursos.get(i);
         else return new Curso();
+    }
+    
+    public Curso getCursoWithCode(String codCurso){
+        for (int i = 0; i < getCantCursos(); i++){
+            if (getCurso(i).getCursoCod().equals(codCurso)){
+                return getCurso(i);
+            }
+        }
+        return null;
     }
     
     public Pago getPago(int i) { 

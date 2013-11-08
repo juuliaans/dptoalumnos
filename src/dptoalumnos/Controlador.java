@@ -131,7 +131,13 @@ public class Controlador {
             
             if (m.getCantCursos() > 0){
                 v.cargaInputsCurso(m.getCurso(m.getPosCursos()));
-                v.addActionListenersModificarCurso(new funcionUpdateCurso(),new RetrocederCursoHandler(), new AvanzarCursoHandler(), new funcionEliminarCurso());
+                v.addActionListenersModificarCurso(
+                        new funcionUpdateCurso()
+                        ,new RetrocederCursoHandler()
+                        , new AvanzarCursoHandler()
+                        , new funcionEliminarCurso()
+                        , new agregarAlumnoACurso()
+                );
             }else{
                 v.showErrorMsg("No hay cursos cargados en el sistema. Dirigase a la pantalla de alta de Cursos para cargar cursos en el sistema.");
             }
@@ -142,7 +148,8 @@ public class Controlador {
         @Override
         public void actionPerformed(ActionEvent ae) {
             v.mostrarPantalla("ALTA_ASISTENCIAS");
-            v.cargaInputsAsistencia(m.getArrayAsistencias());
+            v.addActionListenerAsistencias(new funcionCargarAsistencias(), new funcionSendAltaAsistencia());
+            //v.cargaInputsAsistencia(m.getArrayAsistencias());
             
         }
     }
@@ -543,6 +550,25 @@ public class Controlador {
         
     }
     
+    private class agregarAlumnoACurso implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            String codCurso = v.getTxtFldCursoCodCurso();
+            String nroLegajo = v.showInputDialog("Ingrese el nroLegajo del alumno a agregar: ");
+            
+            int q = m.qryAgregarAlumnoACurso(codCurso, nroLegajo);
+            if (q == 1){
+                v.showSuccessMsg("El alumno ha sido agregado.");
+            }else if (q == 2){
+                v.showErrorMsg("El nro de legajo no corresponde a un alumno válido");
+            }
+            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+
+            
+        }
+        
+    }
+    
     private int insertarModificarCurso(String modo){
         Curso curso = new Curso();
         Boolean validacion = true;
@@ -550,6 +576,7 @@ public class Controlador {
         String codCurso = v.getTxtFldCursoCodCurso();
         String nombre = v.getTxtFldCursoNombre();
         String prof = v.getTxtFldCursoProf();
+        String cantClases = v.getTxtFldCursoCantClases();
 
         if(codCurso.isEmpty()){ 
             validacion = false;
@@ -588,12 +615,17 @@ public class Controlador {
                 }
             }
         }
+        
+        if (Integer.parseInt(cantClases) > 32){
+            validacion = false;
+            v.showErrorMsg("Maximo numero de clases permitido: 32");
+        }
 
         if(validacion){
             if (modo.equals("INSERT")){
-                return m.qryAltaCurso(codCurso, nombre, prof);
+                return m.qryAltaCurso(codCurso, nombre, prof, cantClases);
             }else if (modo.equals("UPDATE")){
-                return m.qryModificarCurso(codCurso , nombre , prof);
+                return m.qryModificarCurso(codCurso , nombre , prof, cantClases);
             }
             return 0;
         }else{
@@ -1023,34 +1055,48 @@ public class Controlador {
     private class funcionSendAltaAsistencia implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
-            int q = insertarModificarAsistencia("INSERT");
+            int q = insertarModificarAsistencia();
             if (q == 1){
-                v.showSuccessMsg("El registro de asistencias ha sido agregado.");
-                v.cargaInputsAsistencia(null);
+                v.showSuccessMsg("El registro de asistencias ha sido cargado.");
             }
             else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
-
-            m.cargaArrayAsistencia(null, q, q);
+            
+            String codCurso = v.getTxtFldAsistCodCurso();
+            String nroClase = v.getTxtFldAsistNroClase();
+            
+            m.cargaArrayAsistencia(codCurso, Integer.valueOf(nroClase), 0);
+            v.cargaInputsAsistencia(m.getArrayAsistencias());
         }
         
     }
     
-    private class funcionUpdateAsistencia implements ActionListener{
+    private class funcionCargarAsistencias implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent ae) {
-            int q = insertarModificarAsistencia("UPDATE");
-            if (q == 1){
-                v.showSuccessMsg("El registro de asistencias ha sido modificado.");
-                int pos = m.getPosAsistencias();
-                m.cargaArrayAsistencia(v.getTxtFldAsistCodCurso() , Integer.parseInt(v.getTxtFldAsistNroClase()) , 0);
-                m.setPosAsistencias(pos);
-                v.cargaInputsAsistencia(m.getArrayAsistencias());
+            
+            String codCurso = v.getTxtFldAsistCodCurso();
+            String nroClase = v.getTxtFldAsistNroClase();
+            
+            Curso a = m.getCursoWithCode(codCurso);
+            if (a != null){
+                if (Integer.valueOf(nroClase) > 0 && Integer.valueOf(nroClase) < (Integer.valueOf(a.getCursoCantClases()) + 1)){
+                    m.cargaArrayAsistencia(codCurso, Integer.valueOf(nroClase), 0);
+                    m.setPosAsistencias(0);
+                    v.limpiarInputsAsistencia();
+                    v.cargaInputsAsistencia(m.getArrayAsistencias());
+                }else{
+                    v.limpiarInputsAsistencia();
+                    v.showErrorMsg("Nro de clase no permitido");
+                }
+            }else{
+                v.limpiarInputsAsistencia();
+                v.showErrorMsg("Cod curso inexistente");
             }
-            else if (q == 0) v.showErrorMsg("Algo ha fallado en la base de datos");
+            
         }
     }
     
-    private int insertarModificarAsistencia(String modo){
+    private int insertarModificarAsistencia(){
 
             Asistencia asistencia = new Asistencia();
             Boolean validacion = true;
@@ -1068,20 +1114,12 @@ public class Controlador {
             
             
             if(validacion){
-                if (modo.equals("INSERT")){
-                    for(int i=0;i<16;i++){
-                        if(arrayNroLegajo[i].toString() != ""){
-                            m.qryAltaAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
-                        }
-                    }
-                }else if (modo.equals("UPDATE")){
-                    for(int i=0;i<16;i++){
-                        if(arrayNroLegajo[i].toString() == ""){
-                            m.qryModificarAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
-                        }
+                for(int i=0;i<16;i++){
+                    if(!(arrayNroLegajo[i].toString().equals(""))){
+                        m.qryUpsertAsistencia(arrayNroLegajo[i] , codCurso , nroClase , arrayAsistencias[i]);
                     }
                 }
-                return 0;
+                return 1;
             }else{
                 v.showErrorMsg("La validación ha fallado.");
                 return -2;

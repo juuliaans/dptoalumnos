@@ -124,6 +124,9 @@ public final class Vista {
     private JTextField txtFldCursoNombre;
     private JLabel txtLblCursoProf;
     private JTextField txtFldCursoProf;
+    private JLabel txtLblCursoCantClases;
+    private JTextField txtFldCursoCantClases;
+    private JButton btnAgregarAlumno;
     private JButton btnCursoSend;
     private JButton btnCursoNext;
     private JButton btnCursoPrev;
@@ -199,6 +202,7 @@ public final class Vista {
     private JTextField txtFldAsistNroLegajo [];
     private JLabel txtLblAsistNombre [];
     private JCheckBox txtFldAsistValue [];
+    private JButton btnAsistCargarDatos;
 
     public Vista() {
         contenedor = new JFrame();
@@ -227,8 +231,9 @@ public final class Vista {
         addItem1_2 = new JMenuItem("Alta");
         delItem1_2 = new JMenuItem("Baja");
         modItem1_2 = new JMenuItem("Modificacion");
-        asistAlta = new JMenuItem("Alta de asistencias");
+        asistAlta = new JMenuItem("Asistencias");
         asistModificar = new JMenuItem("Modificacion de asistencias");
+        asistModificar.setVisible(false);
         item1_2.add(addItem1_2);
         item1_2.add(delItem1_2);
         item1_2.add(modItem1_2);
@@ -831,8 +836,8 @@ public final class Vista {
         JPanel izquierda = new JPanel();
         JPanel derecha = new JPanel();
         
-        izquierda.setLayout(new GridLayout(3, 1));
-        derecha.setLayout(new GridLayout(3, 1));
+        izquierda.setLayout(new GridLayout(4, 1));
+        derecha.setLayout(new GridLayout(4, 1));
         
         formContainer.add(izquierda, BorderLayout.WEST);
         formContainer.add(derecha, BorderLayout.CENTER);
@@ -846,6 +851,8 @@ public final class Vista {
         txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
         txtFldCursoProf = new JTextField(20);
         txtFldCursoProf.setDocument(new JTextFieldLimit(20));
+        txtLblCursoCantClases = new JLabel("Cantidad Clases");
+        txtFldCursoCantClases = new JTextField(5);
         btnCursoSend = new JButton("Enviar");
         
         izquierda.add(txtLblCursoCodCurso);
@@ -865,6 +872,12 @@ public final class Vista {
         JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         p3.add(txtFldCursoProf);
         derecha.add(p3);
+        
+        izquierda.add(txtLblCursoCantClases);
+        
+        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldCursoCantClases);
+        derecha.add(p4);
         
         JPanel submitButton = new JPanel();
         submitButton.add(btnCursoSend);
@@ -890,8 +903,8 @@ public final class Vista {
         JPanel izquierda = new JPanel();
         JPanel derecha = new JPanel();
         
-        izquierda.setLayout(new GridLayout(3, 1));
-        derecha.setLayout(new GridLayout(3, 1));
+        izquierda.setLayout(new GridLayout(5, 1));
+        derecha.setLayout(new GridLayout(5, 1));
         
         formContainer.add(izquierda, BorderLayout.WEST);
         formContainer.add(derecha, BorderLayout.CENTER);
@@ -904,6 +917,10 @@ public final class Vista {
         txtLblCursoProf = new JLabel("Profesor : ", JLabel.RIGHT);
         txtFldCursoProf = new JTextField(20);
         txtFldCursoProf.setDocument(new JTextFieldLimit(20));
+        txtLblCursoCantClases = new JLabel("Cantidad Clases: ");
+        txtFldCursoCantClases = new JTextField(4);
+        btnAgregarAlumno = new JButton("Agregar Alumno");
+        
         
         izquierda.add(txtLblCursoCodCurso);
         
@@ -922,6 +939,14 @@ public final class Vista {
         JPanel p3 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         p3.add(txtFldCursoProf);
         derecha.add(p3);
+        
+        izquierda.add(txtLblCursoCantClases);
+        
+        JPanel p4= new JPanel(new FlowLayout(FlowLayout.LEFT));
+        p4.add(txtFldCursoCantClases);
+        derecha.add(p4);
+        
+        izquierda.add(btnAgregarAlumno);
         
         JPanel actionsContainer = new JPanel();
         btnCursoSave = new JButton("Guardar");
@@ -1436,10 +1461,13 @@ public final class Vista {
         txtLblAsistNroClase = new JLabel("Nro Clase: ");
         txtFldAsistNroClase = new JTextField(6);
         
+        btnAsistCargarDatos = new JButton("Cargar");
+        
         top.add(txtLblAsistCodCurso);
         top.add(txtFldAsistCodCurso);
         top.add(txtLblAsistNroClase);
         top.add(txtFldAsistNroClase);
+        top.add(btnAsistCargarDatos);
         
         JPanel center = new JPanel(new GridLayout(16, 3));
         
@@ -1545,6 +1573,7 @@ public final class Vista {
         setTxtFldCursoCodCurso(curso.getCursoCod());
         setTxtFldCursoNombre(curso.getCursoNombre());
         setTxtFldCursoProf(curso.getCursoProf());
+        setTxtFldCursoCantClases(curso.getCursoCantClases());
     }
     
     public void cargaInputsPago(Pago pago){
@@ -1573,12 +1602,21 @@ public final class Vista {
     }
     
     public void cargaInputsAsistencia(ArrayList<Asistencia> asistencia){
-        for (int i =0;i < 16; i++){
+        for (int i =0;i < 16 && i < asistencia.size(); i++){
             setTxtFldAsistNroLegajo(i, asistencia.get(i).getNroLegajo());
             setTxtFldAsistNombre(i, asistencia.get(i).getNombreApellido()); //alguna forma de obtener el nombre del alumno, no se si esta adentro de la clase asistencia
             setTxtFldAsistValue(i, asistencia.get(i).getAsistencia());
         }
     }
+    
+    public void limpiarInputsAsistencia(){
+        for (int i =0;i < 16; i++){
+            setTxtFldAsistNroLegajo(i, "");
+            setTxtFldAsistNombre(i, ""); //alguna forma de obtener el nombre del alumno, no se si esta adentro de la clase asistencia
+            setTxtFldAsistValue(i, 0);
+        }
+    }
+    
     
     
     
@@ -1654,6 +1692,10 @@ public final class Vista {
 
     public String getTxtFldCursoProf() {
         return txtFldCursoProf.getText();
+    }
+    
+    public String getTxtFldCursoCantClases(){
+        return txtFldCursoCantClases.getText();
     }
 
     public String getTxtFldRecursoCodRec() {
@@ -1816,6 +1858,10 @@ public final class Vista {
     public void setTxtFldCursoProf(String txtFldCursoProf) {
         this.txtFldCursoProf.setText(txtFldCursoProf);
     }
+    
+    public void setTxtFldCursoCantClases(String cantClases) {
+        this.txtFldCursoCantClases.setText(cantClases);
+    }
 
     public void setTxtFldRecursoCodRec(String txtFldRecursoCodRec) {
         this.txtFldRecursoCodRec.setText(txtFldRecursoCodRec);
@@ -1923,6 +1969,11 @@ public final class Vista {
         btnPagoSend.addActionListener(al);
     }
     
+    public void addActionListenerAsistencias(ActionListener load, ActionListener send){
+        btnAsistCargarDatos.addActionListener(load);
+        btnAsistSend.addActionListener(send);
+    }
+    
     public void addActionListenersModificarAlumno(ActionListener save, ActionListener prev, ActionListener next, ActionListener search){
         btnAlumnoSave.addActionListener(save);
         btnAlumnoNext.addActionListener(next);
@@ -1934,11 +1985,12 @@ public final class Vista {
         btnAlumnoBusqueda.addActionListener(al);
     }
     
-    public void addActionListenersModificarCurso(ActionListener save, ActionListener prev, ActionListener next, ActionListener delete){
+    public void addActionListenersModificarCurso(ActionListener save, ActionListener prev, ActionListener next, ActionListener delete, ActionListener addAlumno){
         btnCursoSave.addActionListener(save);
         btnCursoNext.addActionListener(next);
         btnCursoPrev.addActionListener(prev);
         btnCursoDelete.addActionListener(delete);
+        btnAgregarAlumno.addActionListener(addAlumno);
     }
     
     public void addActionListenersModificarRecurso(ActionListener save, ActionListener prev, ActionListener next){
