@@ -487,19 +487,22 @@ public final class Modelo {
     }
     
     public int qryUpsertAsistencia(String nroLegajo, String codCurso, String nroClase, boolean asistencia){
-        String qry = "SELECT * FROM asistencias WHERE nroLegajo = " + nroLegajo + " AND nroClase =" + nroClase;
+        String qry = "SELECT * FROM asistencias "
+                + "WHERE nroLegajo = " + nroLegajo + " AND nroClase =" + nroClase + " AND codCurso = " + codCurso;
         openDBConnection();
         ResultSet rs = executeQuery(qry);
         try {
-            if (rs.next()){
+            if (rs.last()){
+                closeDBConnection();
                 return qryModificarAsistencia(nroLegajo, codCurso, nroClase, asistencia);
             }else{
+                closeDBConnection();
                 return qryAltaAsistencia(nroLegajo, codCurso, nroClase, asistencia);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Modelo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        closeDBConnection();
+        
         return 0;
     }
    
@@ -565,7 +568,7 @@ public final class Modelo {
     public int qryAltaAsistencia(String nroLegajo , String codCurso , String nroClase , boolean asistencia){
         String qry; // revisar los campos de la tabla 
         qry = "INSERT INTO asistencias (nroLegajo , codCurso , nroClase , asistencia) ";
-        qry+= "VALUES ("+nroLegajo+" , "+codCurso+" , '"+nroClase+"' , "+asistencia+");";
+        qry+= "VALUES ("+nroLegajo+" , "+codCurso+" , '"+nroClase+"' , '"+ ((asistencia == true) ? 1 : 0) +"');";
         
         openDBConnection();
         int q = executeUpdate(qry);
@@ -719,13 +722,14 @@ public final class Modelo {
     }
     
     public int generateAlumnosRegularesPorCurso(Integer codCurso){
-        Integer percent = 50;
-        String qry = "SELECT alumnos.nroLegajo, alumnos.nombre, alumnos.apellido, COUNT(*) FROM alumnos" +
+        String qry = "SELECT alumnos.nroLegajo, alumnos.nombre, alumnos.apellido FROM alumnos where nroLegajo NOT IN "
+                + "(SELECT alumnos.nroLegajo FROM alumnos" +
         " INNER JOIN rel_alumnos_cursos ON rel_alumnos_cursos.nroLegajo = alumnos.nroLegajo AND rel_alumnos_cursos.codCurso = " + codCurso.toString() +
         " LEFT JOIN asistencias ON asistencias.nroLegajo = rel_alumnos_cursos.nroLegajo AND asistencias.codCurso = rel_alumnos_cursos.codCurso" +
-        " WHERE asistencias.asistencia = 1"+
+        " WHERE asistencias.asistencia = 0"+
         " GROUP BY alumnos.nroLegajo"+
-        " HAVING COUNT(*) >= (((SELECT cantClases FROM cursos WHERE cursos.codCurso = "+ codCurso.toString() +") * " + percent.toString() + ") / 100)";
+        " HAVING COUNT(*) > ((SELECT cantClases FROM cursos WHERE cursos.codCurso = " + codCurso.toString() + ") - "
+                + "(((SELECT cantClases FROM cursos WHERE cursos.codCurso = "+ codCurso.toString() +") * " + "(SELECT valor FROM config WHERE config = 'PORCENTAJE_REGULARIDAD' LIMIT 1)" + ") / 100)))";
         
         ResultSet rs = null;
         
@@ -748,7 +752,7 @@ public final class Modelo {
                 writer.println("Nro legajo: " + rs.getString(1));
                 writer.println("Nombre: " + rs.getString(2));
                 writer.println("Apellido: " + rs.getString(3));
-                writer.println("Asistencias: " + rs.getString(4));
+                //writer.println("Asistencias: " + rs.getString(4));
                 writer.println("------------------------------");
                 //rs.getString();
                
